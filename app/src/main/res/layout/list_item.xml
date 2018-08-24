@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/listItem"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:paddingEnd="16dp"
+    android:paddingStart="16dp"
+    android:background="@color/colorPrimary">
+
+    <ImageView
+        android:id="@+id/deviceIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/pc"
+        android:contentDescription="@string/device_icon_description" />
+
+    <TextView
+        android:id="@+id/deviceName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@id/deviceIcon"
+        android:layout_toStartOf="@id/connectBtn"
+        android:layout_marginEnd="16dp"
+        android:layout_centerVertical="true"
+        android:text="@string/default_deviceName"
+        android:textColor="@color/primary_text_dark"
+        android:textSize="18sp"/>
+
+    <Button
+        android:id="@+id/connectBtn"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:text="@string/connect_btn_text"
+        android:textAllCaps="false"
+        android:background="#FFF"/>
+
+</RelativeLayout>

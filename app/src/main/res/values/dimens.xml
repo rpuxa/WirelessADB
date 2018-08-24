@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="toolbar_padding">16dp</dimen>
+    <dimen name="title_text_size">20sp</dimen>
+    <dimen name="toolbar_height">60dp</dimen>
+    <dimen name="status_bar_height">26dp</dimen>
+</resources>
