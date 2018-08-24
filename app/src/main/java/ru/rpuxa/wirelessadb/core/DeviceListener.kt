@@ -1,6 +1,6 @@
 package ru.rpuxa.wirelessadb.core
 
-interface DeviceListener {
+internal interface DeviceListener {
 
     fun onGetMessage(message: Message)
 

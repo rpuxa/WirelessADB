@@ -6,33 +6,55 @@ import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.ServerSocket
 import java.net.Socket
-import kotlin.system.measureTimeMillis
 
+
+/**
+ * Главный класс где можно получить информацию об устройствах итд
+ */
 object CoreServer {
 
+    /**
+     *  Включить видимость и начать поиск устройств в Wifi сети
+     */
     fun startServer(deviceInfo: ThisDeviceInfo) {
         if (isAvailable)
             return
         this.deviceInfo = deviceInfo
         val thread = Thread(::init)
-         thread.isDaemon = true
+        thread.isDaemon = true
         thread.start()
     }
 
-    fun closeServer() = sendMessageToServer(CLOSE_CORE_SERVER)
+    /**
+     * Выключить @see[startServer]
+     */
+    fun closeServer() {
+        sendMessageToServer(CLOSE_CORE_SERVER)
+        devices.toTypedArray().forEach { it.disconnect() }
+        devices.clear()
+    }
 
+    /**
+     * Включена ли видимость @see[startServer]
+     */
     val isAvailable: Boolean
-        get() {
-            var a: Boolean = false
-            println(measureTimeMillis {
-                a = sendMessageToServer(CHECK) != null
-            })
-
-            return a
-        }
+        get() = sendMessageToServer(CHECK) != null
 
 
-    fun getDevicesList() = sendMessageToServer(GET_DEVICE_LIST) as Array<SerializableDevice>
+    /**
+     *  Получить массив устройств @see[SerializableDevice]
+     *
+     *  returns null - если сервер не включен @see[startServer]
+     */
+    fun getDevicesList() = sendMessageToServer(GET_DEVICE_LIST) as Array<SerializableDevice>?
+
+
+    /**
+     * Подключить ADB к данному устройству
+     */
+    fun connectAdb(device: SerializableDevice) {
+        TODO("Сделать подключение к ADB")
+    }
 
     @Synchronized
     private fun sendMessageToServer(command: Int, data: Any? = null) =

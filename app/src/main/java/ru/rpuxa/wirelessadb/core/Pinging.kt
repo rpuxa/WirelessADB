@@ -5,18 +5,16 @@ import java.io.ObjectOutputStream
 import java.net.InetAddress
 import java.net.Socket
 
-object Pinging {
+internal object Pinging {
 
-    var ping = false
-    set(value) {
-        if (value)
-            startPingDevices()
-        else
-            stopPingDevices()
-        field = value
-    }
-
-
+    internal var ping = false
+        set(value) {
+            if (value)
+                startPingDevices()
+            else
+                stopPingDevices()
+            field = value
+        }
 
 
     @Synchronized

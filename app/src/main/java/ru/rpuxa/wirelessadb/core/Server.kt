@@ -6,10 +6,10 @@ import java.io.ObjectOutputStream
 import java.net.InetAddress
 import java.net.ServerSocket
 
-object Server {
+internal object Server {
 
     @Synchronized
-    fun openServerSocket() {
+    internal fun openServerSocket() {
         if (isVisible)
             return
         isVisible = true
@@ -36,7 +36,7 @@ object Server {
     }
 
     @Synchronized
-    fun closeServerSocket() {
+    internal fun closeServerSocket() {
         if (!isVisible)
             return
         if (serverSocket != null)

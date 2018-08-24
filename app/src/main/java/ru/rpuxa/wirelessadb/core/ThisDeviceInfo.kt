@@ -4,15 +4,15 @@ import org.jetbrains.annotations.NotNull
 import java.io.*
 import java.util.*
 
-const val UNDEFINED = "\$\$\$\$\$\$\$\$\$<UNDEFINED>\$\$\$\$\$\$\$\$\$\$"
+private const val UNDEFINED = "\$\$\$\$\$\$\$\$\$<UNDEFINED>\$\$\$\$\$\$\$\$\$\$"
 
 abstract class ThisDeviceInfo {
-    abstract val baseName: String
-    abstract val filesDir: File
-    abstract val isMobile: Boolean
+    internal abstract val baseName: String
+    internal abstract val filesDir: File
+    internal abstract val isMobile: Boolean
 
 
-    var name: String = UNDEFINED
+    internal open var name: String = UNDEFINED
         get() = try {
             if (field == UNDEFINED) {
                 ObjectInputStream(FileInputStream(File(filesDir, "name"))).use {
@@ -35,16 +35,16 @@ abstract class ThisDeviceInfo {
 
 
     @NotNull
-    val id: Long? = null
+    internal open val id: Long? = null
         get() = try {
             field ?: ObjectInputStream(FileInputStream(File(filesDir, "id"))).use {
                 it.readObject() as Long
             }
         } catch (e: Exception) {
-            Random().nextLong()
+            val id = Random().nextLong()
+            ObjectOutputStream(FileOutputStream(File(filesDir, "id"))).use {
+                it.writeObject(id)
+            }
+            id
         }
-
-    companion object {
-        lateinit var info: ThisDeviceInfo
-    }
 }

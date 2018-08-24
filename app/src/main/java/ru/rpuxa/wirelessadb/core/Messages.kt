@@ -2,14 +2,14 @@ package ru.rpuxa.wirelessadb.core
 
 import java.io.Serializable
 
-const val ID = 0
-const val NAME = 1
-const val TYPE = 2
+internal const val ID = 0
+internal const val NAME = 1
+internal const val TYPE = 2
 
 
-const val CHECK = 4
-const val GET_DEVICE_LIST = 5
-const val CLOSE_CORE_SERVER = 6
-const val EMPTY_MESSAGE = 7
+internal const val CHECK = 4
+internal const val GET_DEVICE_LIST = 5
+internal const val CLOSE_CORE_SERVER = 6
+internal const val EMPTY_MESSAGE = 7
 
-class Message(val command: Int, val data: Any?) : Serializable
+internal class Message(internal val command: Int, internal val data: Any?) : Serializable

@@ -7,14 +7,19 @@ import java.io.ObjectOutputStream
 import java.net.Socket
 import java.util.concurrent.atomic.AtomicBoolean
 
-class Device(val socket: Socket, private val output: ObjectOutputStream, private val input: ObjectInputStream) {
+internal class Device(private val socket: Socket, private val output: ObjectOutputStream, private val input: ObjectInputStream) {
 
-    var id = -1L
-    var name = ""
-    var isMobile = false
+    private var id = -1L
+    private var name = ""
+    private var isMobile = false
 
-    var listener: DeviceListener? = null
-    var connected = false
+    internal var listener: DeviceListener? = null
+        set(value) {
+            if (value != null && connected)
+                startListening()
+            field = value
+        }
+    private var connected = false
 
     init {
         try {
@@ -48,13 +53,13 @@ class Device(val socket: Socket, private val output: ObjectOutputStream, private
 
             }
             if (devices.find { it.id == id } == null) {
+                devices.add(this)
                 connected.set(true)
                 this.connected = true
-                devices.add(this)
                 Thread {
                     while (true) {
-                        if (!socket.isClosed)
-                            Thread.sleep(500)
+                        if (sendMessage(CHECK))
+                            Thread.sleep(5000)
                         else
                             break
                     }
@@ -62,13 +67,14 @@ class Device(val socket: Socket, private val output: ObjectOutputStream, private
                 }.start()
             }
         } catch (e: Exception) {
+            e.printStackTrace()
             onDisconnected()
         }
     }
 
-    fun readMessage() = input.readObject() as Message
+    private fun readMessage() = input.readObject() as Message
 
-    fun sendMessage(command: Int, data: Any) = try {
+    private fun sendMessage(command: Int, data: Any? = null) = try {
         output.writeObject(Message(command, data))
         output.flush()
         true
@@ -77,7 +83,7 @@ class Device(val socket: Socket, private val output: ObjectOutputStream, private
         false
     }
 
-    fun startListening() {
+    private fun startListening() {
         try {
             while (connected) {
                 val message = readMessage()
@@ -89,7 +95,7 @@ class Device(val socket: Socket, private val output: ObjectOutputStream, private
         }
     }
 
-    fun disconnect() {
+    internal fun disconnect() {
         if (!connected)
             return
         socket.close()
@@ -99,7 +105,7 @@ class Device(val socket: Socket, private val output: ObjectOutputStream, private
         onDisconnected()
     }
 
-    val serializable: SerializableDevice
+    internal val serializable: SerializableDevice
         get() = SerializableDevice(id, name, isMobile)
 
     private fun onDisconnected() {
