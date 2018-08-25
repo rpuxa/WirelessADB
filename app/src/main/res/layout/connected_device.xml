@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/listItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_item_height"
+        android:background="@color/connected_panel_bg"
+        android:paddingEnd="@dimen/default_margin"
+        android:paddingStart="@dimen/default_margin">
+
+        <ImageView
+            android:id="@+id/device_icon"
+            android:layout_width="@dimen/device_icon_width"
+            android:layout_height="@dimen/device_icon_height"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/device_icon_description"
+            android:src="@drawable/pc" />
+
+        <TextView
+            android:id="@+id/device_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_toEndOf="@id/device_icon"
+            android:layout_toStartOf="@id/connect_btn"
+            android:text="@string/default_deviceName"
+            android:textColor="@color/primary_text_dark"
+            android:textSize="@dimen/device_name_text_size" />
+
+        <Button
+            android:id="@+id/connect_btn"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="@dimen/btn_height"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/disconnect_btn" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/auto_connect_height"
+        android:background="@color/auto_connect_bg"
+        android:gravity="center_horizontal">
+
+        <Switch
+            android:id="@+id/autoConnectSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/autoConnectSwitch"
+            android:text="@string/automatically_connect_text" />
+
+    </RelativeLayout>
+
+</LinearLayout>

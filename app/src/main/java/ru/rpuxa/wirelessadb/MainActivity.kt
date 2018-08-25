@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
                 device_list_view
         )
 
-        power_switch.setOnClickListener { _ ->
+        powerSwitch.setOnClickListener { _ ->
             Thread {
                 onConnectChange(CoreServer.isAvailable)
             }.start()
@@ -28,19 +28,18 @@ class MainActivity : AppCompatActivity() {
         onConnectChange(true)
     }
 
-
     private fun onConnectChange(disconnected: Boolean) {
         runOnUiThread {
-            power_switch.isChecked = !disconnected
+            powerSwitch.isChecked = !disconnected
 
             val visibility = if (disconnected) View.INVISIBLE else View.VISIBLE
             allViews.forEach { it.visibility = visibility }
             searchingDevices = !disconnected
             if (!disconnected) {
-                status_bar_text.text = getString(R.string.searching_devices)
+                statusBarText.text = getString(R.string.searching_devices)
                 startSearchingDevices()
             } else {
-                status_bar_text.text = getString(R.string.service_switched_off)
+                statusBarText.text = getString(R.string.service_switched_off)
                 CoreServer.closeServer()
             }
         }
@@ -56,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                 val deviceArray = CoreServer.getDevicesList()
                 if (deviceArray != null) {
                     if (lastDeviceArray == null || !lastDeviceArray.equalsElements(deviceArray)) {
-                        val deviceListAdapter = DeviceListAdapter(layoutInflater, deviceArray)
+                        val deviceListAdapter = DeviceListAdapter(this, layoutInflater, deviceArray)
                         runOnUiThread {
                             device_list_view.adapter = deviceListAdapter
                         }

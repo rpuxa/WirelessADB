@@ -6,4 +6,6 @@
     <color name="primary_text_light">#e6e6e6</color>
     <color name="primary_text_dark">#333333</color>
     <color name="bg_color">#E6E6E6</color>
+    <color name="connected_panel_bg">#999999</color>
+    <color name="auto_connect_bg">#B3B3B3</color>
 </resources>

@@ -1,42 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/listItem"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:paddingEnd="16dp"
-    android:paddingStart="16dp"
-    android:background="@color/colorPrimary">
+    android:layout_height="@dimen/list_item_height"
+    android:background="@color/colorPrimary"
+    android:paddingEnd="@dimen/default_margin"
+    android:paddingStart="@dimen/default_margin">
 
     <ImageView
         android:id="@+id/device_icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="@dimen/device_icon_width"
+        android:layout_height="@dimen/device_icon_height"
         android:layout_centerVertical="true"
-        android:src="@drawable/pc"
-        android:contentDescription="@string/device_icon_description" />
+        android:contentDescription="@string/device_icon_description"
+        android:src="@drawable/pc" />
 
     <TextView
         android:id="@+id/device_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:layout_marginStart="@dimen/default_margin"
         android:layout_toEndOf="@id/device_icon"
         android:layout_toStartOf="@id/connect_btn"
-        android:layout_marginEnd="16dp"
-        android:layout_centerVertical="true"
         android:text="@string/default_deviceName"
         android:textColor="@color/primary_text_dark"
-        android:textSize="18sp"/>
+        android:textSize="@dimen/device_name_text_size" />
 
     <Button
         android:id="@+id/connect_btn"
-        android:layout_width="60dp"
-        android:layout_height="40dp"
-        android:layout_centerVertical="true"
+        android:layout_width="@dimen/btn_width"
+        android:layout_height="@dimen/btn_height"
         android:layout_alignParentEnd="true"
-        android:text="@string/connect_btn_text"
-        android:textAllCaps="false"
-        android:background="#FFF"/>
+        android:layout_centerVertical="true"
+        android:background="@drawable/connect_btn"
+        android:textAllCaps="false" />
 
 </RelativeLayout>

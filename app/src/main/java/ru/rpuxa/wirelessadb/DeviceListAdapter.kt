@@ -1,14 +1,17 @@
 package ru.rpuxa.wirelessadb
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.Toast
 import kotlinx.android.synthetic.main.list_item.view.*
 import ru.rpuxa.wirelessadb.core.CoreServer
 import ru.rpuxa.wirelessadb.core.SerializableDevice
 
 class DeviceListAdapter(
+        private val context: Context,
         private val inflater: LayoutInflater,
         private val devices: Array<SerializableDevice>
 ) : BaseAdapter() {
@@ -33,9 +36,9 @@ class DeviceListAdapter(
 
         itemView.connect_btn.setOnClickListener {
             if (CoreServer.connectAdb(device)) {
-                //получилось подсоединить
+                inflater.inflate(R.layout.connected_device, parent, true)
             } else {
-                //не получилось (тут можно вывести сообщение)
+                Toast.makeText(context, "Connect failed", Toast.LENGTH_LONG).show()
             }
         }
 
