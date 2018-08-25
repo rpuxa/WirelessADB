@@ -4,21 +4,22 @@ import ru.rpuxa.wirelessadb.core.CoreServer.deviceInfo
 import ru.rpuxa.wirelessadb.core.CoreServer.devices
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
+import java.net.InetAddress
 import java.net.Socket
 import java.util.concurrent.atomic.AtomicBoolean
 
-internal class Device(private val socket: Socket, private val output: ObjectOutputStream, private val input: ObjectInputStream) {
+internal class Device(
+        private val socket: Socket,
+        private val output: ObjectOutputStream,
+        private val input: ObjectInputStream,
+        private val ip: InetAddress
+) {
 
-    private var id = -1L
+    internal var id = -1L
     private var name = ""
     private var isMobile = false
 
     internal var listener: DeviceListener? = null
-        set(value) {
-            if (value != null && connected)
-                startListening()
-            field = value
-        }
     private var connected = false
 
     init {
@@ -65,6 +66,7 @@ internal class Device(private val socket: Socket, private val output: ObjectOutp
                     }
                     disconnect()
                 }.start()
+                startListening()
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -87,11 +89,23 @@ internal class Device(private val socket: Socket, private val output: ObjectOutp
         try {
             while (connected) {
                 val message = readMessage()
+                onMessage(message)
                 if (listener != null)
                     listener!!.onGetMessage(message)
             }
         } catch (e: Exception) {
             onDisconnected()
+        }
+    }
+
+    private fun onMessage(msg: Message) {
+        when (msg.command) {
+            CONNECT_ADB -> {
+                if (isMobile && !CoreServer.deviceInfo.isMobile && startADB(ip)) {
+                    sendMessage(ADB_OK)
+                } else
+                    sendMessage(ADB_FAIL)
+            }
         }
     }
 
@@ -112,6 +126,28 @@ internal class Device(private val socket: Socket, private val output: ObjectOutp
         devices.remove(this)
         if (listener != null)
             listener!!.onDisconnected()
+    }
+
+    internal fun sendMessageAndWaitResponse(command: Int, data: Any? = null): Message? {
+        var answer: Message? = null
+        var disconnect = false
+        listener = object : DeviceListener {
+            override fun onGetMessage(message: Message) {
+                answer = message
+            }
+
+            override fun onDisconnected() {
+                disconnect = true
+            }
+        }
+        sendMessage(command, data)
+
+        while (answer == null && !disconnect)
+            Thread.sleep(10)
+        listener = null
+        if (disconnect)
+            return null
+        return answer
     }
 
 

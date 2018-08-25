@@ -18,3 +18,17 @@ internal fun getIp(): String? {
 internal val InetAddress.myPort
     get() = address[3] + 31812
 
+var ADB = "C:\\Programs\\SDK\\oldSdk\\SDK\\platform-tools"
+
+fun startADB(ip: InetAddress) =
+        try {
+            val address = "${ip.toString().substring(1)}:5555"
+            val builder = ProcessBuilder("cmd.exe", "/c", "cd $ADB && adb connect $address")
+            builder.redirectErrorStream(true)
+            builder.start()
+            true
+        } catch (e: Throwable) {
+            false
+        }
+
+

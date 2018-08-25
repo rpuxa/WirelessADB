@@ -2,10 +2,7 @@ package ru.rpuxa.wirelessadb.core
 
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
-import java.net.InetAddress
-import java.net.InetSocketAddress
-import java.net.ServerSocket
-import java.net.Socket
+import java.net.*
 
 
 /**
@@ -46,15 +43,18 @@ object CoreServer {
      *
      *  returns null - если сервер не включен @see[startServer]
      */
+
+    @Suppress("UNCHECKED_CAST")
     fun getDevicesList() = sendMessageToServer(GET_DEVICE_LIST) as Array<SerializableDevice>?
 
 
     /**
      * Подключить ADB к данному устройству
+     *
+     * reutrns true - если соединение прошло успешно
      */
-    fun connectAdb(device: SerializableDevice) {
-        TODO("Сделать подключение к ADB")
-    }
+    fun connectAdb(device: SerializableDevice) = sendMessageToServer(CONNECT_ADB, device) == ADB_OK
+
 
     @Synchronized
     private fun sendMessageToServer(command: Int, data: Any? = null) =
@@ -67,7 +67,6 @@ object CoreServer {
                 val input = ObjectInputStream(inputStream)
                 output.writeObject(Message(command, data))
                 output.flush()
-                println("Отправили сообщение")
                 input.readObject()
             } catch (e: Exception) {
                 null
@@ -78,27 +77,30 @@ object CoreServer {
     internal val devices = ArrayList<Device>()
 
     private fun init() {
-        Server.openServerSocket()
-        Pinging.ping = true
-        val serverSocket = ServerSocket(7158, 0, InetAddress.getByName("localhost"))
-        while (true) {
-            val socket = serverSocket.accept()
-            val inputStream = socket.getInputStream()
-            val outputStream = socket.getOutputStream()
-            val input = ObjectInputStream(inputStream)
-            val output = ObjectOutputStream(outputStream)
-            println("Поулчили сообщение")
-            val message = input.readObject() as Message
-            var close = false
-            if (onMessage(message, output))
-                close = true
-            input.close()
-            output.close()
-            socket.close()
-            if (close) {
-                serverSocket.close()
-                return
+        try {
+            Server.openServerSocket()
+            Pinging.ping = true
+            val serverSocket = ServerSocket(7158, 0, InetAddress.getByName("localhost"))
+            while (true) {
+                val socket = serverSocket.accept()
+                val inputStream = socket.getInputStream()
+                val outputStream = socket.getOutputStream()
+                val input = ObjectInputStream(inputStream)
+                val output = ObjectOutputStream(outputStream)
+                val message = input.readObject() as Message
+                var close = false
+                if (onMessage(message, output))
+                    close = true
+                input.close()
+                output.close()
+                socket.close()
+                if (close) {
+                    serverSocket.close()
+                    return
+                }
             }
+        } catch (e: BindException) {
+            e.printStackTrace()
         }
     }
 
@@ -127,6 +129,23 @@ object CoreServer {
                 Pinging.ping = false
                 Server.closeServerSocket()
                 return true
+            }
+
+            CONNECT_ADB -> {
+                if (deviceInfo.isMobile) {
+                    val sDevice = msg.data as SerializableDevice
+                    val device = devices.find { it.id == sDevice.id }
+                    if (device == null) {
+                        sendMessage(ADB_FAIL)
+                        return false
+                    }
+                    val answer = device.sendMessageAndWaitResponse(CONNECT_ADB)
+                    if (answer == null || answer.command == ADB_FAIL) {
+                        sendMessage(ADB_FAIL)
+                        return false
+                    }
+                    sendMessage(ADB_OK)
+                }
             }
         }
         return false

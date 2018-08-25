@@ -5,4 +5,5 @@
     <string name="device_icon_description">DEVICE ICON</string>
     <string name="searching_devices">Searching devices</string>
     <string name="devices_not_found">Devices not found</string>
+    <string name="service_switched_off">Service switched off</string>
 </resources>

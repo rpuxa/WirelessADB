@@ -14,23 +14,26 @@ internal object Server {
             return
         isVisible = true
         Thread {
-            while (isVisible) {
-                val ip = InetAddress.getByName(getIp())
-                val port = ip.myPort
-                while (serverSocket == null) {
-                    try {
-                        serverSocket = ServerSocket(port, 0, ip)
-                    } catch (e: Exception) {
+            try {
+                while (isVisible) {
+                    val ip = InetAddress.getByName(getIp())
+                    val port = ip.myPort
+                    while (serverSocket == null) {
+                        try {
+                            serverSocket = ServerSocket(port, 0, ip)
+                        } catch (e: Exception) {
+                        }
+                    }
+
+                    while (isVisible) {
+                        val socket = serverSocket!!.accept()
+                        val input = socket.getInputStream()
+                        val output = socket.getOutputStream()
+
+                        Device(socket, ObjectOutputStream(output), ObjectInputStream(input), socket.inetAddress)
                     }
                 }
-
-                while (isVisible) {
-                    val socket = serverSocket!!.accept()
-                    val input = socket.getInputStream()
-                    val output = socket.getOutputStream()
-
-                    Device(socket, ObjectOutputStream(output), ObjectInputStream(input))
-                }
+            } catch (e: Throwable) {
             }
         }.start()
     }
@@ -39,10 +42,12 @@ internal object Server {
     internal fun closeServerSocket() {
         if (!isVisible)
             return
+        isVisible = false
         if (serverSocket != null)
             serverSocket!!.close()
         if (input != null)
             input!!.close()
+        serverSocket = null
     }
 
     private var isVisible = false
