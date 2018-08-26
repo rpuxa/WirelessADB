@@ -1,5 +1,4 @@
 package ru.rpuxa.pc.main
 
-internal fun run(args: Array<String>) {
-
+fun main(args: Array<String>) {
 }

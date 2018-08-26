@@ -9,4 +9,4 @@ import java.io.Serializable
  * [name] - Имя устройства
  * [isMobile] - Является ли устройство телефоном
  */
-data class SerializableDevice(internal val id: Long, val name: String, val isMobile: Boolean) : Serializable
+data class SerializableDevice(val id: Long, val name: String, val isMobile: Boolean) : Serializable

@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Toast
 import kotlinx.android.synthetic.main.list_item.view.*
-import ru.rpuxa.wirelessadb.core.CoreServer
-import ru.rpuxa.wirelessadb.core.SerializableDevice
+import ru.rpuxa.core.CoreServer
+import ru.rpuxa.core.SerializableDevice
 
 class DeviceListAdapter(
         private val context: Context,
