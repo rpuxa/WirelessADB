@@ -7,12 +7,12 @@ import java.util.*
 private const val UNDEFINED = "\$\$\$\$\$\$\$\$\$<UNDEFINED>\$\$\$\$\$\$\$\$\$\$"
 
 abstract class ThisDeviceInfo {
-    internal abstract val baseName: String
-    internal abstract val filesDir: File
-    internal abstract val isMobile: Boolean
+    abstract val baseName: String
+    abstract val filesDir: File
+    abstract val isMobile: Boolean
 
 
-    internal open var name: String = UNDEFINED
+    open var name: String = UNDEFINED
         get() = try {
             if (field == UNDEFINED) {
                 ObjectInputStream(FileInputStream(File(filesDir, "name"))).use {
@@ -35,7 +35,7 @@ abstract class ThisDeviceInfo {
 
 
     @NotNull
-    internal open val id: Long? = null
+    open val id: Long? = null
         get() = try {
             field ?: ObjectInputStream(FileInputStream(File(filesDir, "id"))).use {
                 it.readObject() as Long
