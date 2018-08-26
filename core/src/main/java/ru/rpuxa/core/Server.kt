@@ -1,4 +1,4 @@
-package ru.rpuxa.wirelessadb.core
+package ru.rpuxa.core
 
 import java.io.InputStream
 import java.io.ObjectInputStream
@@ -43,10 +43,16 @@ internal object Server {
         if (!isVisible)
             return
         isVisible = false
-        if (serverSocket != null)
-            serverSocket!!.close()
-        if (input != null)
-            input!!.close()
+        try {
+            if (serverSocket != null)
+                serverSocket!!.close()
+        } catch (e: Exception) {
+        }
+        try {
+            if (input != null)
+                input!!.close()
+        } catch (e: Exception) {
+        }
         serverSocket = null
     }
 

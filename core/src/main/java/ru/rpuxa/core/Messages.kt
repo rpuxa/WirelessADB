@@ -1,4 +1,4 @@
-package ru.rpuxa.wirelessadb.core
+package ru.rpuxa.core
 
 internal const val ID = 0
 internal const val NAME = 1

@@ -1,4 +1,4 @@
-package ru.rpuxa.wirelessadb.core
+package ru.rpuxa.core
 
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream

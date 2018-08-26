@@ -1,4 +1,4 @@
-package ru.rpuxa.wirelessadb.core
+package ru.rpuxa.core
 
 import java.net.InetAddress
 import java.net.NetworkInterface
@@ -20,7 +20,7 @@ internal val InetAddress.myPort
 
 var ADB = "C:\\Programs\\SDK\\oldSdk\\SDK\\platform-tools"
 
-fun startADB(ip: InetAddress) =
+internal fun startADB(ip: InetAddress) =
         try {
             val address = "${ip.toString().substring(1)}:5555"
             val builder = ProcessBuilder("cmd.exe", "/c", "cd $ADB && adb connect $address")

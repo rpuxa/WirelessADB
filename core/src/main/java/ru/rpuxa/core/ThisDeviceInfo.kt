@@ -1,4 +1,4 @@
-package ru.rpuxa.wirelessadb.core
+package ru.rpuxa.core
 
 import org.jetbrains.annotations.NotNull
 import java.io.*

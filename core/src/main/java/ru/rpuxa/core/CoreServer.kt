@@ -1,4 +1,4 @@
-package ru.rpuxa.wirelessadb.core
+package ru.rpuxa.core
 
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
@@ -16,8 +16,8 @@ object CoreServer {
     fun startServer(deviceInfo: ThisDeviceInfo) {
         if (isAvailable)
             return
-        this.deviceInfo = deviceInfo
-        val thread = Thread(::init)
+        CoreServer.deviceInfo = deviceInfo
+        val thread = Thread(CoreServer::init)
         thread.isDaemon = true
         thread.start()
     }
@@ -43,8 +43,6 @@ object CoreServer {
      *
      *  returns null - если сервер не включен @see[startServer]
      */
-
-    @Suppress("UNCHECKED_CAST")
     fun getDevicesList() = sendMessageToServer(GET_DEVICE_LIST) as Array<SerializableDevice>?
 
 
@@ -91,16 +89,24 @@ object CoreServer {
                 var close = false
                 if (onMessage(message, output))
                     close = true
-                input.close()
-                output.close()
-                socket.close()
+                try {
+                    input.close()
+                } catch (e: Exception) {
+                }
+                try {
+                    output.close()
+                } catch (e: Exception) {
+                }
+                try {
+                    socket.close()
+                } catch (e: Exception) {
+                }
                 if (close) {
                     serverSocket.close()
                     return
                 }
             }
         } catch (e: BindException) {
-            e.printStackTrace()
         }
     }
 
@@ -117,7 +123,7 @@ object CoreServer {
                 sendMessage(EMPTY_MESSAGE)
             }
             GET_DEVICE_LIST -> {
-                val devices = this.devices.toTypedArray()
+                val devices = devices.toTypedArray()
                 val list = Array(devices.size) {
                     devices[it].serializable
                 }

@@ -1,7 +1,7 @@
-package ru.rpuxa.wirelessadb.core
+package ru.rpuxa.core
 
-import ru.rpuxa.wirelessadb.core.CoreServer.deviceInfo
-import ru.rpuxa.wirelessadb.core.CoreServer.devices
+import ru.rpuxa.core.CoreServer.deviceInfo
+import ru.rpuxa.core.CoreServer.devices
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.net.InetAddress
@@ -112,9 +112,18 @@ internal class Device(
     internal fun disconnect() {
         if (!connected)
             return
-        socket.close()
-        input.close()
-        output.close()
+        try {
+            socket.close()
+        } catch (e: Exception) {
+        }
+        try {
+            input.close()
+        } catch (e: Exception) {
+        }
+        try {
+            output.close()
+        } catch (e: Exception) {
+        }
         connected = false
         onDisconnected()
     }
