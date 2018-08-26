@@ -16,7 +16,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         allViews = arrayOf(
-                device_list_view
+                device_list_view,
+                include
         )
 
         power_switch.setOnClickListener { _ ->
@@ -55,7 +56,7 @@ class MainActivity : AppCompatActivity() {
                 val deviceArray = CoreServer.getDevicesList()
                 if (deviceArray != null) {
                     if (lastDeviceArray == null || !lastDeviceArray.equalsElements(deviceArray)) {
-                        val deviceListAdapter = DeviceListAdapter(this, layoutInflater, deviceArray)
+                        val deviceListAdapter = DeviceListAdapter(layoutInflater, deviceArray)
                         runOnUiThread {
                             device_list_view.adapter = deviceListAdapter
                         }

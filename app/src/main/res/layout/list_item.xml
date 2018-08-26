@@ -23,13 +23,13 @@
         android:layout_marginEnd="@dimen/default_margin"
         android:layout_marginStart="@dimen/default_margin"
         android:layout_toEndOf="@id/device_icon"
-        android:layout_toStartOf="@id/connect_btn"
+        android:layout_toStartOf="@id/disconnect_btn"
         android:text="@string/default_deviceName"
         android:textColor="@color/primary_text_dark"
         android:textSize="@dimen/device_name_text_size" />
 
     <Button
-        android:id="@+id/connect_btn"
+        android:id="@+id/disconnect_btn"
         android:layout_width="@dimen/btn_width"
         android:layout_height="@dimen/btn_height"
         android:layout_alignParentEnd="true"

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainLayout"
     android:layout_width="match_parent"
@@ -9,13 +10,17 @@
     tools:context=".MainActivity">
 
     <RelativeLayout
+        android:id="@+id/relativeLayout2"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
         android:background="@color/colorPrimaryDark"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingEnd="@dimen/default_margin"
-        android:paddingStart="@dimen/default_margin">
+        android:paddingStart="@dimen/default_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:layout_width="match_parent"
@@ -38,15 +43,32 @@
     <TextView
         android:id="@+id/status_bar_text"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/status_bar_height"
+        android:layout_height="27dp"
         android:background="@drawable/dark_gradient"
         android:gravity="center"
         android:text="@string/searching_devices"
-        android:textColor="@color/primary_text_light" />
+        android:textColor="@color/primary_text_light"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout2" />
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/connected_device"
+        android:layout_width="0dp"
+        android:layout_height="90dp"
+        android:layout_alignParentBottom="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ListView
         android:id="@+id/device_list_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/include"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/status_bar_text" />
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

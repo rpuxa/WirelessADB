@@ -43,6 +43,7 @@ object CoreServer {
      *
      *  returns null - если сервер не включен @see[startServer]
      */
+    @Suppress("UNCHEKED_CAST")
     fun getDevicesList() = sendMessageToServer(GET_DEVICE_LIST) as Array<SerializableDevice>?
 
 
