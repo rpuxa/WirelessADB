@@ -1,6 +1,5 @@
 package ru.rpuxa.wirelessadb
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Handler
 import android.os.Message
@@ -57,7 +56,7 @@ class DeviceListAdapter(
             itemView.connect_btn.visibility = View.INVISIBLE
             itemView.progress_bar_connect.visibility = View.VISIBLE
 
-            val handler = @SuppressLint("HandlerLeak")
+            val handler =
             object : Handler() {
                 override fun handleMessage(msg: Message) {
                     if (true) {

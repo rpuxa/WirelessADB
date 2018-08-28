@@ -30,7 +30,7 @@ internal object Server {
                         val input = socket.getInputStream()
                         val output = socket.getOutputStream()
 
-                        Device(socket, ObjectOutputStream(output), ObjectInputStream(input), socket.inetAddress)
+                        DeviceConnection(socket, ObjectOutputStream(output), ObjectInputStream(input), socket.inetAddress)
                     }
                 }
             } catch (e: Throwable) {

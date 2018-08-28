@@ -1,5 +1,7 @@
 package ru.rpuxa.core
 
+import ru.rpuxa.core.listeners.AdbListener
+import ru.rpuxa.core.listeners.ServerListener
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.net.*
@@ -13,6 +15,7 @@ object CoreServer {
     /**
      *  Включить видимость и начать поиск устройств в Wifi сети
      */
+    @Deprecated("Use startServer(info, listener) instead")
     fun startServer(deviceInfo: ThisDeviceInfo) {
         if (isAvailable)
             return
@@ -21,6 +24,18 @@ object CoreServer {
         thread.isDaemon = true
         thread.start()
     }
+
+    fun startServer(info: ThisDeviceInfo, listener: ServerListener) {
+        if (isAvailable)
+            return
+        deviceListener = listener
+        deviceInfo = info
+        val thread = Thread(CoreServer::init)
+        thread.isDaemon = true
+        thread.start()
+    }
+
+    private var deviceListener: ServerListener? = null
 
     /**
      * Выключить @see[startServer]
@@ -39,20 +54,53 @@ object CoreServer {
 
 
     /**
-     *  Получить массив устройств @see[SerializableDevice]
+     *  Получить массив устройств @see[Device]
      *
      *  returns null - если сервер не включен @see[startServer]
      */
-    @Suppress("UNCHEKED_CAST")
-    fun getDevicesList() = sendMessageToServer(GET_DEVICE_LIST) as Array<SerializableDevice>?
+    @Suppress("UNCHECKED_CAST")
+    fun getDevicesList() = sendMessageToServer(GET_DEVICE_LIST) as Array<Device>?
 
 
     /**
      * Подключить ADB к данному устройству
      *
      * reutrns true - если соединение прошло успешно
+     * @deprecated
      */
-    fun connectAdb(device: SerializableDevice) = sendMessageToServer(CONNECT_ADB, device) == ADB_OK
+    @Deprecated("Use connectAdb(SerializableDevice, AdbListener) instead")
+    fun connectAdb(device: Device) = sendMessageToServer(CONNECT_ADB, device) == ADB_OK
+
+    private var threadName = null as String?
+
+    fun connectAdb(device: Device, listener: AdbListener) {
+        val thread = Thread {
+            if (sendMessageToServer(CONNECT_ADB, device) == ADB_OK) {
+                listener.onConnect()
+
+                while (checkAdb(device)) {
+                    Thread.sleep(3000)
+                    if (Thread.currentThread().name != threadName)
+                        return@Thread
+                }
+            }
+            listener.onDisconnect()
+        }
+        threadName = thread.name
+    }
+
+    /**
+     * Отключить адб
+     */
+    fun disconnectAdb(device: Device) = sendMessageToServer(DISCONNECT_ADB, device)
+
+    /**
+     * Проверить соединение adb с устройством [device]
+     * true - если соединение поддерживается
+     */
+    @Synchronized
+    fun checkAdb(device: Device) =
+            sendMessageToServer(ADB_CHECK, device) == ADB_OK
 
 
     @Synchronized
@@ -71,9 +119,28 @@ object CoreServer {
                 null
             }
 
-
     internal lateinit var deviceInfo: ThisDeviceInfo
-    internal val devices = ArrayList<Device>()
+
+    internal val devices = object : ArrayList<DeviceConnection>() {
+        override fun add(element: DeviceConnection): Boolean {
+            if (deviceListener != null) {
+                deviceListener!!.onAdd(element.serializable)
+            }
+            return super.add(element)
+        }
+
+        override fun remove(element: DeviceConnection): Boolean {
+            if (deviceListener != null) {
+                deviceListener!!.onRemove(element.serializable)
+            }
+            return super.remove(element)
+        }
+
+        @Deprecated("Use remove(element) instead")
+        override fun removeAll(elements: Collection<DeviceConnection>): Boolean {
+            return super.removeAll(elements)
+        }
+    }
 
     private fun init() {
         try {
@@ -139,20 +206,55 @@ object CoreServer {
             }
 
             CONNECT_ADB -> {
+                val sDevice = msg.data as Device
+                val device = devices.find { it.id == sDevice.id }
+                if (device == null) {
+                    sendMessage(ADB_FAIL)
+                    return false
+                }
                 if (deviceInfo.isMobile) {
-                    val sDevice = msg.data as SerializableDevice
-                    val device = devices.find { it.id == sDevice.id }
-                    if (device == null) {
-                        sendMessage(ADB_FAIL)
-                        return false
-                    }
                     val answer = device.sendMessageAndWaitResponse(CONNECT_ADB)
                     if (answer == null || answer.command == ADB_FAIL) {
                         sendMessage(ADB_FAIL)
                         return false
                     }
                     sendMessage(ADB_OK)
+                } else {
+                    sendMessage(if (changeADB(device.ip)) ADB_OK else ADB_FAIL)
                 }
+            }
+
+            ADB_CHECK -> {
+                val sDevice = msg.data as Device
+                val device = devices.find { it.id == sDevice.id }
+                if (device == null) {
+                    sendMessage(ADB_FAIL)
+                    return false
+                }
+
+                if (deviceInfo.isMobile) {
+                    val answer = device.sendMessageAndWaitResponse(ADB_CHECK)
+                    if (answer == null || answer.command == ADB_FAIL) {
+                        sendMessage(ADB_FAIL)
+                        return false
+                    }
+                    sendMessage(ADB_OK)
+                } else {
+                    sendMessage(if (checkADB(device.ip)) ADB_OK else ADB_FAIL)
+
+                }
+            }
+
+            DISCONNECT_ADB -> {
+                val sDevice = msg.data as Device
+                val device = devices.find { it.id == sDevice.id }
+                if (device != null) {
+                    if (deviceInfo.isMobile) {
+                        device.sendMessage(DISCONNECT_ADB)
+                    } else
+                        changeADB(device.ip, false)
+                }
+                sendMessage(EMPTY_MESSAGE)
             }
         }
         return false

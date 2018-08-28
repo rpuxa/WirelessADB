@@ -7,6 +7,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import ru.rpuxa.core.CoreServer
 import ru.rpuxa.core.SerializableDevice
 import ru.rpuxa.core.ThisDeviceInfo
+import ru.rpuxa.core.equalsElements
 
 class MainActivity : AppCompatActivity() {
 
@@ -71,16 +72,6 @@ class MainActivity : AppCompatActivity() {
                 device_list_view.adapter = null
             }
         }.start()
-    }
-
-    private fun Array<SerializableDevice>.equalsElements(arr: Array<SerializableDevice>): Boolean {
-        for (element in this) {
-            if (arr.find { it.id == element.id } == null) {
-                return false
-            }
-        }
-
-        return true
     }
 
     inner class AndroidDeviceInfo : ThisDeviceInfo() {

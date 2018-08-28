@@ -8,7 +8,7 @@ import javax.swing.WindowConstants
 fun main(args: Array<String>) {
     val frame = JFrame()
     frame.add(MainPanel(DesktopActions))
-    frame.pack()
+    frame.setSize(600, 600)
     frame.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
     frame.isVisible = true
 

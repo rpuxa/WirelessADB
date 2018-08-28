@@ -1,5 +1,7 @@
 package ru.rpuxa.core
 
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import java.net.InetAddress
 import java.net.NetworkInterface
 
@@ -18,17 +20,41 @@ internal fun getIp(): String? {
 internal val InetAddress.myPort
     get() = address[3] + 31812
 
-var ADB = "C:\\Programs\\SDK\\oldSdk\\SDK\\platform-tools"
+var ADB = "C:\\Programs\\SDK\\platform-tools"
 
-internal fun startADB(ip: InetAddress) =
+internal fun changeADB(ip: InetAddress, connect: Boolean = true) =
         try {
             val address = "${ip.toString().substring(1)}:5555"
-            val builder = ProcessBuilder("cmd.exe", "/c", "cd $ADB && adb connect $address")
+            val builder = ProcessBuilder("cmd.exe", "/c", "cd $ADB && adb ${if (connect) "" else "dis"}connect $address")
             builder.redirectErrorStream(true)
             builder.start()
-            true
+            checkADB(ip)
         } catch (e: Throwable) {
             false
         }
 
+internal fun checkADB(ip: InetAddress): Boolean {
+    try {
+        val address = "${ip.toString().substring(1)}:5555"
+        val builder = ProcessBuilder("cmd.exe", "/c", "cd $ADB && adb devices")
+        val reader = BufferedReader(InputStreamReader(builder.start().inputStream))
+        while (true) {
+            val line = reader.readLine() ?: return false
+            if (line.contains(address))
+                return true
+        }
+    } catch (e: Throwable) {
+        return false
+    }
+}
+
+fun Array<Device>.equalsElements(arr: Array<Device>): Boolean {
+    for (element in this) {
+        if (arr.find { it.id == element.id } == null) {
+            return false
+        }
+    }
+
+    return true
+}
 

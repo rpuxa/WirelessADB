@@ -12,3 +12,5 @@ internal const val EMPTY_MESSAGE = 7
 internal const val CONNECT_ADB = 8
 internal const val ADB_OK = 9
 internal const val ADB_FAIL = 10
+internal const val ADB_CHECK = 11
+internal const val DISCONNECT_ADB = 12

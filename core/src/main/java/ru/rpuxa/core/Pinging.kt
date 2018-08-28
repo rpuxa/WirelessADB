@@ -64,7 +64,7 @@ internal object Pinging {
                 val output = socket.getOutputStream()
                 val input = socket.getInputStream()
 
-                Device(socket, ObjectOutputStream(output), ObjectInputStream(input), address)
+                DeviceConnection(socket, ObjectOutputStream(output), ObjectInputStream(input), address)
             }
         } catch (e: Throwable) {
         }
