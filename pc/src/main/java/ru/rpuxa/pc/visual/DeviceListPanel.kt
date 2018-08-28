@@ -1,13 +1,18 @@
 package ru.rpuxa.pc.visual
 
+import ru.rpuxa.core.CoreServer
 import ru.rpuxa.core.SerializableDevice
+import ru.rpuxa.pc.Actions
+import java.awt.BorderLayout
+import java.awt.Component
 import java.awt.Dimension
-import javax.swing.BoxLayout
-import javax.swing.JButton
-import javax.swing.JLabel
-import javax.swing.JPanel
+import javax.swing.*
 
-class DeviceListPanel : JPanel() {
+class DeviceListPanel(actions: Actions) : JPanel() {
+
+    init {
+        layout = BoxLayout(this, BoxLayout.Y_AXIS)
+    }
 
     fun updateDevices(devices: Array<SerializableDevice>) : DeviceListPanel {
         devices.forEach(::addDevice)
@@ -17,22 +22,30 @@ class DeviceListPanel : JPanel() {
     private fun addDevice(device: SerializableDevice) {
         val panel = JPanel()
         panel.layout = BoxLayout(panel, BoxLayout.X_AXIS)
-        val height = 50
         val type = JLabel(if (device.isMobile) "Android" else "PC")
 
-        type.preferredSize = Dimension(100, height)
         panel.add(type)
+        panel.add(Box.createHorizontalStrut(70 - type.minimumSize.width), BorderLayout.WEST)
 
         val name = JLabel(device.name)
-        name.preferredSize = Dimension(300, height)
         panel.add(name)
+        panel.add(Box.createHorizontalStrut(200 - type.minimumSize.width))
+
 
         if (device.isMobile) {
-            val runAdb = JButton("Run ADB")
-            runAdb.preferredSize = Dimension(100, height)
+            val runAdb = JButton("Connect ADB")
+            runAdb.addActionListener {
+                if (CoreServer.connectAdb(device)) {
+                    runAdb.text = "Disconnect ADB"
+                }
+            }
             panel.add(runAdb)
         }
 
-        add(panel)
+
+        panel.alignmentX = Component.LEFT_ALIGNMENT
+        panel.maximumSize = Dimension(400, 30)
+        add(panel, BorderLayout.WEST)
+
     }
 }
