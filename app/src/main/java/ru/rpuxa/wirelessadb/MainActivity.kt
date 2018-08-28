@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         onConnectChange(true)
+        include.visibility = View.INVISIBLE
     }
 
     private fun onConnectChange(disconnected: Boolean) {

@@ -14,7 +14,7 @@
         android:paddingStart="@dimen/default_margin">
 
         <ImageView
-            android:id="@+id/device_icon"
+            android:id="@+id/connected_device_icon"
             android:layout_width="@dimen/device_icon_width"
             android:layout_height="@dimen/device_icon_height"
             android:layout_centerVertical="true"
@@ -22,13 +22,13 @@
             android:src="@drawable/pc" />
 
         <TextView
-            android:id="@+id/device_name"
+            android:id="@+id/connected_device_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/default_margin"
             android:layout_marginStart="@dimen/default_margin"
-            android:layout_toEndOf="@id/device_icon"
+            android:layout_toEndOf="@id/connected_device_icon"
             android:layout_toStartOf="@id/disconnect_btn"
             android:text="@string/default_deviceName"
             android:textColor="@color/primary_text_dark"

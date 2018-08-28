@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">WirelessADB</string>
-    <string name="default_deviceName">rpuxa_pc</string>
+    <string name="app_name" translatable="false">WirelessADB</string>
+    <string name="default_deviceName" translatable="false">rpuxa_pc</string>
     <string name="connect_btn_text">connect</string>
     <string name="device_icon_description">DEVICE ICON</string>
     <string name="searching_devices">Searching devices</string>
@@ -8,4 +8,5 @@
     <string name="service_switched_off">Service switched off</string>
     <string name="disconnect_btn_text">Disconnect</string>
     <string name="automatically_connect_text">Connect automatically</string>
+    <string name="green_dot_descriptor">connected</string>
 </resources>
