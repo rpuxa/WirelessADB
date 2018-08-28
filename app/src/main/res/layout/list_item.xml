@@ -42,20 +42,20 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="8dp"
         android:layout_alignEnd="@+id/connect_btn"
         android:layout_centerVertical="true"
-        android:visibility="invisible"/>
+        android:layout_marginEnd="8dp"
+        android:visibility="invisible" />
 
     <ImageView
         android:id="@+id/connect_indicator"
-        android:src="@drawable/green_dot"
         android:layout_width="wrap_content"
-        android:layout_height= "wrap_content"
-        android:layout_marginEnd="20dp"
+        android:layout_height="wrap_content"
         android:layout_alignEnd="@id/connect_btn"
         android:layout_centerVertical="true"
-        android:visibility="invisible"
-        android:contentDescription="@string/green_dot_descriptor" />
+        android:layout_marginEnd="20dp"
+        android:contentDescription="@string/green_dot_descriptor"
+        android:src="@drawable/green_dot"
+        android:visibility="invisible" />
 
 </RelativeLayout>

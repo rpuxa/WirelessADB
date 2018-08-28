@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.rpuxa.core.CoreServer
-import ru.rpuxa.core.SerializableDevice
+import ru.rpuxa.core.Device
 import ru.rpuxa.core.ThisDeviceInfo
 import ru.rpuxa.core.equalsElements
 
@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         onConnectChange(true)
-        include.visibility = View.INVISIBLE
     }
 
     private fun onConnectChange(disconnected: Boolean) {
@@ -40,6 +39,7 @@ class MainActivity : AppCompatActivity() {
             searchingDevices = !disconnected
             if (!disconnected) {
                 status_bar_text.text = getString(R.string.searching_devices)
+                include.visibility = View.INVISIBLE
                 startSearchingDevices()
             } else {
                 status_bar_text.text = getString(R.string.service_switched_off)
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         Thread {
             CoreServer.startServer(AndroidDeviceInfo())
             Thread.sleep(1000)
-            var lastDeviceArray: Array<SerializableDevice>? = null
+            var lastDeviceArray: Array<Device>? = null
             while (searchingDevices) {
                 val deviceArray = CoreServer.getDevicesList()
                 if (deviceArray != null) {

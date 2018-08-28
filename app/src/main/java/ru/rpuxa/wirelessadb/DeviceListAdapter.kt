@@ -2,7 +2,6 @@ package ru.rpuxa.wirelessadb
 
 import android.app.Activity
 import android.os.Handler
-import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,54 +12,66 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.connected_device.view.*
 import kotlinx.android.synthetic.main.list_item.view.*
-import ru.rpuxa.core.SerializableDevice
+import ru.rpuxa.core.Device
 
 class DeviceListAdapter(
         private val inflater: LayoutInflater,
-        private var devices: Array<SerializableDevice>
+        private var devices: Array<Device>
 ) : BaseAdapter() {
+
+    private var devicesItemView: ArrayList<View> = arrayListOf()
 
     init {
         devices = arrayOf(
-                SerializableDevice(1, "abvgd", false),
-                SerializableDevice(1, "abvgd2", true)
+                Device(1, "abvgd", false),
+                Device(1, "abvgd2", true)
         )
 
-
+        for (device in devices) {
+            devicesItemView.add(getDeviceView(device))
+        }
     }
 
-    var connectedDevicePosition: Int? = null
+    private fun toDisconnectViewMode() {
+        for (item in devicesItemView) {
+            item.connect_indicator.visibility = View.INVISIBLE
+            item.connect_btn.visibility = View.VISIBLE
+        }
+        animateConnected(devicesItemView[0].context as Activity, true)
+    }
 
-    override fun getCount() = devices.size
+    private fun onConnecting() {
+        for (item in devicesItemView)
+            item.connect_btn.isEnabled = false
+    }
 
-    override fun getItem(position: Int) = devices[position]
+    private fun onConnected() {
+        for (item in devicesItemView) {
+            item.connect_btn.isEnabled = true
+            item.connect_btn.visibility = View.INVISIBLE
+        }
+    }
 
-    override fun getItemId(position: Int) = position.toLong()
-
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val itemView = convertView ?: inflater.inflate(R.layout.list_item, parent, false)!!
+    private fun getDeviceView(device: Device): View {
+        //Еще не разобрался как родителя передать
+        val itemView = inflater.inflate(R.layout.list_item, null, false)
         val activity = itemView.context as Activity
-
-        val device = devices[position]
 
         itemView.device_icon.setImageResource(
                 if (device.isMobile) R.drawable.phone else R.drawable.pc
         )
         itemView.device_name.text = device.name
 
-        /*if (device.isMobile)
-            itemView.connect_btn.visibility = View.GONE*/
-
         itemView.connect_btn.setOnClickListener {
-
+            onConnecting()
             itemView.connect_btn.visibility = View.INVISIBLE
             itemView.progress_bar_connect.visibility = View.VISIBLE
 
-            val handler =
-            object : Handler() {
-                override fun handleMessage(msg: Message) {
+            val handler = Handler()
+            Thread {
+                emulateConnect()
+                handler.post {
                     if (true) {
-                        connectedDevicePosition = position
                         itemView.progress_bar_connect.visibility = View.INVISIBLE
                         itemView.connect_indicator.visibility = View.VISIBLE
 
@@ -68,26 +79,30 @@ class DeviceListAdapter(
                         activity.include.connected_device_icon.setImageResource(
                                 if (device.isMobile) R.drawable.phone else R.drawable.pc
                         )
-
                         animateConnected(activity, false)
+                        onConnected()
                     } else {
                         Toast.makeText(activity, "Connect failed", Toast.LENGTH_LONG).show()
                     }
                 }
-            }
-
-            Thread {
-                //CoreServer.connectAdb(device)
-                emulateConnect()
-                handler.sendEmptyMessage(1)
             }.start()
         }
+
         activity.include.disconnect_btn.setOnClickListener {
+            toDisconnectViewMode()
             animateConnected(activity, true)
         }
 
         return itemView
     }
+
+    override fun getCount() = devices.size
+
+    override fun getItem(position: Int) = devices[position]
+
+    override fun getItemId(position: Int) = position.toLong()
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View = devicesItemView[position]
 
     private fun animateConnected(activity: Activity, close: Boolean) {
         val animation = AnimationUtils.loadAnimation(activity,
