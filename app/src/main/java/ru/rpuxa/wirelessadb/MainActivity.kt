@@ -10,6 +10,7 @@ import ru.rpuxa.core.CoreServer
 import ru.rpuxa.core.Device
 import ru.rpuxa.core.ThisDeviceInfo
 import ru.rpuxa.core.listeners.ServerListener
+import ru.rpuxa.wirelessadb.settings.AndroidSettings
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,13 +41,14 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            R.id.menu_item_language -> return true
-            R.id.menu_item_rename -> return true
-            else -> return super.onOptionsItemSelected(item)
-        }
-    }
+    override fun onOptionsItemSelected(item: MenuItem?) =
+            when (item?.itemId) {
+                R.id.menu_item_language -> {
+                    true
+                }
+                R.id.menu_item_rename -> true
+                else -> super.onOptionsItemSelected(item)
+            }
 
     private fun onConnectChange(disconnected: Boolean) {
         runOnUiThread {
@@ -90,7 +92,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     inner class AndroidDeviceInfo : ThisDeviceInfo() {
-        override val baseName = "Android Phone"
+        override val settings = AndroidSettings
         override val filesDir = this@MainActivity.filesDir!!
         override val isMobile = true
     }

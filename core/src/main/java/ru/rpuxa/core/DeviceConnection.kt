@@ -26,7 +26,7 @@ internal class DeviceConnection(
     init {
         try {
             sendMessage(ID, deviceInfo.id!!)
-            sendMessage(NAME, deviceInfo.name)
+            sendMessage(NAME, deviceInfo.settings.deviceName)
             sendMessage(TYPE, deviceInfo.isMobile)
 
             val connected = AtomicBoolean(false)
@@ -60,9 +60,8 @@ internal class DeviceConnection(
                 this.connected = true
                 Thread {
                     while (true) {
-                        if (sendMessage(CHECK))
-                            Thread.sleep(5000)
-                        else
+                        Thread.sleep(5000)
+                        if (!sendMessage(CHECK))
                             break
                     }
                     disconnect()

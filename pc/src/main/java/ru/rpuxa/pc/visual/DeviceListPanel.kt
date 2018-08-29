@@ -2,7 +2,6 @@ package ru.rpuxa.pc.visual
 
 import ru.rpuxa.core.CoreServer
 import ru.rpuxa.core.Device
-import ru.rpuxa.core.equalsElements
 import ru.rpuxa.core.listeners.AdbListener
 import ru.rpuxa.pc.Actions
 import java.awt.BorderLayout
@@ -19,14 +18,10 @@ class DeviceListPanel(actions: Actions) : JPanel() {
         layout = BoxLayout(this, BoxLayout.Y_AXIS)
     }
 
-    private var lastDevices: Array<Device>? = null
-
     fun updateDevices(devices: Array<Device>): DeviceListPanel {
-        if (lastDevices != null && devices.equalsElements(lastDevices!!))
-            return this
-        lastDevices = devices
+        removeAll()
         devices.forEach(::addDevice)
-        revalidate()
+        repaint()
         return this
     }
 

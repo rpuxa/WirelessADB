@@ -1,6 +1,7 @@
 package ru.rpuxa.core
 
 import java.io.BufferedReader
+import java.io.IOException
 import java.io.InputStreamReader
 import java.net.InetAddress
 import java.net.NetworkInterface
@@ -20,7 +21,8 @@ internal fun getIp(): String? {
 internal val InetAddress.myPort
     get() = address[3] + 31812
 
-var ADB = "C:\\Programs\\SDK\\platform-tools"
+val ADB: String
+    get() = CoreServer.deviceInfo.settings.adbPath
 
 internal fun changeADB(ip: InetAddress, connect: Boolean = true) =
         try {
@@ -33,7 +35,7 @@ internal fun changeADB(ip: InetAddress, connect: Boolean = true) =
                 println(line)
             }
             checkADB(ip)
-        } catch (e: Throwable) {
+        } catch (e: IOException) {
             false
         }
 
@@ -47,18 +49,8 @@ internal fun checkADB(ip: InetAddress): Boolean {
             if (line.contains(address))
                 return true
         }
-    } catch (e: Throwable) {
+    } catch (e: IOException) {
         return false
     }
-}
-
-fun Array<Device>.equalsElements(arr: Array<Device>): Boolean {
-    for (element in this) {
-        if (arr.find { it.id == element.id } == null) {
-            return false
-        }
-    }
-
-    return true
 }
 

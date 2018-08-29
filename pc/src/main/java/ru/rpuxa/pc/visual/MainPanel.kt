@@ -9,13 +9,14 @@ import java.awt.Component
 import java.awt.Dimension
 import javax.swing.*
 
-class MainPanel(val actions: Actions) : JPanel() {
+class MainPanel(actions: Actions) : JPanel() {
     private val mainSwitch = JCheckBox("Enable Wireless Adb")
     private val autoLoading = JCheckBox("Add service to auto-loading")
     private val devicesLabel = JLabel("Devices:")
+    private val adbPathPicker = AdbPathPicker(actions)
 
     private val deviceListPanel = DeviceListPanel(actions)
-    private val deviceArray = ArrayList<Device>()
+    private val deviceList = ArrayList<Device>()
 
     //Размещение компонентов
     init {
@@ -33,6 +34,8 @@ class MainPanel(val actions: Actions) : JPanel() {
         add(devicesLabel)
 
         //forth line
+        add(adbPathPicker)
+
         val scroll = JScrollPane(deviceListPanel)
         scroll.maximumSize = Dimension(850, 200)
 
@@ -53,22 +56,26 @@ class MainPanel(val actions: Actions) : JPanel() {
             if (!CoreServer.isAvailable) {
                 CoreServer.startServer(PCDeviceInfo, object : ServerListener {
                     override fun onAdd(device: Device) {
-                        deviceArray.add(device)
+                        deviceList.add(device)
                         updateDevices()
                     }
 
                     override fun onRemove(device: Device) {
-                        deviceArray.removeIf { it.id == device.id }
-                        updateDevices()
+                        if (deviceList.isNotEmpty()) {
+                            deviceList.removeIf { it.id == device.id }
+                            updateDevices()
+                        }
                     }
                 })
             } else {
+                deviceList.clear()
+                updateDevices()
                 CoreServer.closeServer()
             }
         }
     }
 
     private fun updateDevices() {
-        deviceListPanel.updateDevices(deviceArray.toTypedArray())
+        deviceListPanel.updateDevices(deviceList.toTypedArray())
     }
 }

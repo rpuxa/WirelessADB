@@ -80,7 +80,8 @@ object CoreServer {
     /**
      * Отключить адб
      */
-    fun disconnectAdb(device: Device) = sendMessageToServer(DISCONNECT_ADB, device)
+    fun disconnectAdb(device: Device) =
+            Thread { sendMessageToServer(DISCONNECT_ADB, device) }.start()
 
     /**
      * Проверить соединение adb с устройством [device]
