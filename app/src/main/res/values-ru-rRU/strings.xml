@@ -8,4 +8,6 @@
     <string name="disconnect_btn_text">Отключить</string>
     <string name="automatically_connect_text">Подключаться автоматически</string>
     <string name="green_dot_descriptor">подключено</string>
+    <string name="language_menu_item">Язык</string>
+    <string name="rename_menu_item">Переименование устройства</string>
 </resources>

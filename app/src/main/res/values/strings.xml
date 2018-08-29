@@ -9,4 +9,6 @@
     <string name="disconnect_btn_text">Disconnect</string>
     <string name="automatically_connect_text">Connect automatically</string>
     <string name="green_dot_descriptor">connected</string>
+    <string name="language_menu_item">Language</string>
+    <string name="rename_menu_item">Rename this device</string>
 </resources>

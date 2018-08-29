@@ -12,7 +12,9 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.connected_device.view.*
 import kotlinx.android.synthetic.main.list_item.view.*
+import ru.rpuxa.core.CoreServer
 import ru.rpuxa.core.Device
+import ru.rpuxa.core.listeners.AdbListener
 
 class DeviceListAdapter(private val inflater: LayoutInflater, private val listView: ViewGroup) : BaseAdapter() {
 
@@ -66,7 +68,6 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
         }
     }
 
-    //Переделал в функцию расширение + исправил ворнинг с родителем
     private fun Device.getView(): View {
         val itemView = inflater.inflate(R.layout.list_item, listView, false)
         val activity = itemView.context as Activity
@@ -77,29 +78,41 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
         itemView.device_name.text = name
 
         itemView.connect_btn.setOnClickListener {
-            onConnecting()
-            itemView.connect_btn.visibility = View.INVISIBLE
-            itemView.progress_bar_connect.visibility = View.VISIBLE
+            if (!CoreServer.checkAdb(this)) {
+                onConnecting()
+                itemView.connect_btn.visibility = View.INVISIBLE
+                itemView.progress_bar_connect.visibility = View.VISIBLE
 
-            val handler = Handler()
-            Thread {
-                emulateConnect()
-                handler.post {
-                    if (true) {
-                        itemView.progress_bar_connect.visibility = View.INVISIBLE
-                        itemView.connect_indicator.visibility = View.VISIBLE
+                val handler = Handler()
+                Thread {
+                    CoreServer.connectAdb(
+                            this,
+                            object : AdbListener {
+                                override fun onConnect() {
+                                    handler.post {
+                                        itemView.progress_bar_connect.visibility = View.INVISIBLE
+                                        itemView.connect_indicator.visibility = View.VISIBLE
 
-                        activity.include.connected_device_name.text = name
-                        activity.include.connected_device_icon.setImageResource(
-                                if (isMobile) R.drawable.phone else R.drawable.pc
-                        )
-                        animateConnected(activity, false)
-                        onConnected()
-                    } else {
-                        Toast.makeText(activity, "Connect failed", Toast.LENGTH_LONG).show()
-                    }
-                }
-            }.start()
+                                        activity.include.connected_device_name.text = name
+                                        activity.include.connected_device_icon.setImageResource(
+                                                if (isMobile) R.drawable.phone else R.drawable.pc
+                                        )
+                                        animateConnected(activity, false)
+                                        onConnected()
+                                    }
+                                }
+
+                                override fun onDisconnect() {
+                                    Toast.makeText(activity, "Connect failed", Toast.LENGTH_LONG)
+                                            .show()
+                                }
+                            }
+                    )
+                }.start()
+            } else {
+                Toast.makeText(activity, "You are connected to another device", Toast.LENGTH_LONG)
+                        .show()
+            }
         }
 
         activity.include.disconnect_btn.setOnClickListener {
@@ -134,11 +147,6 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
         }
         activity.include.startAnimation(animation)
     }
-
-    private fun emulateConnect() {
-        Thread.sleep(3000)
-    }
-
 
     override fun getCount() = devices.size
 
