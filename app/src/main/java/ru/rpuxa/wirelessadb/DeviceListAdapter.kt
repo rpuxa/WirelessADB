@@ -14,21 +14,35 @@ import kotlinx.android.synthetic.main.connected_device.view.*
 import kotlinx.android.synthetic.main.list_item.view.*
 import ru.rpuxa.core.Device
 
-class DeviceListAdapter(
-        private val inflater: LayoutInflater,
-        private var devices: Array<Device>
-) : BaseAdapter() {
+class DeviceListAdapter(private val inflater: LayoutInflater, private val listView: ViewGroup) : BaseAdapter() {
 
-    private var devicesItemView: ArrayList<View> = arrayListOf()
+    private var devices = ArrayList<Device>()
+    private var devicesItemView = ArrayList<View>()
 
-    init {
-        devices = arrayOf(
-                Device(1, "abvgd", false),
-                Device(1, "abvgd2", true)
-        )
+    /**
+     * Метод для добавления нового девайса в адаптер
+     */
+    fun addDevice(device: Device) {
+        (inflater.context as Activity).runOnUiThread {
+            devices.add(device)
+            devicesItemView.add(device.getView())
+            notifyDataSetChanged()
+        }
+    }
 
-        for (device in devices) {
-            devicesItemView.add(getDeviceView(device))
+    /**
+     * Аналогичное удаление
+     */
+    fun removeDevice(device: Device) {
+        (inflater.context as Activity).runOnUiThread {
+            for (i in devices.indices.reversed())
+                if (devices[i].id == device.id) {
+                    devices.removeAt(i)
+                    devicesItemView.removeAt(i)
+                    break
+                }
+
+            notifyDataSetChanged()
         }
     }
 
@@ -52,15 +66,15 @@ class DeviceListAdapter(
         }
     }
 
-    private fun getDeviceView(device: Device): View {
-        //Еще не разобрался как родителя передать
-        val itemView = inflater.inflate(R.layout.list_item, null, false)
+    //Переделал в функцию расширение + исправил ворнинг с родителем
+    private fun Device.getView(): View {
+        val itemView = inflater.inflate(R.layout.list_item, listView, false)
         val activity = itemView.context as Activity
 
         itemView.device_icon.setImageResource(
-                if (device.isMobile) R.drawable.phone else R.drawable.pc
+                if (isMobile) R.drawable.phone else R.drawable.pc
         )
-        itemView.device_name.text = device.name
+        itemView.device_name.text = name
 
         itemView.connect_btn.setOnClickListener {
             onConnecting()
@@ -75,9 +89,9 @@ class DeviceListAdapter(
                         itemView.progress_bar_connect.visibility = View.INVISIBLE
                         itemView.connect_indicator.visibility = View.VISIBLE
 
-                        activity.include.connected_device_name.text = device.name
+                        activity.include.connected_device_name.text = name
                         activity.include.connected_device_icon.setImageResource(
-                                if (device.isMobile) R.drawable.phone else R.drawable.pc
+                                if (isMobile) R.drawable.phone else R.drawable.pc
                         )
                         animateConnected(activity, false)
                         onConnected()
@@ -95,14 +109,6 @@ class DeviceListAdapter(
 
         return itemView
     }
-
-    override fun getCount() = devices.size
-
-    override fun getItem(position: Int) = devices[position]
-
-    override fun getItemId(position: Int) = position.toLong()
-
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View = devicesItemView[position]
 
     private fun animateConnected(activity: Activity, close: Boolean) {
         val animation = AnimationUtils.loadAnimation(activity,
@@ -132,4 +138,13 @@ class DeviceListAdapter(
     private fun emulateConnect() {
         Thread.sleep(3000)
     }
+
+
+    override fun getCount() = devices.size
+
+    override fun getItem(position: Int) = devices[position]
+
+    override fun getItemId(position: Int) = position.toLong()
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?) = devicesItemView[position]
 }

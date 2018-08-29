@@ -2,9 +2,6 @@ package ru.rpuxa.core
 
 import java.io.Serializable
 
-@Deprecated("Deprecated class name, use Device instead")
-typealias SerializableDevice = Device
-
 /**
  * Data-класс устройства
  *

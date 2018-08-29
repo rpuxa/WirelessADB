@@ -136,8 +136,8 @@ internal class DeviceConnection(
         onDisconnected()
     }
 
-    internal val serializable: SerializableDevice
-        get() = SerializableDevice(id, name, isMobile)
+    internal val serializable: Device
+        get() = Device(id, name, isMobile)
 
     private fun onDisconnected() {
         devices.remove(this)

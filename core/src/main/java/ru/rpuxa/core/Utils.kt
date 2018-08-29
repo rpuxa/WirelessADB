@@ -27,7 +27,11 @@ internal fun changeADB(ip: InetAddress, connect: Boolean = true) =
             val address = "${ip.toString().substring(1)}:5555"
             val builder = ProcessBuilder("cmd.exe", "/c", "cd $ADB && adb ${if (connect) "" else "dis"}connect $address")
             builder.redirectErrorStream(true)
-            builder.start()
+            val reader = BufferedReader(InputStreamReader(builder.start().inputStream))
+            while (true) {
+                val line = reader.readLine() ?: break
+                println(line)
+            }
             checkADB(ip)
         } catch (e: Throwable) {
             false

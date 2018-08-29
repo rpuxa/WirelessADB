@@ -12,19 +12,10 @@ import java.net.*
  */
 object CoreServer {
 
+
     /**
      *  Включить видимость и начать поиск устройств в Wifi сети
      */
-    @Deprecated("Use startServer(info, listener) instead")
-    fun startServer(deviceInfo: ThisDeviceInfo) {
-        if (isAvailable)
-            return
-        CoreServer.deviceInfo = deviceInfo
-        val thread = Thread(CoreServer::init)
-        thread.isDaemon = true
-        thread.start()
-    }
-
     fun startServer(info: ThisDeviceInfo, listener: ServerListener) {
         if (isAvailable)
             return
@@ -36,6 +27,7 @@ object CoreServer {
     }
 
     private var deviceListener: ServerListener? = null
+
 
     /**
      * Выключить @see[startServer]
@@ -65,14 +57,7 @@ object CoreServer {
     /**
      * Подключить ADB к данному устройству
      *
-     * reutrns true - если соединение прошло успешно
-     * @deprecated
      */
-    @Deprecated("Use connectAdb(SerializableDevice, AdbListener) instead")
-    fun connectAdb(device: Device) = sendMessageToServer(CONNECT_ADB, device) == ADB_OK
-
-    private var threadName = null as String?
-
     fun connectAdb(device: Device, listener: AdbListener) {
         val thread = Thread {
             if (sendMessageToServer(CONNECT_ADB, device) == ADB_OK) {
@@ -87,7 +72,10 @@ object CoreServer {
             listener.onDisconnect()
         }
         threadName = thread.name
+        thread.start()
     }
+
+    private var threadName = null as String?
 
     /**
      * Отключить адб
@@ -134,11 +122,6 @@ object CoreServer {
                 deviceListener!!.onRemove(element.serializable)
             }
             return super.remove(element)
-        }
-
-        @Deprecated("Use remove(element) instead")
-        override fun removeAll(elements: Collection<DeviceConnection>): Boolean {
-            return super.removeAll(elements)
         }
     }
 

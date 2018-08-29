@@ -7,11 +7,12 @@ import kotlinx.android.synthetic.main.activity_main.*
 import ru.rpuxa.core.CoreServer
 import ru.rpuxa.core.Device
 import ru.rpuxa.core.ThisDeviceInfo
-import ru.rpuxa.core.equalsElements
+import ru.rpuxa.core.listeners.ServerListener
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var allViews: Array<View>
+    private lateinit var adapter: DeviceListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,14 +21,14 @@ class MainActivity : AppCompatActivity() {
                 device_list_view,
                 include
         )
+        adapter = DeviceListAdapter(layoutInflater, device_list_view)
+        device_list_view.adapter = adapter
 
-        power_switch.setOnClickListener { _ ->
-            Thread {
-                onConnectChange(CoreServer.isAvailable)
-            }.start()
+        power_switch.setOnClickListener {
+            onConnectChange(CoreServer.isAvailable)
         }
 
-        onConnectChange(true)
+        onConnectChange(!CoreServer.isAvailable)
     }
 
     private fun onConnectChange(disconnected: Boolean) {
@@ -50,26 +51,23 @@ class MainActivity : AppCompatActivity() {
 
     private var searchingDevices = true
     private fun startSearchingDevices() {
+        CoreServer.startServer(AndroidDeviceInfo(), object : ServerListener {
+            override fun onAdd(device: Device) {
+                adapter.addDevice(device)
+            }
+
+            override fun onRemove(device: Device) {
+                adapter.removeDevice(device)
+            }
+        })
         Thread {
-            CoreServer.startServer(AndroidDeviceInfo())
             Thread.sleep(1000)
-            var lastDeviceArray: Array<Device>? = null
             while (searchingDevices) {
-                val deviceArray = CoreServer.getDevicesList()
-                if (deviceArray != null) {
-                    if (lastDeviceArray == null || !lastDeviceArray.equalsElements(deviceArray)) {
-                        val deviceListAdapter = DeviceListAdapter(layoutInflater, deviceArray)
-                        runOnUiThread {
-                            device_list_view.adapter = deviceListAdapter
-                        }
-                    }
-                    lastDeviceArray = deviceArray
+                if (CoreServer.isAvailable) {
+                    Thread.sleep(1000)
                 } else
                     onConnectChange(true)
-                Thread.sleep(1000)
-            }
-            runOnUiThread {
-                device_list_view.adapter = null
+
             }
         }.start()
     }
