@@ -12,17 +12,18 @@ import java.awt.Dimension
 import javax.swing.*
 
 class MainPanel(actions: Actions) : JPanel() {
-    private val mainSwitch = JCheckBox("Enable Wireless Adb")
-    private val autoLoading = JCheckBox("Add service to auto-loading")
-    private val devicesLabel = JLabel("Devices:")
-    private val adbPathPicker = AdbPathPicker(actions)
-
-    private val deviceListPanel = DeviceListPanel(actions)
-    private val deviceList = ArrayList<Device>()
-
     init {
         SettingsCache.load(PCSettings, PCDeviceInfo)
     }
+
+    private val mainSwitch = JCheckBox("Enable Wireless Adb")
+    private val autoLoading = JCheckBox("Add service to auto-loading")
+    private val devicesLabel = JLabel("Devices:")
+
+    private val adbPathPicker = AdbPathPicker(actions)
+    private val deviceListPanel = DeviceListPanel(actions)
+
+    private val deviceList = ArrayList<Device>()
 
     //Размещение компонентов
     init {
