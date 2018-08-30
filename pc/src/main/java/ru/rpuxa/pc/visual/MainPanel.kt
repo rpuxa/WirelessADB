@@ -3,8 +3,10 @@ package ru.rpuxa.pc.visual
 import ru.rpuxa.core.CoreServer
 import ru.rpuxa.core.Device
 import ru.rpuxa.core.listeners.ServerListener
+import ru.rpuxa.core.settings.SettingsCache
 import ru.rpuxa.pc.Actions
 import ru.rpuxa.pc.PCDeviceInfo
+import ru.rpuxa.pc.PCSettings
 import java.awt.Component
 import java.awt.Dimension
 import javax.swing.*
@@ -17,6 +19,10 @@ class MainPanel(actions: Actions) : JPanel() {
 
     private val deviceListPanel = DeviceListPanel(actions)
     private val deviceList = ArrayList<Device>()
+
+    init {
+        SettingsCache.load(PCSettings, PCDeviceInfo)
+    }
 
     //Размещение компонентов
     init {

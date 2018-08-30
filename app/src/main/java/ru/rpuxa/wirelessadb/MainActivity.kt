@@ -8,9 +8,7 @@ import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.rpuxa.core.CoreServer
 import ru.rpuxa.core.Device
-import ru.rpuxa.core.ThisDeviceInfo
 import ru.rpuxa.core.listeners.ServerListener
-import ru.rpuxa.wirelessadb.settings.AndroidSettings
 
 class MainActivity : AppCompatActivity() {
 
@@ -89,11 +87,5 @@ class MainActivity : AppCompatActivity() {
 
             }
         }.start()
-    }
-
-    inner class AndroidDeviceInfo : ThisDeviceInfo() {
-        override val settings = AndroidSettings
-        override val filesDir = this@MainActivity.filesDir!!
-        override val isMobile = true
     }
 }

@@ -1,6 +1,8 @@
 package ru.rpuxa.pc.visual
 
+import ru.rpuxa.core.settings.SettingsCache
 import ru.rpuxa.pc.Actions
+import ru.rpuxa.pc.PCDeviceInfo
 import ru.rpuxa.pc.PCSettings
 import ru.rpuxa.pc.containsAdb
 import javax.swing.*
@@ -24,6 +26,7 @@ class AdbPathPicker(actions: Actions) : JPanel() {
             if (result == JFileChooser.APPROVE_OPTION) {
                 if (chooser.selectedFile.containsAdb) {
                     PCSettings.adbPath = chooser.selectedFile.toString()
+                    SettingsCache.save(PCSettings, PCDeviceInfo)
                 } else {
                     actions.sendMessage("This folder doesn't contain adb.exe", this)
                 }
