@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 
     private var searchingDevices = true
     private fun startSearchingDevices() {
-        CoreServer.startServer(AndroidDeviceInfo(), object : ServerListener {
+        CoreServer.startServer(ANDROID_DEVICE_INFO, object : ServerListener {
             override fun onAdd(device: Device) {
                 adapter.addDevice(device)
             }
