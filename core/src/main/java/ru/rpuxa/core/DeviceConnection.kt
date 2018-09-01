@@ -101,8 +101,12 @@ internal class DeviceConnection(
     private fun onMessage(msg: Message) {
         when (msg.command) {
             CONNECT_ADB -> {
-                if (isMobile && !CoreServer.deviceInfo.isMobile && changeADB(ip)) {
-                    sendMessage(ADB_OK)
+                if (isMobile && !CoreServer.deviceInfo.isMobile) {
+                    val res = changeADB(ip)
+                    if (res == 0)
+                        sendMessage(ADB_OK)
+                    else
+                        sendMessage(ADB_ERROR, res)
                 } else
                     sendMessage(ADB_FAIL)
             }
@@ -115,7 +119,7 @@ internal class DeviceConnection(
             }
 
             DISCONNECT_ADB -> {
-                if (isMobile && !CoreServer.deviceInfo.isMobile && changeADB(ip, false)) {
+                if (isMobile && !CoreServer.deviceInfo.isMobile && changeADB(ip, false) == 0) {
                     sendMessage(ADB_OK)
                 } else
                     sendMessage(ADB_FAIL)

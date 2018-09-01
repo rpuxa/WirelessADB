@@ -62,7 +62,8 @@ object CoreServer {
      */
     fun connectAdb(device: Device, listener: AdbListener) {
         val thread = Thread {
-            if (sendMessageToServer(CONNECT_ADB, device) == ADB_OK) {
+            val msg = sendMessageToServer(CONNECT_ADB, device) as Message
+            if (msg.command == ADB_OK) {
                 listener.onConnect()
 
                 while (checkAdb(device)) {
@@ -72,6 +73,8 @@ object CoreServer {
                 }
             }
             listener.onDisconnect()
+            if (msg.command == ADB_ERROR)
+                listener.onError(msg.data as Int)
         }
         threadName = thread.name
         thread.start()
@@ -206,7 +209,11 @@ object CoreServer {
                     }
                     sendMessage(ADB_OK)
                 } else {
-                    sendMessage(if (changeADB(device.ip)) ADB_OK else ADB_FAIL)
+                    val res = changeADB(device.ip)
+                    if (res == 0)
+                        sendMessage(Message(ADB_OK, null))
+                    else
+                        sendMessage(Message(ADB_ERROR, res))
                 }
             }
 

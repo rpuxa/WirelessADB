@@ -11,4 +11,11 @@ interface AdbListener {
      * Вызывается при разрыве соединения.
      */
     fun onDisconnect()
+
+    /**
+     * Вызывается при ошибке подключения адб
+     * [code] - код ошибки
+     */
+    fun onError(code: Int) {
+    }
 }

@@ -14,3 +14,4 @@ internal const val ADB_OK = 9
 internal const val ADB_FAIL = 10
 internal const val ADB_CHECK = 11
 internal const val DISCONNECT_ADB = 12
+internal const val ADB_ERROR = 13

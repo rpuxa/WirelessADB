@@ -30,11 +30,18 @@ internal fun changeADB(ip: InetAddress, connect: Boolean = true) =
             val builder = ProcessBuilder("cmd.exe", "/c", "cd $ADB && adb ${if (connect) "" else "dis"}connect $address")
             builder.redirectErrorStream(true)
             val reader = BufferedReader(InputStreamReader(builder.start().inputStream))
+            var fullAnswer = ""
             while (true) {
                 val line = reader.readLine() ?: break
+                fullAnswer += line
                 println(line)
             }
-            checkADB(ip)
+            val openBracket = fullAnswer.lastIndexOf('(')
+            val closeBracket = fullAnswer.lastIndexOf(')')
+            if (openBracket != -1)
+                fullAnswer.substring(openBracket + 1, closeBracket).toInt()
+            else
+                0
         } catch (e: IOException) {
             false
         }
@@ -54,7 +61,6 @@ internal fun checkADB(ip: InetAddress): Boolean {
     }
 }
 
-
 /**
  * Запускает поток
  *
@@ -63,9 +69,8 @@ internal fun checkADB(ip: InetAddress): Boolean {
  * //code
  * }
  */
-inline fun trd(crossinline block: () -> Unit) {
-    Thread {
-        block()
-    }.start()
-}
+inline fun trd(crossinline block: () -> Unit) =
+        Thread {
+            block()
+        }.start()
 
