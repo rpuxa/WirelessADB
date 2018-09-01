@@ -15,7 +15,7 @@ class AdbPathPicker(actions: Actions) : JPanel() {
     init {
         layout = BoxLayout(this, BoxLayout.X_AXIS)
 
-        pathLabel.text = "Path: ${PCSettings.adbPath}     "
+        pathLabel.text = "ADB Path: ${PCSettings.adbPath}     "
         add(pathLabel)
 
         selectButton.addActionListener { _ ->

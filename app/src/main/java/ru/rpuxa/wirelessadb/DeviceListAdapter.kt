@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.BaseAdapter
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.connected_device.view.*
 import kotlinx.android.synthetic.main.list_item.view.*
@@ -103,19 +102,18 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
                                 }
 
                                 override fun onDisconnect() {
-                                    Toast.makeText(activity, "Connect failed", Toast.LENGTH_LONG)
-                                            .show()
+                                    activity.toast("Connect failed")
                                 }
                             }
                     )
                 }.start()
             } else {
-                Toast.makeText(activity, "You are connected to another device", Toast.LENGTH_LONG)
-                        .show()
+                activity.toast("You are connected to another device")
             }
         }
 
         activity.include.disconnect_btn.setOnClickListener {
+            CoreServer.disconnectAdb(this)
             toDisconnectViewMode()
             animateConnected(activity, true)
         }

@@ -113,6 +113,13 @@ internal class DeviceConnection(
                 } else
                     sendMessage(ADB_FAIL)
             }
+
+            DISCONNECT_ADB -> {
+                if (isMobile && !CoreServer.deviceInfo.isMobile && changeADB(ip, false)) {
+                    sendMessage(ADB_OK)
+                } else
+                    sendMessage(ADB_FAIL)
+            }
         }
     }
 

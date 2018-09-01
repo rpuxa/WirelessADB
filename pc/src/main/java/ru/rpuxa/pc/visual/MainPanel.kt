@@ -21,7 +21,7 @@ class MainPanel(actions: Actions) : JPanel() {
     private val devicesLabel = JLabel("Devices:")
 
     private val adbPathPicker = AdbPathPicker(actions)
-    private val deviceListPanel = DeviceListPanel(actions)
+    private val deviceListPanel = DeviceListPanel()
 
     private val deviceList = ArrayList<Device>()
 
@@ -30,7 +30,7 @@ class MainPanel(actions: Actions) : JPanel() {
         layout = BoxLayout(this, BoxLayout.Y_AXIS)
 
         //first line
-        mainSwitch.alignmentX = Component.LEFT_ALIGNMENT
+        devicesLabel.alignmentX = Component.LEFT_ALIGNMENT
         add(mainSwitch)
 
         //second Line
@@ -38,14 +38,17 @@ class MainPanel(actions: Actions) : JPanel() {
         add(autoLoading)
 
         //third line
-        add(devicesLabel)
-
-        //forth line
+        adbPathPicker.alignmentX = Component.LEFT_ALIGNMENT
         add(adbPathPicker)
 
-        val scroll = JScrollPane(deviceListPanel)
-        scroll.maximumSize = Dimension(850, 200)
+        //forth line
+        devicesLabel.alignmentX = Component.LEFT_ALIGNMENT
+        add(devicesLabel)
 
+
+        val scroll = JScrollPane(deviceListPanel)
+        scroll.maximumSize = Dimension(850, 200)//850 200
+        scroll.alignmentX = Component.LEFT_ALIGNMENT
         add(scroll)
     }
 

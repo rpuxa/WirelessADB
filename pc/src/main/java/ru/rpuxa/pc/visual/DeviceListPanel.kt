@@ -3,7 +3,6 @@ package ru.rpuxa.pc.visual
 import ru.rpuxa.core.CoreServer
 import ru.rpuxa.core.Device
 import ru.rpuxa.core.listeners.AdbListener
-import ru.rpuxa.pc.Actions
 import java.awt.BorderLayout
 import java.awt.Component
 import java.awt.Dimension
@@ -12,7 +11,7 @@ import javax.swing.*
 const val DISCONNECT = "Disconnect Adb"
 const val CONNECT = "Connect Adb"
 
-class DeviceListPanel(actions: Actions) : JPanel() {
+class DeviceListPanel : JPanel() {
 
     init {
         layout = BoxLayout(this, BoxLayout.Y_AXIS)
@@ -69,7 +68,7 @@ class DeviceListPanel(actions: Actions) : JPanel() {
 
         panel.alignmentX = Component.LEFT_ALIGNMENT
         panel.maximumSize = Dimension(500, 30)
-        add(panel, BorderLayout.WEST)
+        add(panel)
 
     }
 }
