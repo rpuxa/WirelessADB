@@ -54,3 +54,18 @@ internal fun checkADB(ip: InetAddress): Boolean {
     }
 }
 
+
+/**
+ * Запускает поток
+ *
+ * Usage:
+ * trd {
+ * //code
+ * }
+ */
+inline fun trd(crossinline block: () -> Unit) {
+    Thread {
+        block()
+    }.start()
+}
+

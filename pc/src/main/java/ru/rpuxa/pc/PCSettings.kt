@@ -5,7 +5,7 @@ import ru.rpuxa.core.settings.Settings
 object PCSettings : Settings {
     override var deviceName = "Computer"
 
-    override var adbPath = "C:\\Programs\\SDK\\platform-tools"
+    override var adbPath = "C:\\"
 
 
     override val fields: Array<Any?>

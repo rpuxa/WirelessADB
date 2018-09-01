@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.list_item.view.*
 import ru.rpuxa.core.CoreServer
 import ru.rpuxa.core.Device
 import ru.rpuxa.core.listeners.AdbListener
+import ru.rpuxa.core.trd
 
 class DeviceListAdapter(private val inflater: LayoutInflater, private val listView: ViewGroup) : BaseAdapter() {
 
@@ -76,46 +77,42 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
         )
         itemView.device_name.text = name
 
-        itemView.connect_btn.setOnClickListener {
-            if (!CoreServer.checkAdb(this)) {
-                onConnecting()
-                itemView.connect_btn.visibility = View.INVISIBLE
-                itemView.progress_bar_connect.visibility = View.VISIBLE
+        val handler = Handler()
+        val adbListener = object : AdbListener {
+            override fun onConnect() {
+                handler.post {
+                    itemView.progress_bar_connect.visibility = View.INVISIBLE
+                    itemView.connect_indicator.visibility = View.VISIBLE
 
-                val handler = Handler()
-                Thread {
-                    CoreServer.connectAdb(
-                            this,
-                            object : AdbListener {
-                                override fun onConnect() {
-                                    handler.post {
-                                        itemView.progress_bar_connect.visibility = View.INVISIBLE
-                                        itemView.connect_indicator.visibility = View.VISIBLE
-
-                                        activity.include.connected_device_name.text = name
-                                        activity.include.connected_device_icon.setImageResource(
-                                                if (isMobile) R.drawable.phone else R.drawable.pc
-                                        )
-                                        animateConnected(activity, false)
-                                        onConnected()
-                                    }
-                                }
-
-                                override fun onDisconnect() {
-                                    activity.toast("Connect failed")
-                                }
-                            }
+                    activity.include.connected_device_name.text = name
+                    activity.include.connected_device_icon.setImageResource(
+                            if (isMobile) R.drawable.phone else R.drawable.pc
                     )
-                }.start()
-            } else {
-                activity.toast("You are connected to another device")
+                    animateConnected(activity, false)
+                    onConnected()
+                }
+            }
+
+            override fun onDisconnect() {
+                toDisconnectViewMode()
+                animateConnected(activity, true)
             }
         }
 
+        trd {
+            if (CoreServer.checkAdb(this))
+                adbListener.onConnect()
+        }
+
+        itemView.connect_btn.setOnClickListener {
+            onConnecting()
+            itemView.connect_btn.visibility = View.INVISIBLE
+            itemView.progress_bar_connect.visibility = View.VISIBLE
+            trd { CoreServer.connectAdb(this, adbListener) }
+        }
+
         activity.include.disconnect_btn.setOnClickListener {
-            CoreServer.disconnectAdb(this)
-            toDisconnectViewMode()
-            animateConnected(activity, true)
+            trd { CoreServer.disconnectAdb(this) }
         }
 
         return itemView

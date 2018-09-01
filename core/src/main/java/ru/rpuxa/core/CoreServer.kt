@@ -2,6 +2,7 @@ package ru.rpuxa.core
 
 import ru.rpuxa.core.listeners.AdbListener
 import ru.rpuxa.core.listeners.ServerListener
+import java.io.IOException
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.net.*
@@ -16,15 +17,16 @@ object CoreServer {
     /**
      *  Включить видимость и начать поиск устройств в Wifi сети
      */
-    fun startServer(info: ThisDeviceInfo, listener: ServerListener) {
-        if (isAvailable)
-            return
-        deviceListener = listener
-        deviceInfo = info
-        val thread = Thread(CoreServer::init)
-        thread.isDaemon = true
-        thread.start()
-    }
+    fun startServer(info: ThisDeviceInfo, listener: ServerListener) =
+            trd {
+                if (isAvailable)
+                    return@trd
+                deviceListener = listener
+                deviceInfo = info
+                val thread = Thread(CoreServer::init)
+                thread.isDaemon = true
+                thread.start()
+            }
 
     private var deviceListener: ServerListener? = null
 
@@ -64,7 +66,7 @@ object CoreServer {
                 listener.onConnect()
 
                 while (checkAdb(device)) {
-                    Thread.sleep(3000)
+                    Thread.sleep(1000)
                     if (Thread.currentThread().name != threadName)
                         return@Thread
                 }
@@ -104,7 +106,7 @@ object CoreServer {
                 output.writeObject(Message(command, data))
                 output.flush()
                 input.readObject()
-            } catch (e: Exception) {
+            } catch (e: IOException) {
                 null
             }
 

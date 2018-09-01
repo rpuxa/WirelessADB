@@ -9,9 +9,13 @@ import java.awt.Dimension
 import javax.swing.*
 
 const val DISCONNECT = "Disconnect Adb"
+const val DISCONNECTING = "Disconnecting..."
 const val CONNECT = "Connect Adb"
+const val CONNECTING = "Connecting..."
 
 class DeviceListPanel : JPanel() {
+
+    private val runAdbButtons = ArrayList<Pair<Device, JButton>>()
 
     init {
         layout = BoxLayout(this, BoxLayout.Y_AXIS)
@@ -19,6 +23,7 @@ class DeviceListPanel : JPanel() {
 
     fun updateDevices(devices: Array<Device>): DeviceListPanel {
         removeAll()
+        runAdbButtons.clear()
         devices.forEach(::addDevice)
         repaint()
         return this
@@ -39,36 +44,45 @@ class DeviceListPanel : JPanel() {
 
         if (device.isMobile)
             Thread {
-                var connected = CoreServer.checkAdb(device)
-                val runAdb = JButton(if (connected) DISCONNECT else CONNECT)
-                runAdb.addActionListener {
-                    connected = CoreServer.checkAdb(device)
-                    if (connected) {
-                        CoreServer.disconnectAdb(device)
-                        connected = false
-                        runAdb.text = CONNECT
-                    } else {
-                        CoreServer.connectAdb(device, object : AdbListener {
-                            override fun onConnect() {
-                                runAdb.text = DISCONNECT
-                                connected = true
-                            }
+                val runAdb = JButton()
+                val adbListener = object : AdbListener {
+                    override fun onConnect() {
+                        runAdb.text = DISCONNECT
+                    }
 
-                            override fun onDisconnect() {
-                                runAdb.text = CONNECT
-                                connected = false
-                            }
-                        })
+                    override fun onDisconnect() {
+                        runAdb.text = CONNECT
+                    }
+                }
+                if (CoreServer.checkAdb(device)) {
+                    adbListener.onConnect()
+                } else {
+                    adbListener.onDisconnect()
+                }
+                runAdb.addActionListener {
+                    if (CoreServer.checkAdb(device)) {
+                        runAdb.text = DISCONNECTING
+                        CoreServer.disconnectAdb(device)
+                    } else {
+                        runAdb.text = CONNECTING
+                        CoreServer.connectAdb(device, adbListener)
                     }
                 }
                 panel.add(runAdb)
                 revalidate()
+                runAdbButtons.add(device to runAdb)
             }.start()
 
 
         panel.alignmentX = Component.LEFT_ALIGNMENT
         panel.maximumSize = Dimension(500, 30)
         add(panel)
+
+    }
+
+    fun refresh() {
+        for ((device, button) in runAdbButtons.toTypedArray())
+            button.text = if (CoreServer.checkAdb(device)) DISCONNECT else CONNECT
 
     }
 }

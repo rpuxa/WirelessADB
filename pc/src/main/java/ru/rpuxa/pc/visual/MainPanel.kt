@@ -58,7 +58,8 @@ class MainPanel(actions: Actions) : JPanel() {
             while (true) {
                 val available = CoreServer.isAvailable
                 mainSwitch.isSelected = available
-                Thread.sleep(3000)
+                deviceListPanel.refresh()
+                Thread.sleep(1500)
             }
         }.start()
 

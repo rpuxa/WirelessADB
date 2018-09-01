@@ -9,6 +9,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import ru.rpuxa.core.CoreServer
 import ru.rpuxa.core.Device
 import ru.rpuxa.core.listeners.ServerListener
+import ru.rpuxa.core.trd
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,10 +29,14 @@ class MainActivity : AppCompatActivity() {
         device_list_view.adapter = adapter
 
         power_switch.setOnClickListener {
-            onConnectChange(CoreServer.isAvailable)
+            trd {
+                onConnectChange(CoreServer.isAvailable)
+            }
         }
-
-        onConnectChange(!CoreServer.isAvailable)
+        trd {
+            if (CoreServer.isAvailable)
+                onConnectChange(false)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -48,20 +53,20 @@ class MainActivity : AppCompatActivity() {
                 else -> super.onOptionsItemSelected(item)
             }
 
-    private fun onConnectChange(disconnected: Boolean) {
+    private fun onConnectChange(disconnect: Boolean) {
         runOnUiThread {
-            power_switch.isChecked = !disconnected
+            power_switch.isChecked = !disconnect
 
-            val visibility = if (disconnected) View.INVISIBLE else View.VISIBLE
+            val visibility = if (disconnect) View.INVISIBLE else View.VISIBLE
             allViews.forEach { it.visibility = visibility }
-            searchingDevices = !disconnected
-            if (!disconnected) {
+            searchingDevices = !disconnect
+            if (!disconnect) {
                 status_bar_text.text = getString(R.string.searching_devices)
                 include.visibility = View.INVISIBLE
                 startSearchingDevices()
             } else {
                 status_bar_text.text = getString(R.string.service_switched_off)
-                CoreServer.closeServer()
+                trd(CoreServer::closeServer)
             }
         }
     }
@@ -77,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                 adapter.removeDevice(device)
             }
         })
-        Thread {
+        trd {
             Thread.sleep(1000)
             while (searchingDevices) {
                 if (CoreServer.isAvailable) {
@@ -86,6 +91,6 @@ class MainActivity : AppCompatActivity() {
                     onConnectChange(true)
 
             }
-        }.start()
+        }
     }
 }
