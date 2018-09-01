@@ -3,6 +3,7 @@ package ru.rpuxa.core
 import ru.rpuxa.core.CoreServer.deviceInfo
 import ru.rpuxa.core.CoreServer.devices
 import ru.rpuxa.core.listeners.DeviceListener
+import java.io.IOException
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.net.InetAddress
@@ -21,7 +22,7 @@ internal class DeviceConnection(
     private var isMobile = false
 
     internal var listener: DeviceListener? = null
-    private var connected = false
+    private var connected = AtomicBoolean(false)
 
     init {
         try {
@@ -29,7 +30,6 @@ internal class DeviceConnection(
             sendMessage(NAME, deviceInfo.settings.deviceName)
             sendMessage(TYPE, deviceInfo.isMobile)
 
-            val connected = AtomicBoolean(false)
             Thread {
                 Thread.sleep(5000)
                 if (!connected.get()) {
@@ -57,18 +57,18 @@ internal class DeviceConnection(
             if (devices.find { it.id == id } == null) {
                 devices.add(this)
                 connected.set(true)
-                this.connected = true
+                this.connected.set(true)
                 Thread {
                     while (true) {
                         Thread.sleep(5000)
-                        if (!sendMessage(CHECK))
+                        if (!connected.get() || !sendMessage(CHECK))
                             break
                     }
                     disconnect()
                 }.start()
                 startListening()
             }
-        } catch (e: Exception) {
+        } catch (e: IOException) {
             e.printStackTrace()
             onDisconnected()
         }
@@ -76,18 +76,19 @@ internal class DeviceConnection(
 
     private fun readMessage() = input.readObject() as Message
 
+    @Synchronized
     internal fun sendMessage(command: Int, data: Any? = null) = try {
         output.writeObject(Message(command, data))
         output.flush()
         true
-    } catch (e: Throwable) {
+    } catch (e: IOException) {
         onDisconnected()
         false
     }
 
     private fun startListening() {
         try {
-            while (connected) {
+            while (connected.get()) {
                 val message = readMessage()
                 onMessage(message)
                 if (listener != null)
@@ -128,7 +129,7 @@ internal class DeviceConnection(
     }
 
     internal fun disconnect() {
-        if (!connected)
+        if (!connected.get())
             return
         try {
             socket.close()
@@ -142,7 +143,6 @@ internal class DeviceConnection(
             output.close()
         } catch (e: Exception) {
         }
-        connected = false
         onDisconnected()
     }
 
@@ -150,6 +150,7 @@ internal class DeviceConnection(
         get() = Device(id, name, isMobile)
 
     private fun onDisconnected() {
+        connected.set(false)
         devices.remove(this)
         if (listener != null)
             listener!!.onDisconnected()

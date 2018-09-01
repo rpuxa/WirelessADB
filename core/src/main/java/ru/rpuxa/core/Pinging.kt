@@ -19,7 +19,7 @@ internal object Pinging {
 
     @Synchronized
     private fun startPingDevices() {
-        if (pingingDevices)
+        if (pingingDevices || CoreServer.deviceInfo.isMobile)
             return
         pingingDevices = true
 

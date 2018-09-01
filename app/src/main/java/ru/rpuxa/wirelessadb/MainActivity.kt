@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
                 onConnectChange(CoreServer.isAvailable)
             }
         }
+
         trd {
             if (CoreServer.isAvailable)
                 onConnectChange(false)
@@ -66,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                 startSearchingDevices()
             } else {
                 status_bar_text.text = getString(R.string.service_switched_off)
-                trd(CoreServer::closeServer)
+                trd { CoreServer.closeServer() }
             }
         }
     }

@@ -44,6 +44,7 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
                     break
                 }
 
+            //TODO Сделать закрытие панели снизу, если подключение с этим устройство разорвано
             notifyDataSetChanged()
         }
     }
@@ -94,8 +95,10 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
             }
 
             override fun onDisconnect() {
-                toDisconnectViewMode()
-                animateConnected(activity, true)
+                handler.post {
+                    toDisconnectViewMode()
+                    animateConnected(activity, true)
+                }
             }
         }
 
@@ -112,7 +115,7 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
         }
 
         activity.include.disconnect_btn.setOnClickListener {
-            trd { CoreServer.disconnectAdb(this) }
+            CoreServer.disconnectAdb(this, adbListener)
         }
 
         return itemView

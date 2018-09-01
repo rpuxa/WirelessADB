@@ -6,6 +6,7 @@ import java.io.IOException
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.net.*
+import java.util.concurrent.ConcurrentHashMap
 
 
 /**
@@ -61,32 +62,30 @@ object CoreServer {
      *
      */
     fun connectAdb(device: Device, listener: AdbListener) {
-        val thread = Thread {
+        trd {
             val msg = sendMessageToServer(CONNECT_ADB, device) as Message
             if (msg.command == ADB_OK) {
                 listener.onConnect()
-
-                while (checkAdb(device)) {
-                    Thread.sleep(1000)
-                    if (Thread.currentThread().name != threadName)
-                        return@Thread
-                }
             }
-            listener.onDisconnect()
-            if (msg.command == ADB_ERROR)
-                listener.onError(msg.data as Int)
-        }
-        threadName = thread.name
-        thread.start()
-    }
 
-    private var threadName = null as String?
+            if (msg.command == ADB_ERROR) {
+                listener.onDisconnect()
+                listener.onError(msg.data as Int)
+            } else {
+                startCheckingAdb(device, listener)
+            }
+        }
+    }
 
     /**
      * Отключить адб
      */
-    fun disconnectAdb(device: Device) =
-            Thread { sendMessageToServer(DISCONNECT_ADB, device) }.start()
+    fun disconnectAdb(device: Device, listener: AdbListener) {
+        trd {
+            sendMessageToServer(DISCONNECT_ADB, device)
+            startCheckingAdb(device, listener)
+        }
+    }
 
     /**
      * Проверить соединение adb с устройством [device]
@@ -96,6 +95,25 @@ object CoreServer {
     fun checkAdb(device: Device) =
             sendMessageToServer(ADB_CHECK, device) == ADB_OK
 
+
+    private val devicesThreads = ConcurrentHashMap<Device, Pair<Thread, AdbListener>>()
+
+    private fun startCheckingAdb(device: Device, listener: AdbListener) {
+        val pair = devicesThreads[device]
+        if (pair != null) {
+            devicesThreads[device] = pair.first to listener
+            return
+        }
+
+        val thread = Thread {
+            while (checkAdb(device))
+                Thread.sleep(500)
+            devicesThreads[device]!!.second.onDisconnect()
+            devicesThreads.remove(device)
+        }
+        devicesThreads[device] = thread to listener
+        thread.start()
+    }
 
     @Synchronized
     private fun sendMessageToServer(command: Int, data: Any? = null) =
@@ -198,16 +216,16 @@ object CoreServer {
                 val sDevice = msg.data as Device
                 val device = devices.find { it.id == sDevice.id }
                 if (device == null) {
-                    sendMessage(ADB_FAIL)
+                    sendMessage(Message(ADB_FAIL))
                     return false
                 }
                 if (deviceInfo.isMobile) {
                     val answer = device.sendMessageAndWaitResponse(CONNECT_ADB)
                     if (answer == null || answer.command == ADB_FAIL) {
-                        sendMessage(ADB_FAIL)
+                        sendMessage(Message(ADB_FAIL))
                         return false
                     }
-                    sendMessage(ADB_OK)
+                    sendMessage(Message(ADB_OK))
                 } else {
                     val res = changeADB(device.ip)
                     if (res == 0)
@@ -243,7 +261,7 @@ object CoreServer {
                 val device = devices.find { it.id == sDevice.id }
                 if (device != null) {
                     if (deviceInfo.isMobile) {
-                        device.sendMessage(DISCONNECT_ADB)
+                        device.sendMessageAndWaitResponse(DISCONNECT_ADB)
                     } else
                         changeADB(device.ip, false)
                 }
