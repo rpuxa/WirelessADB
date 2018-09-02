@@ -62,7 +62,7 @@ class DeviceListPanel : JPanel() {
                 runAdb.addActionListener {
                     if (CoreServer.checkAdb(device)) {
                         runAdb.text = DISCONNECTING
-                        CoreServer.disconnectAdb(device)
+                        CoreServer.disconnectAdb(device, adbListener)
                     } else {
                         runAdb.text = CONNECTING
                         CoreServer.connectAdb(device, adbListener)

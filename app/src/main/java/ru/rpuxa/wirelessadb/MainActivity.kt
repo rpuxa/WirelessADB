@@ -10,6 +10,8 @@ import ru.rpuxa.core.CoreServer
 import ru.rpuxa.core.Device
 import ru.rpuxa.core.listeners.ServerListener
 import ru.rpuxa.core.trd
+import ru.rpuxa.wirelessadb.dialogs.DeviceRenameDialog
+import ru.rpuxa.wirelessadb.dialogs.LanguageDialog
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,7 +27,7 @@ class MainActivity : AppCompatActivity() {
                 device_list_view,
                 include
         )
-        adapter = DeviceListAdapter(layoutInflater, device_list_view)
+        adapter = DeviceListAdapter(layoutInflater, device_list_view, supportFragmentManager)
         device_list_view.adapter = adapter
 
         power_switch.setOnClickListener {
@@ -45,12 +47,16 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?) =
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean =
             when (item?.itemId) {
                 R.id.menu_item_language -> {
+                    LanguageDialog().show(supportFragmentManager, "Language")
                     true
                 }
-                R.id.menu_item_rename -> true
+                R.id.menu_item_rename -> {
+                    DeviceRenameDialog().show(supportFragmentManager, "Rename")
+                    true
+                }
                 else -> super.onOptionsItemSelected(item)
             }
 
@@ -90,7 +96,6 @@ class MainActivity : AppCompatActivity() {
                     Thread.sleep(1000)
                 } else
                     onConnectChange(true)
-
             }
         }
     }

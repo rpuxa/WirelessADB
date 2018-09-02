@@ -11,4 +11,7 @@
     <string name="green_dot_descriptor">connected</string>
     <string name="language_menu_item">Language</string>
     <string name="rename_menu_item">Rename this device</string>
+    <string name="device_rename">Device rename</string>
+    <string name="cancel_dialog_btn">Cancel</string>
+    <string name="rename_dialog_btn">Rename</string>
 </resources>

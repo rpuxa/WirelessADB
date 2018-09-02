@@ -2,6 +2,7 @@ package ru.rpuxa.wirelessadb
 
 import android.app.Activity
 import android.os.Handler
+import android.support.v4.app.FragmentManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +16,9 @@ import ru.rpuxa.core.CoreServer
 import ru.rpuxa.core.Device
 import ru.rpuxa.core.listeners.AdbListener
 import ru.rpuxa.core.trd
+import ru.rpuxa.wirelessadb.dialogs.OnErrorDialog
 
-class DeviceListAdapter(private val inflater: LayoutInflater, private val listView: ViewGroup) : BaseAdapter() {
+class DeviceListAdapter(private val inflater: LayoutInflater, private val listView: ViewGroup, private val supportFragmentManager: FragmentManager) : BaseAdapter() {
 
     private var devices = ArrayList<Device>()
     private var devicesItemView = ArrayList<View>()
@@ -44,12 +46,12 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
                     break
                 }
 
-            //TODO Сделать закрытие панели снизу, если подключение с этим устройство разорвано
+            onDisconnected()
             notifyDataSetChanged()
         }
     }
 
-    private fun toDisconnectViewMode() {
+    private fun onDisconnected() {
         for (item in devicesItemView) {
             item.connect_indicator.visibility = View.INVISIBLE
             item.connect_btn.visibility = View.VISIBLE
@@ -96,9 +98,13 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
 
             override fun onDisconnect() {
                 handler.post {
-                    toDisconnectViewMode()
+                    onDisconnected()
                     animateConnected(activity, true)
                 }
+            }
+
+            override fun onError(code: Int) {
+                OnErrorDialog().show(supportFragmentManager, "Error")
             }
         }
 
