@@ -1,15 +1,20 @@
 package ru.rpuxa.core
 
 import java.io.BufferedReader
+import java.io.File
 import java.io.IOException
 import java.io.InputStreamReader
 import java.net.InetAddress
+
+const val UNKNOWN_ERROR = -103
 
 val ADB: String
     get() = CoreServer.deviceInfo.settings.adbPath
 
 internal fun changeADB(ip: InetAddress, connect: Boolean = true) =
         try {
+            if (!File(ADB).containsAdb)
+                throw IOException()
             val address = "${ip.toString().substring(1)}:5555"
             val builder = ProcessBuilder("cmd.exe", "/c", "cd $ADB && adb ${if (connect) "" else "dis"}connect $address")
             builder.redirectErrorStream(true)
@@ -27,7 +32,7 @@ internal fun changeADB(ip: InetAddress, connect: Boolean = true) =
             else
                 0
         } catch (e: IOException) {
-            false
+            UNKNOWN_ERROR
         }
 
 internal fun checkADB(ip: InetAddress): Boolean {
@@ -62,3 +67,20 @@ fun fixAdb10061(ip: InetAddress) =
         } catch (e: IOException) {
             false
         }
+
+
+val File.containsAdb: Boolean
+    get() {
+        try {
+            val builder = ProcessBuilder("cmd.exe", "/c", "cd $this && adb version")
+            builder.redirectErrorStream(true)
+            val reader = BufferedReader(InputStreamReader(builder.start().inputStream))
+            while (true) {
+                val line = reader.readLine() ?: return false
+                if (line.startsWith("Android Debug Bridge version"))
+                    return true
+            }
+        } catch (e: IOException) {
+            return false
+        }
+    }

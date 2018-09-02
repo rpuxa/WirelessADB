@@ -9,7 +9,9 @@ import ru.rpuxa.wirelessadb.R
 import ru.rpuxa.wirelessadb.settings.AndroidSettings
 
 class DeviceRenameDialog : DialogFragment() {
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+
         val builder = AlertDialog.Builder(context)
         val dialogView = activity.layoutInflater.inflate(R.layout.device_rename_dialog, null)
 
