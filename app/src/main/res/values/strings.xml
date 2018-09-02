@@ -14,4 +14,13 @@
     <string name="device_rename">Device rename</string>
     <string name="cancel_dialog_btn">Cancel</string>
     <string name="rename_dialog_btn">Rename</string>
+    <string name="error_dialog_title">Error on connecting</string>
+    <string name="error_img_description">error</string>
+    <string name="error_code">Error code: </string>
+    <string name="search_btn">Search</string>
+    <string name="def_code">11111</string>
+    <string name="default_error_msg">An error occurred during the connection. Click \'Search\' to finding a solution on the Internet.</string>
+    <string name="known_error_msg">An error occurred during the connection. Connect this device via USB and press "Fix" to clear it and prevent it from happening again.</string>
+    <string name="usb_error_msg">Please connect this device to USB and press "Fix" again.</string>
+    <string name="fix_btn">Fix</string>
 </resources>

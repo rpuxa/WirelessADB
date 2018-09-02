@@ -227,12 +227,13 @@ object CoreServer {
                     return false
                 }
                 if (deviceInfo.isMobile) {
-                    val answer = device.sendMessageAndWaitResponse(CONNECT_ADB)
-                    if (answer == null || answer.command == ADB_FAIL) {
-                        sendMessage(Message(ADB_FAIL))
-                        return false
+                    val answer = device.sendMessageAndWaitResponse(CONNECT_ADB)!!
+                    when (answer.command) {
+                        ADB_FAIL -> sendMessage(Message(ADB_FAIL))
+                        ADB_ERROR -> sendMessage(answer)
+                        else -> sendMessage(Message(ADB_OK))
                     }
-                    sendMessage(Message(ADB_OK))
+                    return false
                 } else {
                     val res = changeADB(device.ip)
                     if (res == 0)

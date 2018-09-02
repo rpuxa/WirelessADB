@@ -56,7 +56,7 @@ fun fixAdb10061(ip: InetAddress) =
             val builder = ProcessBuilder(
                     "cmd.exe",
                     "/c",
-                    "cd $ADB && adb kill-server && adb usb && adb tcpip 5555 && adb connect ${ip.toString().substring(1)}:5555"
+                    "cd $ADB && adb usb && adb kill-server && adb tcpip 5555 && adb connect ${ip.toString().substring(1)}:5555"
             )
             val reader = BufferedReader(InputStreamReader(builder.start().inputStream))
             while (true) {

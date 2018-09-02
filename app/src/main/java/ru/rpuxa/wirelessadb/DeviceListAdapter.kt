@@ -1,7 +1,7 @@
 package ru.rpuxa.wirelessadb
 
 import android.app.Activity
-import android.os.Handler
+import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.view.LayoutInflater
 import android.view.View
@@ -38,7 +38,8 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
      * Аналогичное удаление
      */
     fun removeDevice(device: Device) {
-        (inflater.context as Activity).runOnUiThread {
+        val activity = inflater.context as Activity
+        activity.runOnUiThread {
             for (i in devices.indices.reversed())
                 if (devices[i].id == device.id) {
                     devices.removeAt(i)
@@ -46,17 +47,17 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
                     break
                 }
 
-            onDisconnected()
+            onDisconnected(activity)
             notifyDataSetChanged()
         }
     }
 
-    private fun onDisconnected() {
+    private fun onDisconnected(activity: Activity) {
         for (item in devicesItemView) {
             item.connect_indicator.visibility = View.INVISIBLE
             item.connect_btn.visibility = View.VISIBLE
         }
-        animateConnected(devicesItemView[0].context as Activity, true)
+        animateConnected(activity, true)
     }
 
     private fun onConnecting() {
@@ -81,10 +82,9 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
         )
         itemView.device_name.text = name
 
-        val handler = Handler()
         val adbListener = object : AdbListener {
             override fun onConnect() {
-                handler.post {
+                activity.runOnUiThread {
                     itemView.progress_bar_connect.visibility = View.INVISIBLE
                     itemView.connect_indicator.visibility = View.VISIBLE
 
@@ -98,14 +98,18 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
             }
 
             override fun onDisconnect() {
-                handler.post {
-                    onDisconnected()
+                activity.runOnUiThread {
+                    onDisconnected(activity)
                     animateConnected(activity, true)
                 }
             }
 
             override fun onError(code: Int) {
-                OnErrorDialog().show(supportFragmentManager, "Error")
+                val args = Bundle()
+                val errorDialog = OnErrorDialog()
+                args.putInt("errorCode", code)
+                errorDialog.arguments = args
+                errorDialog.show(supportFragmentManager, "Error")
             }
         }
 

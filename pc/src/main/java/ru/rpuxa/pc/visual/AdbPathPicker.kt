@@ -15,7 +15,7 @@ class AdbPathPicker(actions: Actions) : JPanel() {
     init {
         layout = BoxLayout(this, BoxLayout.X_AXIS)
 
-        pathLabel.text = "ADB Path: ${PCSettings.adbPath}     "
+        setPath(PCSettings.adbPath)
         add(pathLabel)
 
         selectButton.addActionListener { _ ->
@@ -25,6 +25,7 @@ class AdbPathPicker(actions: Actions) : JPanel() {
             val result = chooser.showOpenDialog(this@AdbPathPicker)
             if (result == JFileChooser.APPROVE_OPTION) {
                 if (chooser.selectedFile.containsAdb) {
+                    setPath(chooser.selectedFile.toString())
                     PCSettings.adbPath = chooser.selectedFile.toString()
                     SettingsCache.save(PCSettings, PCDeviceInfo)
                 } else {
@@ -35,5 +36,7 @@ class AdbPathPicker(actions: Actions) : JPanel() {
         add(selectButton)
     }
 
-
+    private fun setPath(path: String) {
+        pathLabel.text = "ADB Path: $path     "
+    }
 }
