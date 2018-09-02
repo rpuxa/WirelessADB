@@ -21,7 +21,7 @@ internal class DeviceConnection(
     private var name = ""
     private var isMobile = false
 
-    internal var listener: DeviceListener? = null
+    private var listener: DeviceListener? = null
     private var connected = AtomicBoolean(false)
 
     init {
@@ -101,7 +101,7 @@ internal class DeviceConnection(
 
     private fun onMessage(msg: Message) {
         when (msg.command) {
-            CONNECT_ADB -> {
+            CONNECT_ADB ->
                 if (isMobile && !CoreServer.deviceInfo.isMobile) {
                     val res = changeADB(ip)
                     if (res == 0)
@@ -110,21 +110,27 @@ internal class DeviceConnection(
                         sendMessage(ADB_ERROR, res)
                 } else
                     sendMessage(ADB_FAIL)
-            }
 
-            ADB_CHECK -> {
+
+            ADB_CHECK ->
                 if (isMobile && !CoreServer.deviceInfo.isMobile && checkADB(ip)) {
                     sendMessage(ADB_OK)
                 } else
                     sendMessage(ADB_FAIL)
-            }
 
-            DISCONNECT_ADB -> {
+
+            DISCONNECT_ADB ->
                 if (isMobile && !CoreServer.deviceInfo.isMobile && changeADB(ip, false) == 0) {
                     sendMessage(ADB_OK)
                 } else
                     sendMessage(ADB_FAIL)
-            }
+
+
+            FIX_ADB_10061 ->
+                if (isMobile && !CoreServer.deviceInfo.isMobile && fixAdb10061(ip)) {
+                    sendMessage(ADB_OK)
+                } else
+                    sendMessage(ADB_FAIL)
         }
     }
 

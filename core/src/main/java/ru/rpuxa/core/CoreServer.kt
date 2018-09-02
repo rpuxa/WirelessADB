@@ -95,6 +95,15 @@ object CoreServer {
     fun checkAdb(device: Device) =
             sendMessageToServer(ADB_CHECK, device) == ADB_OK
 
+    /**
+     * Пофиксить ошибку 10061
+     * true - если ошибка успешно пофиксилась (и это означает еще то, что адб
+     * подключено)
+     * Иначе не подключен провод или еще какая то ошибка
+     */
+    fun fixAdb10061(device: Device) =
+            sendMessageToServer(FIX_ADB_10061, device) == ADB_OK
+
 
     private val devicesThreads = ConcurrentHashMap<Device, Pair<Thread, AdbListener>>()
 
@@ -213,9 +222,7 @@ object CoreServer {
             }
 
             CONNECT_ADB -> {
-                val sDevice = msg.data as Device
-                val device = devices.find { it.id == sDevice.id }
-                if (device == null) {
+                val device = (msg.data as Device).getDeviceConnection {
                     sendMessage(Message(ADB_FAIL))
                     return false
                 }
@@ -236,13 +243,10 @@ object CoreServer {
             }
 
             ADB_CHECK -> {
-                val sDevice = msg.data as Device
-                val device = devices.find { it.id == sDevice.id }
-                if (device == null) {
+                val device = (msg.data as Device).getDeviceConnection {
                     sendMessage(ADB_FAIL)
                     return false
                 }
-
                 if (deviceInfo.isMobile) {
                     val answer = device.sendMessageAndWaitResponse(ADB_CHECK)
                     if (answer == null || answer.command == ADB_FAIL) {
@@ -267,7 +271,32 @@ object CoreServer {
                 }
                 sendMessage(EMPTY_MESSAGE)
             }
+
+            FIX_ADB_10061 -> {
+                val device = (msg.data as Device).getDeviceConnection {
+                    sendMessage(ADB_FAIL)
+                    return false
+                }
+                if (deviceInfo.isMobile) {
+                    val answer = device.sendMessageAndWaitResponse(FIX_ADB_10061)
+                    if (answer == null || answer.command == ADB_FAIL) {
+                        sendMessage(ADB_FAIL)
+                        return false
+                    }
+                    sendMessage(ADB_OK)
+                } else
+                    sendMessage(if (fixAdb10061(device.ip)) ADB_OK else ADB_FAIL)
+            }
         }
         return false
+    }
+
+    private inline fun Device.getDeviceConnection(onNotFound: () -> Unit): DeviceConnection {
+        val device = devices.find { it.id == id }
+        if (device == null) {
+            onNotFound()
+            throw IllegalStateException("Return missed")
+        }
+        return device
     }
 }
