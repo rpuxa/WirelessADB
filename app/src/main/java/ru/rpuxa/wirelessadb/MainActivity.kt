@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
                 device_list_view,
                 include
         )
-        adapter = DeviceListAdapter(layoutInflater, device_list_view, supportFragmentManager)
+        adapter = DeviceListAdapter(layoutInflater, device_list_view)
         device_list_view.adapter = adapter
 
         power_switch.setOnClickListener {

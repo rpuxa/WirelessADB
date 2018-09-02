@@ -1,23 +1,24 @@
 package ru.rpuxa.wirelessadb.settings
 
+import android.content.Context
 import ru.rpuxa.core.settings.Settings
+import java.util.*
 
 object AndroidSettings : Settings {
     override var deviceName = "Android"
 
     var language = Languages.ENGLISH
-        set(value) {
-            if (field == value)
-                return
 
-            //TODO Сделать смену языка
-            when (value) {
-                Languages.ENGLISH -> TODO("Ангийский язык")
-                Languages.RUSSIAN -> TODO("Русский")
-            }
+    fun setLanguage(language: Languages, context: Context) {
+        if (this.language == language)
+            return
+        val resources = context.resources
+        val conf = resources.configuration
+        conf.setLocale(Locale(language.languageName))
+        context.createConfigurationContext(conf)
 
-            field = value
-        }
+        this.language = language
+    }
 
     override var adbPath: String
         get() = throw UnsupportedOperationException()
