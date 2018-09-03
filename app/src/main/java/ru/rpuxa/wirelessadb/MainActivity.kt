@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
                 include.visibility = View.INVISIBLE
                 startSearchingDevices()
             } else {
-                status_bar_text.text = getString(R.string.service_switched_off)
+                status_bar_text.text = getString(R.string.search_disabled)
                 trd { CoreServer.closeServer() }
             }
         }

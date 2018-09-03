@@ -5,7 +5,7 @@
     <string name="device_icon_description">DEVICE ICON</string>
     <string name="searching_devices">Searching devices</string>
     <string name="devices_not_found">Devices not found</string>
-    <string name="service_switched_off">Service switched off</string>
+    <string name="search_disabled">Search disabled</string>
     <string name="disconnect_btn_text">Disconnect</string>
     <string name="automatically_connect_text">Connect automatically</string>
     <string name="green_dot_descriptor">connected</string>

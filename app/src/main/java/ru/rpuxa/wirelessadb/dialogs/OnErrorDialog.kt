@@ -7,12 +7,14 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import kotlinx.android.synthetic.main.on_error_dialog.view.*
+import ru.rpuxa.core.CoreServer
 import ru.rpuxa.core.Device
+import ru.rpuxa.core.trd
 import ru.rpuxa.wirelessadb.R
 
 
 const val ERROR_CODE = "errorCode"
-const val DEVICE = "deivce"
+const val DEVICE = "device"
 
 class OnErrorDialog : DialogFragment() {
 
@@ -28,11 +30,12 @@ class OnErrorDialog : DialogFragment() {
 
         dialogView.do_btn.setOnClickListener {
             if (code == 10061) {
-                /*if (CoreServer.fixAdb10061())
-                    this.dialog.cancel()
-                else
-                    dialogView.error_msg.text = getString(R.string.usb_error_msg)*/
-                //откуда бы взять здесь device
+                trd {
+                    if (CoreServer.fixAdb10061(device))
+                        this.dialog.cancel()
+                    else
+                        dialogView.error_msg.text = getString(R.string.usb_error_msg)
+                }
             } else {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://stackoverflow.com/search?q=adb+error+$code")))
             }

@@ -56,10 +56,10 @@
     <TextView
         android:id="@+id/error_msg"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="@dimen/default_padding"
         android:padding="@dimen/default_padding"
         android:text="@string/default_error_msg" />
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -68,18 +68,22 @@
 
         <Button
             android:id="@+id/cancel_dialog_btn"
+            style="@style/DialogButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
             android:text="@string/cancel_dialog_btn"
             android:textAllCaps="false"
             tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/do_btn"
+            style="@style/DialogButton.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
             android:text="@string/search_btn"
             android:textAllCaps="false"
             tools:ignore="ButtonStyle" />

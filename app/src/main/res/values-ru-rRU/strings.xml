@@ -4,7 +4,7 @@
     <string name="device_icon_description">иконка устройства</string>
     <string name="searching_devices">Поиск устройств</string>
     <string name="devices_not_found">Устройства не найдены</string>
-    <string name="service_switched_off">Поиск отключен</string>
+    <string name="search_disabled">Поиск отключен</string>
     <string name="disconnect_btn_text">Отключить</string>
     <string name="automatically_connect_text">Подключаться автоматически</string>
     <string name="green_dot_descriptor">подключено</string>

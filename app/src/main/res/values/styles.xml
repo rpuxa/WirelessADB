@@ -6,4 +6,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="DialogButton.Colored" parent="Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:fontFamily"> sans-serif-medium</item>
+    </style>
+
+    <style name="DialogButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:fontFamily"> sans-serif-medium</item>
+    </style>
+
 </resources>

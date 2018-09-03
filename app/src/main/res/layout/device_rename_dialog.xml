@@ -31,18 +31,22 @@
 
         <Button
             android:id="@+id/cancel_dialog_btn"
+            style="@style/DialogButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/cancel_dialog_btn"
+            android:textAllCaps="false"
             tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/rename_dialog_btn"
+            style="@style/DialogButton.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/rename_dialog_btn"
+            android:textAllCaps="false"
             tools:ignore="ButtonStyle" />
 
     </LinearLayout>
