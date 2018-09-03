@@ -10,13 +10,18 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.BaseAdapter
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.connected_device.*
 import kotlinx.android.synthetic.main.connected_device.view.*
 import kotlinx.android.synthetic.main.list_item.view.*
 import ru.rpuxa.core.CoreServer
 import ru.rpuxa.core.Device
 import ru.rpuxa.core.listeners.AdbListener
 import ru.rpuxa.core.trd
+import ru.rpuxa.wirelessadb.dialogs.DEVICE
+import ru.rpuxa.wirelessadb.dialogs.ERROR_CODE
 import ru.rpuxa.wirelessadb.dialogs.OnErrorDialog
+import ru.rpuxa.wirelessadb.settings.AndroidSettings
+import java.util.concurrent.atomic.AtomicBoolean
 
 class DeviceListAdapter(private val inflater: LayoutInflater, private val listView: ViewGroup) : BaseAdapter() {
 
@@ -82,8 +87,11 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
         )
         itemView.device_name.text = name
 
+        val connectedAdb = AtomicBoolean(false)
+
         val adbListener = object : AdbListener {
             override fun onConnect() {
+                connectedAdb.set(true)
                 activity.runOnUiThread {
                     itemView.progress_bar_connect.visibility = View.INVISIBLE
                     itemView.connect_indicator.visibility = View.VISIBLE
@@ -98,6 +106,7 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
             }
 
             override fun onDisconnect() {
+                connectedAdb.set(false)
                 activity.runOnUiThread {
                     onDisconnected(activity)
                     animateConnected(activity, true)
@@ -107,29 +116,56 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
             override fun onError(code: Int) {
                 val args = Bundle()
                 val errorDialog = OnErrorDialog()
-                args.putInt("errorCode", code)
+                args.putInt(ERROR_CODE, code)
+                args.putSerializable(DEVICE, this@getView)
                 errorDialog.arguments = args
                 errorDialog.show(supportFragmentManager, "Error")
             }
         }
 
-        trd {
-            if (CoreServer.checkAdb(this))
-                adbListener.onConnect()
-        }
-
         itemView.connect_btn.setOnClickListener {
-            onConnecting()
-            itemView.connect_btn.visibility = View.INVISIBLE
-            itemView.progress_bar_connect.visibility = View.VISIBLE
-            trd { CoreServer.connectAdb(this, adbListener) }
+            connectAdb(itemView, adbListener)
         }
 
         activity.include.disconnect_btn.setOnClickListener {
             CoreServer.disconnectAdb(this, adbListener)
         }
 
+        val switch = activity.auto_connect_switch
+        val autoConnect = AndroidSettings.isAutoConnect(this)
+        if (autoConnect) {
+            connectAdb(itemView, adbListener)
+        }
+        switch.isChecked = autoConnect
+        switch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                AndroidSettings.autoConnectIds.add(id)
+            } else
+                AndroidSettings.autoConnectIds.remove(id)
+        }
+
+        trd {
+            while (devices.find { it == this } != null) {
+                val res = CoreServer.checkAdb(this)
+                if (connectedAdb.get() != res) {
+                    if (res)
+                        adbListener.onConnect()
+                    else
+                        adbListener.onDisconnect()
+                }
+
+                Thread.sleep(1500)
+            }
+        }
+
         return itemView
+    }
+
+    private fun Device.connectAdb(itemView: View, adbListener: AdbListener) {
+        onConnecting()
+        itemView.connect_btn.visibility = View.INVISIBLE
+        itemView.progress_bar_connect.visibility = View.VISIBLE
+        trd { CoreServer.connectAdb(this, adbListener) }
     }
 
     private fun animateConnected(activity: Activity, close: Boolean) {

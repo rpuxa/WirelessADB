@@ -7,14 +7,18 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import kotlinx.android.synthetic.main.on_error_dialog.view.*
+import ru.rpuxa.core.Device
 import ru.rpuxa.wirelessadb.R
 
+
+const val ERROR_CODE = "errorCode"
+const val DEVICE = "deivce"
 
 class OnErrorDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
-        val code = arguments?.getInt("errorCode")
+        val code = arguments!!.getInt(ERROR_CODE)
+        val device = arguments!!.getSerializable(DEVICE) as Device
         val builder = AlertDialog.Builder(context)
         val dialogView = activity.layoutInflater.inflate(R.layout.on_error_dialog, null)
 
@@ -30,7 +34,7 @@ class OnErrorDialog : DialogFragment() {
                     dialogView.error_msg.text = getString(R.string.usb_error_msg)*/
                 //откуда бы взять здесь device
             } else {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://www.stackoverflow.com")))
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://stackoverflow.com/search?q=adb+error+$code")))
             }
         }
 

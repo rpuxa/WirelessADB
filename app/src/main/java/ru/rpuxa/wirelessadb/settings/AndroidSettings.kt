@@ -1,13 +1,20 @@
 package ru.rpuxa.wirelessadb.settings
 
 import android.content.Context
+import ru.rpuxa.core.Device
 import ru.rpuxa.core.settings.Settings
 import java.util.*
+import kotlin.collections.HashSet
 
 object AndroidSettings : Settings {
     override var deviceName = "Android"
 
     var language = Languages.ENGLISH
+
+    override var autoConnectIds: MutableSet<Long> = HashSet()
+
+
+    fun isAutoConnect(device: Device) = autoConnectIds.find { it == device.id } != null
 
     fun setLanguage(language: Languages, context: Context) {
         if (this.language == language)
@@ -27,11 +34,13 @@ object AndroidSettings : Settings {
     override val fields: Array<Any?>
         get() = arrayOf(
                 deviceName,
-                language
+                language,
+                autoConnectIds
         )
 
     override fun deserializable(fields: Array<Any?>) {
         deviceName = fields[0] as String
         language = fields[1] as Languages
+        autoConnectIds = fields[2] as MutableSet<Long>
     }
 }
