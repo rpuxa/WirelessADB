@@ -9,9 +9,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 import ru.rpuxa.core.CoreServer
 import ru.rpuxa.core.Device
 import ru.rpuxa.core.listeners.ServerListener
+import ru.rpuxa.core.settings.SettingsCache
 import ru.rpuxa.core.trd
 import ru.rpuxa.wirelessadb.dialogs.DeviceRenameDialog
 import ru.rpuxa.wirelessadb.dialogs.LanguageDialog
+import ru.rpuxa.wirelessadb.settings.AndroidSettings
 
 class MainActivity : AppCompatActivity() {
 
@@ -76,6 +78,11 @@ class MainActivity : AppCompatActivity() {
                 trd { CoreServer.closeServer() }
             }
         }
+    }
+
+    override fun onPause() {
+        SettingsCache.save(AndroidSettings, ANDROID_DEVICE_INFO)
+        super.onPause()
     }
 
     private var searchingDevices = true

@@ -20,6 +20,7 @@ object SettingsCache {
                 settings.deserializable(it.readObject() as Array<Any?>)
             }
         } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }

@@ -84,5 +84,6 @@ class DeviceListPanel : JPanel() {
         for ((device, button) in runAdbButtons.toTypedArray())
             button.text = if (CoreServer.checkAdb(device)) DISCONNECT else CONNECT
 
+
     }
 }

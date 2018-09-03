@@ -42,8 +42,11 @@ internal fun checkADB(ip: InetAddress): Boolean {
         val reader = BufferedReader(InputStreamReader(builder.start().inputStream))
         while (true) {
             val line = reader.readLine() ?: return false
-            if (line.contains(address))
+            println(line)
+            if (line.contains(address)) {
+                println("found! adbcheck")
                 return true
+            }
         }
     } catch (e: IOException) {
         return false
