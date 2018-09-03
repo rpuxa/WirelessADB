@@ -19,7 +19,7 @@ object SettingsCache {
             ObjectInputStream(FileInputStream(File(info.filesDir, FILE_NAME))).use {
                 settings.deserializable(it.readObject() as Array<Any?>)
             }
-        } catch (e: FileNotFoundException) {
+        } catch (e: Exception) {
         }
     }
 }
