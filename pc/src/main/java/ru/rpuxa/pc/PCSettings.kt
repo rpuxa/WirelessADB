@@ -20,6 +20,6 @@ object PCSettings : Settings {
     override fun deserializable(fields: Array<Any?>) {
         deviceName = fields[0] as String
         adbPath = fields[1] as String
-        autoConnectIds = fields[2] as MutableSet<Long>
+        // autoConnectIds = fields[2] as MutableSet<Long>
     }
 }

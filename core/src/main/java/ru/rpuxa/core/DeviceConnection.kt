@@ -167,7 +167,8 @@ internal class DeviceConnection(
         var disconnect = false
         listener = object : DeviceListener {
             override fun onGetMessage(message: Message) {
-                answer = message
+                if (message.command != CHECK)
+                    answer = message
             }
 
             override fun onDisconnected() {

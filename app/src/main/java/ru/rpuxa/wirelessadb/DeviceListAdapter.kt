@@ -145,7 +145,7 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
                 AndroidSettings.autoConnectIds.remove(id)
         }
 
-        trd {
+        Thread {
             while (devices.find { it == this } != null) {
                 val res = CoreServer.checkAdb(this)
                 if (connectedAdb.get() != res) {
@@ -157,7 +157,7 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
 
                 Thread.sleep(1500)
             }
-        }
+        }.start()
 
         return itemView
     }

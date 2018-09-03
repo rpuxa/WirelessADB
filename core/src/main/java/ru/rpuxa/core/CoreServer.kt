@@ -25,7 +25,6 @@ object CoreServer {
                 deviceListener = listener
                 deviceInfo = info
                 val thread = Thread(CoreServer::init)
-                thread.isDaemon = true
                 thread.start()
             }
 
