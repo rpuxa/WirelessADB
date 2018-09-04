@@ -26,7 +26,8 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         allViews = arrayOf(
-                device_list_view
+                device_list_view,
+                include
         )
         adapter = DeviceListAdapter(layoutInflater, device_list_view)
         device_list_view.adapter = adapter
@@ -71,7 +72,8 @@ class MainActivity : AppCompatActivity() {
             power_switch.isChecked = !disconnect
 
             val visibility = if (disconnect) View.INVISIBLE else View.VISIBLE
-            allViews.forEach { it.visibility = visibility }
+            //allViews.forEach { it.visibility = visibility }
+            device_list_view.visibility = visibility
             searchingDevices = !disconnect
             if (!disconnect) {
                 status_bar_text.text = getString(R.string.searching_devices)

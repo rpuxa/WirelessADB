@@ -52,12 +52,17 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
                     break
                 }
 
-            onDisconnected(activity)
+            trd {
+                if (CoreServer.checkAdb(device))
+                    activity.runOnUiThread {
+                        onDisconnected(activity)
+                    }
+            }
             notifyDataSetChanged()
         }
     }
 
-    private fun onDisconnected (activity: Activity) {
+    private fun onDisconnected(activity: Activity) {
         for (item in devicesItemView) {
             item.connect_indicator.visibility = View.INVISIBLE
             item.progress_bar_connect.visibility = View.INVISIBLE
