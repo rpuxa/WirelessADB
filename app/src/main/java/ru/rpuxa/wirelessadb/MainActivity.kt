@@ -26,8 +26,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         allViews = arrayOf(
-                device_list_view,
-                include
+                device_list_view
         )
         adapter = DeviceListAdapter(layoutInflater, device_list_view)
         device_list_view.adapter = adapter
@@ -46,7 +45,6 @@ class MainActivity : AppCompatActivity() {
             if (CoreServer.isAvailable)
                 onConnectChange(false)
         }
-
 
     }
 

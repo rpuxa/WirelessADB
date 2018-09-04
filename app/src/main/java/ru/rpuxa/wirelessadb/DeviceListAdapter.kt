@@ -57,7 +57,7 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
         }
     }
 
-    private fun onDisconnected(activity: Activity) {
+    private fun onDisconnected (activity: Activity) {
         for (item in devicesItemView) {
             item.connect_indicator.visibility = View.INVISIBLE
             item.progress_bar_connect.visibility = View.INVISIBLE
@@ -110,7 +110,6 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
                 connectedAdb.set(false)
                 activity.runOnUiThread {
                     onDisconnected(activity)
-                    animateConnected(activity, true)
                 }
             }
 
