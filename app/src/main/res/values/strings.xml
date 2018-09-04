@@ -23,4 +23,5 @@
     <string name="known_error_msg">An error occurred during the connection. Connect this device via USB and press "Fix" to clear it and prevent it from happening again.</string>
     <string name="usb_error_msg">Please connect this device to USB and press "Fix" again.</string>
     <string name="fix_btn">Fix</string>
+    <string name="not_enabled_wifi">WIFI is not enabled</string>
 </resources>

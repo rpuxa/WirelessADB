@@ -5,6 +5,7 @@ interface Settings {
     var adbPath: String
     var autoConnectIds: MutableSet<Long>
 
+
     val fields: Array<Any?>
 
     fun deserializable(fields: Array<Any?>)
