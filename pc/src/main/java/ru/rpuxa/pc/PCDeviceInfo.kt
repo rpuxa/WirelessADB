@@ -7,4 +7,8 @@ object PCDeviceInfo : ThisDeviceInfo() {
     override val settings = PCSettings
     override val filesDir = File("config")
     override val isMobile = false
+
+    //TODO
+    override val isWifiEnable: Boolean
+        get() = true
 }

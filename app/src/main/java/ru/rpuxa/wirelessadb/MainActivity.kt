@@ -33,15 +33,21 @@ class MainActivity : AppCompatActivity() {
         device_list_view.adapter = adapter
 
         power_switch.setOnClickListener {
-            trd {
-                onConnectChange(CoreServer.isAvailable)
-            }
+            if (!ANDROID_DEVICE_INFO.isWifiEnable) {
+                toast(getString(R.string.not_enabled_wifi))
+                power_switch.isChecked = false
+            } else
+                trd {
+                    onConnectChange(CoreServer.isAvailable)
+                }
         }
 
         trd {
             if (CoreServer.isAvailable)
                 onConnectChange(false)
         }
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

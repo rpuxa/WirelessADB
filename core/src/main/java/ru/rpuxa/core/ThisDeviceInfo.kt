@@ -9,6 +9,8 @@ abstract class ThisDeviceInfo {
     abstract val settings: Settings
     abstract val filesDir: File
     abstract val isMobile: Boolean
+    abstract val isWifiEnable: Boolean
+
 
     @NotNull
     open val id: Long? = null
