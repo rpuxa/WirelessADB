@@ -34,7 +34,7 @@
         android:layout_height="@dimen/btn_height"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/connect_btn"
+        android:background="@drawable/connect_btn_png"
         android:textAllCaps="false" />
 
     <ProgressBar
