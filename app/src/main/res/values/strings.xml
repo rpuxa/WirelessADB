@@ -18,10 +18,12 @@
     <string name="error_img_description">error</string>
     <string name="error_code">Error code: </string>
     <string name="search_btn">Search</string>
-    <string name="def_code">11111</string>
-    <string name="default_error_msg">An error occurred during the connection. Click \'Search\' to finding a solution on the Internet.</string>
-    <string name="known_error_msg">An error occurred during the connection. Connect this device via USB and press "Fix" to clear it and prevent it from happening again.</string>
-    <string name="usb_error_msg">Please connect this device to USB and press "Fix" again.</string>
+    <string name="def_code" translatable="false">11111</string>
+    <string name="default_error_msg">An error occurred during the connection. Click \"Search\" to finding a solution on the Internet.</string>
+    <string name="known_error_msg">An error occurred during the connection. Connect this device via USB and press \"Fix\" to clear it and prevent it from happening again.</string>
+    <string name="usb_error_msg">Please connect this device to USB and press \"Fix\" again.</string>
     <string name="fix_btn">Fix</string>
-    <string name="not_enabled_wifi">WIFI is not enabled</string>
+    <string name="language_dialog_title">Pick a language</string>
+    <string name="not_enabled_wifi">Wi-fi is not enabled</string>
+    <string name="menu_check_box">Auto start search</string>
 </resources>

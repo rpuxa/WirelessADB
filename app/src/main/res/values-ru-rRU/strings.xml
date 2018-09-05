@@ -10,4 +10,18 @@
     <string name="green_dot_descriptor">подключено</string>
     <string name="language_menu_item">Язык</string>
     <string name="rename_menu_item">Переименование устройства</string>
+    <string name="device_rename">Переименование устройства</string>
+    <string name="cancel_dialog_btn">Отменить</string>
+    <string name="rename_dialog_btn">Переименовать</string>
+    <string name="error_dialog_title">Ошибка при подключении ADB</string>
+    <string name="error_img_description">ошибка</string>
+    <string name="error_code">"Код ошибки: "</string>
+    <string name="search_btn">Поиск</string>
+    <string name="fix_btn">Исправить</string>
+    <string name="not_enabled_wifi">Wi-fi недоступен</string>
+    <string name="menu_check_box">Начинать поиск при запуске</string>
+    <string name="default_error_msg">Во время подключения произошла ошибка. Нажмите \"Поиск\", чтобы искать решение в интернете.</string>
+    <string name="known_error_msg">Во время подключения произошла ошибка. Подключите устройство по USB и нажмите \"Исправить\", чтобы предотвратить появление ошибки в дальнейшем.</string>
+    <string name="usb_error_msg">Убедитесь, что устройство подклчено по USB и нажмите \"Исправить\" снова.</string>
+    <string name="language_dialog_title">Выберите язык</string>
 </resources>

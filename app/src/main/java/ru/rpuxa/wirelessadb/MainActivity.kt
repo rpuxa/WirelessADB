@@ -17,7 +17,6 @@ import ru.rpuxa.wirelessadb.settings.AndroidSettings
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var allViews: Array<View>
     private lateinit var adapter: DeviceListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,10 +24,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        allViews = arrayOf(
-                device_list_view,
-                include
-        )
         adapter = DeviceListAdapter(layoutInflater, device_list_view)
         device_list_view.adapter = adapter
 
@@ -41,9 +36,13 @@ class MainActivity : AppCompatActivity() {
                 onConnectChange(false)
         }
 
+        if (AndroidSettings.autoStart) {
+            power_switch.isChecked = true
+            onMainSwitchChange()
+        }
     }
 
-    fun onMainSwitchChange() {
+    private fun onMainSwitchChange() {
         if (!ANDROID_DEVICE_INFO.isWifiEnable && !power_switch.isChecked) {
             toast(getString(R.string.not_enabled_wifi))
             power_switch.isChecked = false
@@ -55,6 +54,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
+        menu?.findItem(R.id.checkable_item)?.isChecked = AndroidSettings.autoStart
         return true
     }
 
@@ -68,6 +68,11 @@ class MainActivity : AppCompatActivity() {
                     DeviceRenameDialog().show(supportFragmentManager, "Rename")
                     true
                 }
+                R.id.checkable_item -> {
+                    item.isChecked = !item.isChecked
+                    AndroidSettings.autoStart = item.isChecked
+                    true
+                }
                 else -> super.onOptionsItemSelected(item)
             }
 
@@ -76,7 +81,6 @@ class MainActivity : AppCompatActivity() {
             power_switch.isChecked = !disconnect
 
             val visibility = if (disconnect) View.INVISIBLE else View.VISIBLE
-            //allViews.forEach { it.visibility = visibility }
             device_list_view.visibility = visibility
             searchingDevices = !disconnect
             if (!disconnect) {

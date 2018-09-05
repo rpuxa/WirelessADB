@@ -10,6 +10,7 @@ object AndroidSettings : Settings {
     override var deviceName = "Android"
 
     var language = Languages.ENGLISH
+    var autoStart = true
 
     override var autoConnectIds: MutableSet<Long> = HashSet()
 
