@@ -1,5 +1,6 @@
 package ru.rpuxa.core
 
+import java.io.IOException
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.net.InetAddress
@@ -40,9 +41,12 @@ internal object Pinging {
                     val newAddress = address.clone()
                     newAddress[3] = lastByte.toByte()
                     while (pingingDevices) {
-                        val byAddress = InetAddress.getByAddress(newAddress)
-                        if (byAddress.isReachable(1000))
-                            checkDevice(byAddress)
+                        try {
+                            val byAddress = InetAddress.getByAddress(newAddress)
+                            if (byAddress.isReachable(1000))
+                                checkDevice(byAddress)
+                        } catch (e: IOException) {
+                        }
                     }
                 }.start()
             }
