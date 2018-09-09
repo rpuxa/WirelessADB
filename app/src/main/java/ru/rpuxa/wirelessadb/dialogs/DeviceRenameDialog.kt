@@ -21,6 +21,7 @@ class DeviceRenameDialog : DialogFragment() {
 
         dialogView.rename_dialog_btn.setOnClickListener {
             AndroidSettings.deviceName = dialogView.name_text.text.toString()
+            this.dialog.cancel()
         }
 
         builder.setView(dialogView)

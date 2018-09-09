@@ -10,7 +10,7 @@ object AndroidSettings : Settings {
     override var deviceName = "Android"
 
     var language = Languages.ENGLISH
-    var autoStart = true
+    override var autoStart = true
 
     override var autoConnectIds: MutableSet<Long> = HashSet()
 
@@ -36,12 +36,15 @@ object AndroidSettings : Settings {
         get() = arrayOf(
                 deviceName,
                 language,
-                autoConnectIds
+                autoConnectIds,
+                autoStart
         )
 
+    @Suppress("UNCHECKED_CAST")
     override fun deserializable(fields: Array<Any?>) {
         deviceName = fields[0] as String
         language = fields[1] as Languages
         autoConnectIds = fields[2] as MutableSet<Long>
+        autoStart = fields[3] as Boolean
     }
 }

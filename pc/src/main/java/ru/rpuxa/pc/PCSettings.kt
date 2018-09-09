@@ -9,17 +9,19 @@ object PCSettings : Settings {
 
     override var autoConnectIds: MutableSet<Long> = HashSet()
 
+    override var autoStart = false
 
     override val fields: Array<Any?>
         get() = arrayOf(
                 deviceName,
                 adbPath,
-                autoConnectIds
+                autoConnectIds,
+                autoStart
         )
 
     override fun deserializable(fields: Array<Any?>) {
         deviceName = fields[0] as String
         adbPath = fields[1] as String
-        // autoConnectIds = fields[2] as MutableSet<Long>
+        autoStart = fields[2] as Boolean
     }
 }

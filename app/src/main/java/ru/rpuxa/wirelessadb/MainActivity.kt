@@ -54,12 +54,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
-        menu?.findItem(R.id.checkable_item)?.isChecked = AndroidSettings.autoStart
+        menu!!.findItem(R.id.checkable_item).isChecked = AndroidSettings.autoStart
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean =
-            when (item?.itemId) {
+            when (item!!.itemId) {
                 R.id.menu_item_language -> {
                     LanguageDialog().show(supportFragmentManager, "Language")
                     true

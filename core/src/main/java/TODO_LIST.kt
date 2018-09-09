@@ -2,5 +2,8 @@
  * Файл для ближайших целей
  */
 
-//TODO fix this java.net.SocketException: Unrecognized Windows Sockets error: 11050: no further information
-//TODO проверка на подключение к Wifi перед запуском
+//TODO сделать иконку приложения
+//TODO смена языка не работает
+//TODO При переименовании устройства в editText написать текущее имя устрйоства
+
+//TODO запилить внутренний сервер в отдельный jar архив
