@@ -174,28 +174,29 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
     }
 
     private fun animateConnected(activity: Activity, close: Boolean) {
-        val animation = AnimationUtils.loadAnimation(activity,
-                if (close)
-                    R.anim.close_anim
-                else
-                    R.anim.open_anim
-        )
-        animation.duration = 500
-        activity.include.visibility = View.VISIBLE
-        if (close) {
-            animation.setAnimationListener(object : Animation.AnimationListener {
-                override fun onAnimationRepeat(animation: Animation?) {
-                }
+        if (activity.include.visibility == if (close) View.VISIBLE else View.INVISIBLE) {
+            val animation = AnimationUtils.loadAnimation(activity,
+                    if (close)
+                        R.anim.close_anim
+                    else
+                        R.anim.open_anim
+            )
+            activity.include.visibility = View.VISIBLE
+            if (close) {
+                animation.setAnimationListener(object : Animation.AnimationListener {
+                    override fun onAnimationRepeat(animation: Animation?) {
+                    }
 
-                override fun onAnimationEnd(animation: Animation?) {
-                    activity.include.visibility = View.INVISIBLE
-                }
+                    override fun onAnimationEnd(animation: Animation?) {
+                        activity.include.visibility = View.INVISIBLE
+                    }
 
-                override fun onAnimationStart(animation: Animation?) {
-                }
-            })
+                    override fun onAnimationStart(animation: Animation?) {
+                    }
+                })
+            }
+            activity.include.startAnimation(animation)
         }
-        activity.include.startAnimation(animation)
     }
 
     override fun getCount() = devices.size

@@ -14,6 +14,7 @@ class DeviceRenameDialog : DialogFragment() {
 
         val builder = AlertDialog.Builder(context)
         val dialogView = activity.layoutInflater.inflate(R.layout.device_rename_dialog, null)
+        dialogView.name_text.setText(AndroidSettings.deviceName)
 
         dialogView.cancel_dialog_btn.setOnClickListener {
             this.dialog.cancel()

@@ -26,4 +26,5 @@
     <string name="language_dialog_title">Pick a language</string>
     <string name="not_enabled_wifi">Wi-fi is not enabled</string>
     <string name="menu_check_box">Auto start search</string>
+    <string name="default_device_name">Android</string>
 </resources>

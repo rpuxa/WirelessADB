@@ -14,7 +14,6 @@ object AndroidSettings : Settings {
 
     override var autoConnectIds: MutableSet<Long> = HashSet()
 
-
     fun isAutoConnect(device: Device) = autoConnectIds.find { it == device.id } != null
 
     fun setLanguage(language: Languages, context: Context) {
