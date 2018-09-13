@@ -1,13 +1,12 @@
 package ru.rpuxa.internalServer
 
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
 import ru.rpuxa.core.trd
 import ru.rpuxa.internalServer.InternalServer.info
 import java.io.IOException
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.net.InetAddress
+import java.net.InetSocketAddress
 import java.net.Socket
 
 internal object Pinging {
@@ -66,7 +65,8 @@ internal object Pinging {
             val port = address.myPort
             if (port != InetAddress.getByName(getIp()).myPort) {
                 println(address)
-                val socket = Socket(address, port)
+                val socket = Socket()
+                socket.connect(InetSocketAddress(address, port), 500)
                 val output = socket.getOutputStream()
                 val input = socket.getInputStream()
                 DeviceConnection(socket, ObjectOutputStream(output), ObjectInputStream(input), address)
@@ -76,15 +76,3 @@ internal object Pinging {
     }
 
 }
-
-fun main(args: Array<String>) {
-    for (i in 1..1000)
-        launch {
-            println(i)
-            delay(500)
-            println(i)
-        }
-    Thread.sleep(1000)
-}
-
-

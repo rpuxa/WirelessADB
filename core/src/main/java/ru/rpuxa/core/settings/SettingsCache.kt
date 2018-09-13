@@ -15,6 +15,9 @@ object SettingsCache {
 
     @Suppress("UNCHECKED_CAST")
     fun load(settings: Settings, info: DeviceInfo) {
+        val dir = File(info.filesDir)
+        if (!dir.exists())
+            dir.mkdir()
         try {
             ObjectInputStream(FileInputStream(File(info.filesDir, FILE_NAME))).use {
                 settings.deserializable(it.readObject() as Array<Any?>)

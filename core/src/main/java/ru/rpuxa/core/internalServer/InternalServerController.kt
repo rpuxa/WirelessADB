@@ -166,8 +166,7 @@ object InternalServerController {
     private fun getDevicesList() = sendMessageToServer(GET_DEVICE_LIST) as Array<Device>?
 
     fun setDeviceInfo(info: DeviceInfo) {
-        info.serialize()
-        sendMessageToServer(SET_DEVICE_INFO, info)
+        sendMessageToServer(SET_DEVICE_INFO, DeviceInfoSerializable(info))
     }
 
     @Synchronized

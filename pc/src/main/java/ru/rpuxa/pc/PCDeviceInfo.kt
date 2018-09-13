@@ -6,11 +6,14 @@ import java.io.File
 object PCDeviceInfo : DeviceInfo() {
     override val filesDir = File("config").path!!
     override val isMobile = false
-    override lateinit var adbPath: String
-    override lateinit var name: String
-
-    override fun serialize() {
-        adbPath = PCSettings.adbPath
-        name = PCSettings.deviceName
-    }
+    override var adbPath: String
+        get() = PCSettings.adbPath
+        set(value) {
+            PCSettings.adbPath = value
+        }
+    override var name: String
+        get() = PCSettings.deviceName
+        set(value) {
+            PCSettings.deviceName = value
+        }
 }

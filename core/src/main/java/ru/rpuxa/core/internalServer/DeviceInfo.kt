@@ -3,7 +3,7 @@ package ru.rpuxa.core.internalServer
 import java.io.*
 import java.util.*
 
-abstract class DeviceInfo : Serializable {
+abstract class DeviceInfo {
     abstract val filesDir: String
     abstract val isMobile: Boolean
     abstract var adbPath: String
@@ -22,6 +22,4 @@ abstract class DeviceInfo : Serializable {
             }
             id
         }
-
-    abstract fun serialize()
 }

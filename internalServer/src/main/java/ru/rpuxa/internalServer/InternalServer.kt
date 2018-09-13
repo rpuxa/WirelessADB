@@ -1,7 +1,7 @@
 package ru.rpuxa.internalServer
 
 import ru.rpuxa.core.internalServer.Device
-import ru.rpuxa.core.internalServer.DeviceInfo
+import ru.rpuxa.core.internalServer.DeviceInfoSerializable
 import ru.rpuxa.core.internalServer.Message
 import ru.rpuxa.core.internalServer.SET_DEVICE_INFO
 import java.io.ObjectInputStream
@@ -13,7 +13,7 @@ object InternalServer {
 
     internal val devices = ArrayList<DeviceConnection>()
 
-    internal lateinit var info: DeviceInfo
+    internal lateinit var info: DeviceInfoSerializable
 
     fun init() {
         val serverSocket = ServerSocket(7158, 0, InetAddress.getByName("localhost"))
@@ -142,7 +142,7 @@ object InternalServer {
             }
 
             SET_DEVICE_INFO -> {
-                info = msg.data as DeviceInfo
+                info = msg.data as DeviceInfoSerializable
                 Server.openServerSocket()
                 Pinging.ping = true
             }
