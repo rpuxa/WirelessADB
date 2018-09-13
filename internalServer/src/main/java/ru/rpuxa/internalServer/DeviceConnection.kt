@@ -136,7 +136,7 @@ internal class DeviceConnection(
         }
     }
 
-    internal fun disconnect() {
+    private fun disconnect() {
         if (!connected.get())
             return
         try {

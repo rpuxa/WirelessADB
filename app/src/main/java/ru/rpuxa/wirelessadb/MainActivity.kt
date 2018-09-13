@@ -1,5 +1,7 @@
 package ru.rpuxa.wirelessadb
 
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
@@ -10,16 +12,21 @@ import ru.rpuxa.core.internalServer.Device
 import ru.rpuxa.core.internalServer.InternalServerController
 import ru.rpuxa.core.settings.SettingsCache
 import ru.rpuxa.core.trd
-import ru.rpuxa.wirelessadb.dialogs.DeviceRenameDialog
-import ru.rpuxa.wirelessadb.dialogs.LanguageDialog
+import ru.rpuxa.wirelessadb.dialogs.*
 import ru.rpuxa.wirelessadb.settings.AndroidSettings
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        private var listener: MainActivity.Listener? = null
+    }
 
     private lateinit var adapter: DeviceListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (listener == null)
+            listener = Listener()
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
@@ -42,7 +49,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onMainSwitchChange() {
-        if (!ANDROID_DEVICE_INFO.isWifiEnable && !power_switch.isChecked) {
+        if (!isWifiEnabled && !power_switch.isChecked) {
             toast(getString(R.string.not_enabled_wifi))
             power_switch.isChecked = false
         } else
@@ -75,48 +82,73 @@ class MainActivity : AppCompatActivity() {
                 else -> super.onOptionsItemSelected(item)
             }
 
-    private fun onConnectChange(disconnect: Boolean) {
+    private fun onConnectChange(connect: Boolean) {
         runOnUiThread {
-            power_switch.isChecked = !disconnect
-
-            val visibility = if (disconnect) View.INVISIBLE else View.VISIBLE
-            device_list_view.visibility = visibility
-            searchingDevices = !disconnect
-            if (!disconnect) {
+            power_switch.isChecked = !connect
+            device_list_view.visibility = if (connect) View.VISIBLE else View.INVISIBLE
+            if (connect) {
                 status_bar_text.text = getString(R.string.searching_devices)
                 include.visibility = View.INVISIBLE
-                startSearchingDevices()
+                InternalServerController.startServer(WirelessAdb.deviceInfo, WirelessAdb.serverStarter)
             } else {
                 status_bar_text.text = getString(R.string.search_disabled)
-                trd { InternalServerController.closeServer() }
+                InternalServerController.closeServer()
             }
         }
     }
 
     override fun onPause() {
-        SettingsCache.save(AndroidSettings, ANDROID_DEVICE_INFO)
+        SettingsCache.save(AndroidSettings, WirelessAdb.deviceInfo)
         super.onPause()
     }
 
-    private var searchingDevices = true
-    private fun startSearchingDevices() {
-        InternalServerController.startServer(ANDROID_DEVICE_INFO, object : ServerListener {
-            override fun onAdd(device: Device) {
-                adapter.addDevice(device)
-            }
+    private val isWifiEnabled: Boolean
+        get() {
+            val connManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+            return mWifi.isConnected
+        }
 
-            override fun onRemove(device: Device) {
-                adapter.removeDevice(device)
-            }
-        })
-        trd {
-            Thread.sleep(1000)
-            while (searchingDevices) {
-                if (InternalServerController.isAvailable) {
-                    Thread.sleep(1000)
-                } else
-                    onConnectChange(true)
-            }
+    private inner class Listener : InternalServerController.InternalServerListener {
+        override fun onServerConnected() {
+            power_switch.isChecked = true
+        }
+
+        override fun onServerDisconnect() {
+            power_switch.isChecked = false
+        }
+
+        override fun serverStillWorking() {
+            power_switch.isChecked = true
+        }
+
+        override fun serverStillDisabled() {
+            power_switch.isChecked = false
+        }
+
+        override fun onDeviceDetected(device: Device) {
+            adapter.addDevice(device)
+        }
+
+        override fun onDeviceDisconnected(device: Device) {
+            adapter.removeDevice(device)
+        }
+
+        override fun onAdbConnected(device: Device) {
+            adapter.onAdbConnected(device)
+        }
+
+        override fun onAdbDisconnected(device: Device) {
+            adapter.onAdbDisconnected(device)
+        }
+
+        override fun onAdbError(device: Device, code: Int) {
+            val args = Bundle()
+            val errorDialog = OnErrorDialog()
+            args.putInt(ERROR_CODE, code)
+            args.putSerializable(DEVICE, code)
+            errorDialog.arguments = args
+            errorDialog.show(supportFragmentManager, "Error")
         }
     }
 }

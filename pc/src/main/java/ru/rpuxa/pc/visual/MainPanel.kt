@@ -101,7 +101,7 @@ class MainPanel(actions: Actions) : JPanel() {
             deviceListPanel.changeAdb(device, false)
         }
 
-        override fun onAdbError(code: Int) {
+        override fun onAdbError(device: Device, code: Int) {
         }
     }
 

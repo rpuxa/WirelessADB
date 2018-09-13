@@ -22,13 +22,13 @@ class DeviceListPanel : JPanel() {
 
     fun addDevice(device: Device) {
         drawDevice(device)
-        repaint()
+        revalidate()
     }
 
     fun removeDevice(device: Device) {
         remove(deviceViews.find { it.device == device }!!.panel)
         deviceViews.removeIf { it.device == device }
-        repaint()
+        revalidate()
     }
 
     fun changeAdb(device: Device, connected: Boolean) {
@@ -50,7 +50,7 @@ class DeviceListPanel : JPanel() {
         var adbButton: JButton? = null
 
         if (device.isMobile) {
-            adbButton = JButton()
+            adbButton = JButton(CONNECT)
             adbButton.addActionListener {
                 if (InternalServerController.checkAdb(device)) {
                     adbButton.text = DISCONNECTING
@@ -60,6 +60,7 @@ class DeviceListPanel : JPanel() {
                     InternalServerController.connectAdb(device)
                 }
             }
+            panel.add(adbButton)
         }
 
 
@@ -74,6 +75,7 @@ class DeviceListPanel : JPanel() {
     fun clear() {
         removeAll()
         deviceViews.clear()
+        revalidate()
     }
 
 

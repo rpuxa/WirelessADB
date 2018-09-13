@@ -29,7 +29,7 @@ object InternalServerController {
     /**
      * Выключить @see[startServer]
      */
-    fun closeServer() {
+    fun closeServer() = trd {
         sendMessageToServer(CLOSE_CORE_SERVER)
     }
 
@@ -48,7 +48,7 @@ object InternalServerController {
         trd {
             val msg = sendMessageToServer(CONNECT_ADB, device) as Message
             if (msg.command == ADB_ERROR && listener != null) {
-                listener!!.onAdbError(msg.data as Int)
+                listener!!.onAdbError(device, msg.data as Int)
             }
         }
     }
@@ -102,9 +102,8 @@ object InternalServerController {
         fun onAdbConnected(device: Device)
 
         fun onAdbDisconnected(device: Device)
-        fun onAdbError(code: Int)
 
-
+        fun onAdbError(device: Device, code: Int)
     }
 
     private var listener: InternalServerListener? = null
