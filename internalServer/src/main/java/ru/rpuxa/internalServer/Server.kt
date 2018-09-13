@@ -1,4 +1,4 @@
-package ru.rpuxa.core
+package ru.rpuxa.internalServer
 
 import java.io.InputStream
 import java.io.ObjectInputStream

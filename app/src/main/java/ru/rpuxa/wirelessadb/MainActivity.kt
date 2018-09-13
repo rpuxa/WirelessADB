@@ -6,9 +6,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
-import ru.rpuxa.core.CoreServer
-import ru.rpuxa.core.Device
-import ru.rpuxa.core.listeners.ServerListener
+import ru.rpuxa.core.internalServer.Device
+import ru.rpuxa.core.internalServer.InternalServerController
 import ru.rpuxa.core.settings.SettingsCache
 import ru.rpuxa.core.trd
 import ru.rpuxa.wirelessadb.dialogs.DeviceRenameDialog
@@ -32,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         trd {
-            if (CoreServer.isAvailable)
+            if (InternalServerController.isAvailable)
                 onConnectChange(false)
         }
 
@@ -48,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             power_switch.isChecked = false
         } else
             trd {
-                onConnectChange(CoreServer.isAvailable)
+                onConnectChange(InternalServerController.isAvailable)
             }
     }
 
@@ -89,7 +88,7 @@ class MainActivity : AppCompatActivity() {
                 startSearchingDevices()
             } else {
                 status_bar_text.text = getString(R.string.search_disabled)
-                trd { CoreServer.closeServer() }
+                trd { InternalServerController.closeServer() }
             }
         }
     }
@@ -101,7 +100,7 @@ class MainActivity : AppCompatActivity() {
 
     private var searchingDevices = true
     private fun startSearchingDevices() {
-        CoreServer.startServer(ANDROID_DEVICE_INFO, object : ServerListener {
+        InternalServerController.startServer(ANDROID_DEVICE_INFO, object : ServerListener {
             override fun onAdd(device: Device) {
                 adapter.addDevice(device)
             }
@@ -113,7 +112,7 @@ class MainActivity : AppCompatActivity() {
         trd {
             Thread.sleep(1000)
             while (searchingDevices) {
-                if (CoreServer.isAvailable) {
+                if (InternalServerController.isAvailable) {
                     Thread.sleep(1000)
                 } else
                     onConnectChange(true)

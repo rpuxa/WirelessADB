@@ -1,18 +1,15 @@
-package ru.rpuxa.core
+package ru.rpuxa.core.internalServer
 
-import org.jetbrains.annotations.NotNull
-import ru.rpuxa.core.settings.Settings
 import java.io.*
 import java.util.*
 
-abstract class ThisDeviceInfo {
-    abstract val settings: Settings
-    abstract val filesDir: File
+abstract class DeviceInfo : Serializable {
+    abstract val filesDir: String
     abstract val isMobile: Boolean
-    abstract val isWifiEnable: Boolean
+    abstract var adbPath: String
+    abstract var name: String
 
-
-    @NotNull
+    @Transient
     open val id: Long? = null
         get() = try {
             field ?: ObjectInputStream(FileInputStream(File(filesDir, "id"))).use {
@@ -25,4 +22,6 @@ abstract class ThisDeviceInfo {
             }
             id
         }
+
+    abstract fun serialize()
 }

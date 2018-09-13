@@ -1,7 +1,7 @@
 package ru.rpuxa.wirelessadb.settings
 
 import android.content.Context
-import ru.rpuxa.core.Device
+import ru.rpuxa.core.internalServer.Device
 import ru.rpuxa.core.settings.Settings
 import java.util.*
 import kotlin.collections.HashSet

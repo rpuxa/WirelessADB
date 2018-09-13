@@ -13,9 +13,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.connected_device.*
 import kotlinx.android.synthetic.main.connected_device.view.*
 import kotlinx.android.synthetic.main.list_item.view.*
-import ru.rpuxa.core.CoreServer
-import ru.rpuxa.core.Device
-import ru.rpuxa.core.listeners.AdbListener
+import ru.rpuxa.core.internalServer.Device
+import ru.rpuxa.core.internalServer.InternalServerController
 import ru.rpuxa.core.trd
 import ru.rpuxa.wirelessadb.dialogs.DEVICE
 import ru.rpuxa.wirelessadb.dialogs.ERROR_CODE
@@ -53,7 +52,7 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
                 }
 
             trd {
-                if (CoreServer.checkAdb(device))
+                if (InternalServerController.checkAdb(device))
                     activity.runOnUiThread {
                         onDisconnected(activity)
                     }
@@ -133,7 +132,7 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
         }
 
         activity.include.disconnect_btn.setOnClickListener {
-            CoreServer.disconnectAdb(this, adbListener)
+            InternalServerController.disconnectAdb(this, adbListener)
         }
 
         val switch = activity.auto_connect_switch
@@ -151,7 +150,7 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
 
         Thread {
             while (devices.find { it == this } != null) {
-                val res = CoreServer.checkAdb(this)
+                val res = InternalServerController.checkAdb(this)
                 if (connectedAdb.get() != res) {
                     if (res)
                         adbListener.onConnect()
@@ -170,7 +169,7 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
         onConnecting()
         itemView.connect_btn.visibility = View.INVISIBLE
         itemView.progress_bar_connect.visibility = View.VISIBLE
-        trd { CoreServer.connectAdb(this, adbListener) }
+        trd { InternalServerController.connectAdb(this, adbListener) }
     }
 
     private fun animateConnected(activity: Activity, close: Boolean) {

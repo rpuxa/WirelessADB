@@ -1,4 +1,4 @@
-package ru.rpuxa.core
+package ru.rpuxa.core.internalServer
 
 import java.io.Serializable
 

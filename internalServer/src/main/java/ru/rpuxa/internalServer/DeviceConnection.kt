@@ -1,8 +1,9 @@
-package ru.rpuxa.core
+package ru.rpuxa.internalServer
 
-import ru.rpuxa.core.CoreServer.deviceInfo
-import ru.rpuxa.core.CoreServer.devices
-import ru.rpuxa.core.listeners.DeviceListener
+import ru.rpuxa.core.internalServer.Device
+import ru.rpuxa.core.internalServer.Message
+import ru.rpuxa.internalServer.InternalServer.devices
+import ru.rpuxa.internalServer.InternalServer.info
 import java.io.IOException
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
@@ -26,9 +27,9 @@ internal class DeviceConnection(
 
     init {
         try {
-            sendMessage(ID, deviceInfo.id!!)
-            sendMessage(NAME, deviceInfo.settings.deviceName)
-            sendMessage(TYPE, deviceInfo.isMobile)
+            sendMessage(ID, info.id!!)
+            sendMessage(NAME, info.name)
+            sendMessage(TYPE, info.isMobile)
 
             Thread {
                 Thread.sleep(5000)
@@ -103,7 +104,7 @@ internal class DeviceConnection(
     private fun onMessage(msg: Message) {
         when (msg.command) {
             CONNECT_ADB ->
-                if (isMobile && !CoreServer.deviceInfo.isMobile) {
+                if (isMobile && !info.isMobile) {
                     val res = changeADB(ip)
                     if (res == 0)
                         sendMessage(ADB_OK)
@@ -114,21 +115,21 @@ internal class DeviceConnection(
 
 
             ADB_CHECK ->
-                if (isMobile && !CoreServer.deviceInfo.isMobile && checkADB(ip)) {
+                if (isMobile && !info.isMobile && checkADB(ip)) {
                     sendMessage(ADB_OK)
                 } else
                     sendMessage(ADB_FAIL)
 
 
             DISCONNECT_ADB ->
-                if (isMobile && !CoreServer.deviceInfo.isMobile && changeADB(ip, false) == 0) {
+                if (isMobile && !info.isMobile && changeADB(ip, false) == 0) {
                     sendMessage(ADB_OK)
                 } else
                     sendMessage(ADB_FAIL)
 
 
             FIX_ADB_10061 ->
-                if (isMobile && !CoreServer.deviceInfo.isMobile && fixAdb10061(ip)) {
+                if (isMobile && !info.isMobile && fixAdb10061(ip)) {
                     sendMessage(ADB_OK)
                 } else
                     sendMessage(ADB_FAIL)

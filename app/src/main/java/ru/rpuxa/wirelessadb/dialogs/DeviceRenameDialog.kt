@@ -17,12 +17,12 @@ class DeviceRenameDialog : DialogFragment() {
         dialogView.name_text.setText(AndroidSettings.deviceName)
 
         dialogView.cancel_dialog_btn.setOnClickListener {
-            this.dialog.cancel()
+            dialog.cancel()
         }
 
         dialogView.rename_dialog_btn.setOnClickListener {
             AndroidSettings.deviceName = dialogView.name_text.text.toString()
-            this.dialog.cancel()
+            dialog.cancel()
         }
 
         builder.setView(dialogView)

@@ -1,4 +1,4 @@
-package ru.rpuxa.core
+package ru.rpuxa.internalServer
 
 internal const val ID = 0
 internal const val NAME = 1

@@ -7,8 +7,8 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import kotlinx.android.synthetic.main.on_error_dialog.view.*
-import ru.rpuxa.core.CoreServer
-import ru.rpuxa.core.Device
+import ru.rpuxa.core.internalServer.Device
+import ru.rpuxa.core.internalServer.InternalServerController
 import ru.rpuxa.core.trd
 import ru.rpuxa.wirelessadb.R
 
@@ -31,7 +31,7 @@ class OnErrorDialog : DialogFragment() {
         dialogView.do_btn.setOnClickListener {
             if (code == 10061) {
                 trd {
-                    if (CoreServer.fixAdb10061(device))
+                    if (InternalServerController.fixAdb10061(device))
                         this.dialog.cancel()
                     else
                         dialogView.error_msg.text = getString(R.string.usb_error_msg)

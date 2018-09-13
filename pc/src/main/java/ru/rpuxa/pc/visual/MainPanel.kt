@@ -1,14 +1,14 @@
 package ru.rpuxa.pc.visual
 
-import ru.rpuxa.core.CoreServer
-import ru.rpuxa.core.Device
-import ru.rpuxa.core.listeners.ServerListener
+import ru.rpuxa.core.internalServer.Device
+import ru.rpuxa.core.internalServer.InternalServerController
 import ru.rpuxa.core.settings.SettingsCache
 import ru.rpuxa.pc.Actions
 import ru.rpuxa.pc.PCDeviceInfo
 import ru.rpuxa.pc.PCSettings
 import java.awt.Component
 import java.awt.Dimension
+import java.io.File
 import javax.swing.*
 
 class MainPanel(actions: Actions) : JPanel() {
@@ -23,7 +23,7 @@ class MainPanel(actions: Actions) : JPanel() {
     private val adbPathPicker = AdbPathPicker(actions)
     private val deviceListPanel = DeviceListPanel()
 
-    private val deviceList = ArrayList<Device>()
+    private val listener = Listener()
 
     //Размещение компонентов
     init {
@@ -52,41 +52,65 @@ class MainPanel(actions: Actions) : JPanel() {
         add(scroll)
     }
 
-    //Установка листенеров и запуск потоков
+    //Установка листенеров
     init {
-        Thread {
-            while (true) {
-                val available = CoreServer.isAvailable
-                mainSwitch.isSelected = available
-                deviceListPanel.refresh()
-                Thread.sleep(1500)
-            }
-        }.start()
+        InternalServerController.setListener(listener)
 
-        mainSwitch.addActionListener { _ ->
-            if (!CoreServer.isAvailable) {
-                CoreServer.startServer(PCDeviceInfo, object : ServerListener {
-                    override fun onAdd(device: Device) {
-                        deviceList.add(device)
-                        updateDevices()
-                    }
-
-                    override fun onRemove(device: Device) {
-                        if (deviceList.isNotEmpty()) {
-                            deviceList.removeIf { it.id == device.id }
-                            updateDevices()
-                        }
-                    }
-                })
+        mainSwitch.addActionListener {
+            if (!InternalServerController.isAvailable) {
+                InternalServerController.startServer(PCDeviceInfo, ServerStarter)
             } else {
-                deviceList.clear()
-                updateDevices()
-                CoreServer.closeServer()
+                deviceListPanel.clear()
+                InternalServerController.closeServer()
             }
         }
     }
 
-    private fun updateDevices() {
-        deviceListPanel.updateDevices(deviceList.toTypedArray())
+
+    inner class Listener : InternalServerController.InternalServerListener {
+        override fun onServerConnected() {
+            mainSwitch.isSelected = true
+            InternalServerController.setDeviceInfo(PCDeviceInfo)
+        }
+
+        override fun onServerDisconnect() {
+            mainSwitch.isSelected = false
+        }
+
+        override fun serverStillWorking() {
+            mainSwitch.isSelected = true
+        }
+
+        override fun serverStillDisabled() {
+            mainSwitch.isSelected = false
+        }
+
+        override fun onDeviceDetected(device: Device) {
+            deviceListPanel.addDevice(device)
+        }
+
+        override fun onDeviceDisconnected(device: Device) {
+            deviceListPanel.removeDevice(device)
+        }
+
+        override fun onAdbConnected(device: Device) {
+            deviceListPanel.changeAdb(device, true)
+        }
+
+        override fun onAdbDisconnected(device: Device) {
+            deviceListPanel.changeAdb(device, false)
+        }
+
+        override fun onAdbError(code: Int) {
+        }
+    }
+
+    object ServerStarter : InternalServerController.Starter {
+
+        override fun startServer() {
+            val file = File("WAJAR.jar")
+            val process = Runtime.getRuntime().exec("java -jar $file server")
+            process.waitFor()
+        }
     }
 }

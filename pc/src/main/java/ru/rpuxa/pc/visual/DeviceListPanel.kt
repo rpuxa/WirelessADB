@@ -1,8 +1,7 @@
 package ru.rpuxa.pc.visual
 
-import ru.rpuxa.core.CoreServer
-import ru.rpuxa.core.Device
-import ru.rpuxa.core.listeners.AdbListener
+import ru.rpuxa.core.internalServer.Device
+import ru.rpuxa.core.internalServer.InternalServerController
 import java.awt.BorderLayout
 import java.awt.Component
 import java.awt.Dimension
@@ -15,21 +14,28 @@ const val CONNECTING = "Connecting..."
 
 class DeviceListPanel : JPanel() {
 
-    private val runAdbButtons = ArrayList<Pair<Device, JButton>>()
+    private val deviceViews = ArrayList<DeviceView>()
 
     init {
         layout = BoxLayout(this, BoxLayout.Y_AXIS)
     }
 
-    fun updateDevices(devices: Array<Device>): DeviceListPanel {
-        removeAll()
-        runAdbButtons.clear()
-        devices.forEach(::addDevice)
+    fun addDevice(device: Device) {
+        drawDevice(device)
         repaint()
-        return this
     }
 
-    private fun addDevice(device: Device) {
+    fun removeDevice(device: Device) {
+        remove(deviceViews.find { it.device == device }!!.panel)
+        deviceViews.removeIf { it.device == device }
+        repaint()
+    }
+
+    fun changeAdb(device: Device, connected: Boolean) {
+        deviceViews.find { it.device == device }!!.adbButton!!.text = if (connected) CONNECT else DISCONNECT
+    }
+
+    private fun drawDevice(device: Device) {
         val panel = JPanel()
         panel.layout = BoxLayout(panel, BoxLayout.X_AXIS)
         val type = JLabel(if (device.isMobile) "Android" else "PC")
@@ -41,49 +47,35 @@ class DeviceListPanel : JPanel() {
         panel.add(name)
         panel.add(Box.createHorizontalStrut(200 - type.minimumSize.width))
 
+        var adbButton: JButton? = null
 
-        if (device.isMobile)
-            Thread {
-                val runAdb = JButton()
-                val adbListener = object : AdbListener {
-                    override fun onConnect() {
-                        runAdb.text = DISCONNECT
-                    }
-
-                    override fun onDisconnect() {
-                        runAdb.text = CONNECT
-                    }
-                }
-                if (CoreServer.checkAdb(device)) {
-                    adbListener.onConnect()
+        if (device.isMobile) {
+            adbButton = JButton()
+            adbButton.addActionListener {
+                if (InternalServerController.checkAdb(device)) {
+                    adbButton.text = DISCONNECTING
+                    InternalServerController.disconnectAdb(device)
                 } else {
-                    adbListener.onDisconnect()
+                    adbButton.text = CONNECTING
+                    InternalServerController.connectAdb(device)
                 }
-                runAdb.addActionListener {
-                    if (CoreServer.checkAdb(device)) {
-                        runAdb.text = DISCONNECTING
-                        CoreServer.disconnectAdb(device, adbListener)
-                    } else {
-                        runAdb.text = CONNECTING
-                        CoreServer.connectAdb(device, adbListener)
-                    }
-                }
-                panel.add(runAdb)
-                revalidate()
-                runAdbButtons.add(device to runAdb)
-            }.start()
+            }
+        }
 
 
         panel.alignmentX = Component.LEFT_ALIGNMENT
         panel.maximumSize = Dimension(500, 30)
+
+        deviceViews.add(DeviceView(device, panel, adbButton))
+
         add(panel)
-
     }
 
-    fun refresh() {
-        for ((device, button) in runAdbButtons.toTypedArray())
-            button.text = if (CoreServer.checkAdb(device)) DISCONNECT else CONNECT
-
-
+    fun clear() {
+        removeAll()
+        deviceViews.clear()
     }
+
+
+    class DeviceView(val device: Device, val panel: JPanel, val adbButton: JButton?)
 }

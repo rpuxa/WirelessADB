@@ -1,6 +1,6 @@
-package ru.rpuxa.core.listeners
+package ru.rpuxa.internalServer
 
-import ru.rpuxa.core.Message
+import ru.rpuxa.core.internalServer.Message
 
 internal interface DeviceListener {
 

@@ -1,5 +1,9 @@
-package ru.rpuxa.core
+package ru.rpuxa.internalServer
 
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
+import ru.rpuxa.core.trd
+import ru.rpuxa.internalServer.InternalServer.info
 import java.io.IOException
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
@@ -20,7 +24,7 @@ internal object Pinging {
 
     @Synchronized
     private fun startPingDevices() {
-        if (pingingDevices || CoreServer.deviceInfo.isMobile)
+        if (pingingDevices || info.isMobile)
             return
         pingingDevices = true
 
@@ -36,20 +40,17 @@ internal object Pinging {
 
             val address = InetAddress.getByName(ip).address
 
-            for (lastByte in 1..254) {
-                Thread {
-                    val newAddress = address.clone()
-                    newAddress[3] = lastByte.toByte()
+            for (lastByte in 1..254)
+                trd {
                     while (pingingDevices) {
-                        try {
-                            val byAddress = InetAddress.getByAddress(newAddress)
-                            if (byAddress.isReachable(1000))
-                                checkDevice(byAddress)
-                        } catch (e: IOException) {
-                        }
+                        val newAddress = address.clone()
+                        newAddress[3] = lastByte.toByte()
+                        val byAddress = InetAddress.getByAddress(newAddress)
+                        if (byAddress.isReachable(1000))
+                            checkDevice(byAddress)
+                        Thread.sleep(500)
                     }
-                }.start()
-            }
+                }
         }.start()
     }
 
@@ -64,14 +65,26 @@ internal object Pinging {
         try {
             val port = address.myPort
             if (port != InetAddress.getByName(getIp()).myPort) {
+                println(address)
                 val socket = Socket(address, port)
                 val output = socket.getOutputStream()
                 val input = socket.getInputStream()
-
                 DeviceConnection(socket, ObjectOutputStream(output), ObjectInputStream(input), address)
             }
-        } catch (e: Throwable) {
+        } catch (e: IOException) {
         }
     }
 
 }
+
+fun main(args: Array<String>) {
+    for (i in 1..1000)
+        launch {
+            println(i)
+            delay(500)
+            println(i)
+        }
+    Thread.sleep(1000)
+}
+
+

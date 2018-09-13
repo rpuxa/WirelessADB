@@ -1,1 +1,1 @@
-include ':app', ':core', ':pc'
+include ':app', ':core', ':pc', ':internalServer'
