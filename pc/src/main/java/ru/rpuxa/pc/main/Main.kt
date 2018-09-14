@@ -1,4 +1,4 @@
-package ru.rpuxa.internalServer.main
+package ru.rpuxa.pc.main
 
 import ru.rpuxa.core.trd
 import ru.rpuxa.internalServer.InternalServer

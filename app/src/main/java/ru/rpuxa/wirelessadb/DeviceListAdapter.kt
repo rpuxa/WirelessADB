@@ -171,7 +171,7 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
 
     override fun getItemId(position: Int) = position.toLong()
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?) = null
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?) = deviceViews[position].view
 
-    private class DeviceView(val view: View, val device: Device)
+    class DeviceView(val view: View, val device: Device)
 }

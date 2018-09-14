@@ -32,7 +32,7 @@ class DeviceListPanel : JPanel() {
     }
 
     fun changeAdb(device: Device, connected: Boolean) {
-        deviceViews.find { it.device == device }!!.adbButton!!.text = if (connected) CONNECT else DISCONNECT
+        deviceViews.find { it.device == device }!!.adbButton!!.text = if (connected) DISCONNECT else CONNECT
     }
 
     private fun drawDevice(device: Device) {

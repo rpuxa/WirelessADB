@@ -18,20 +18,21 @@ import ru.rpuxa.wirelessadb.settings.AndroidSettings
 class MainActivity : AppCompatActivity() {
 
     companion object {
-        private var listener: MainActivity.Listener? = null
+        private var listener: InternalServerController.InternalServerListener? = null
     }
 
     private lateinit var adapter: DeviceListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (listener == null)
-            listener = Listener()
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-
         adapter = DeviceListAdapter(layoutInflater, device_list_view)
         device_list_view.adapter = adapter
+
+        if (listener == null)
+            listener = Listener()
+        InternalServerController.setListener(listener!!)
 
         power_switch.setOnClickListener {
             onMainSwitchChange()
@@ -39,7 +40,10 @@ class MainActivity : AppCompatActivity() {
 
         trd {
             if (InternalServerController.isAvailable)
-                onConnectChange(false)
+                onConnectChange(true)
+            runOnUiThread {
+                power_switch.isChecked = true
+            }
         }
 
         if (AndroidSettings.autoStart) {
@@ -54,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             power_switch.isChecked = false
         } else
             trd {
-                onConnectChange(InternalServerController.isAvailable)
+                onConnectChange(!InternalServerController.isAvailable)
             }
     }
 
@@ -84,8 +88,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun onConnectChange(connect: Boolean) {
         runOnUiThread {
-            power_switch.isChecked = !connect
-            device_list_view.visibility = if (connect) View.VISIBLE else View.INVISIBLE
             if (connect) {
                 status_bar_text.text = getString(R.string.searching_devices)
                 include.visibility = View.INVISIBLE
@@ -111,19 +113,30 @@ class MainActivity : AppCompatActivity() {
 
     private inner class Listener : InternalServerController.InternalServerListener {
         override fun onServerConnected() {
-            power_switch.isChecked = true
+            runOnUiThread {
+                power_switch.isChecked = true
+            }
+            InternalServerController.setDeviceInfo(WirelessAdb.deviceInfo)
         }
 
         override fun onServerDisconnect() {
-            power_switch.isChecked = false
+            runOnUiThread {
+                power_switch.isChecked = false
+            }
         }
 
         override fun serverStillWorking() {
-            power_switch.isChecked = true
+            runOnUiThread {
+                power_switch.isChecked = true
+                device_list_view.visibility = View.VISIBLE
+            }
         }
 
         override fun serverStillDisabled() {
-            power_switch.isChecked = false
+            runOnUiThread {
+                power_switch.isChecked = false
+                device_list_view.visibility = View.INVISIBLE
+            }
         }
 
         override fun onDeviceDetected(device: Device) {
@@ -143,12 +156,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onAdbError(device: Device, code: Int) {
-            val args = Bundle()
-            val errorDialog = OnErrorDialog()
-            args.putInt(ERROR_CODE, code)
-            args.putSerializable(DEVICE, code)
-            errorDialog.arguments = args
-            errorDialog.show(supportFragmentManager, "Error")
+            runOnUiThread {
+                val args = Bundle()
+                val errorDialog = OnErrorDialog()
+                args.putInt(ERROR_CODE, code)
+                args.putSerializable(DEVICE, code)
+                errorDialog.arguments = args
+                errorDialog.show(supportFragmentManager, "Error")
+            }
         }
     }
 }

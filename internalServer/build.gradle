@@ -8,8 +8,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation project(':core')
-    compile project(path: ':pc')
-    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.21"
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.21'
 }
 
 sourceCompatibility = "1.7"
