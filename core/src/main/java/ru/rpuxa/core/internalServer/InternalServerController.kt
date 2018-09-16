@@ -13,12 +13,13 @@ object InternalServerController {
     /**
      *  Включить видимость и начать поиск устройств в Wifi сети
      */
-    fun startServer(info: DeviceInfo, starter: Starter) = trd {
-        if (!isAvailable) {
-            starter.startServer()
-            setDeviceInfo(info)
-        }
-    }
+    fun startServer(info: DeviceInfo, starter: Starter) =
+            trd {
+                if (!isAvailable) {
+                    starter.startServer()
+                    setDeviceInfo(info)
+                }
+            }
 
     fun setListener(listener: InternalServerListener) {
         this.listener = listener
@@ -29,9 +30,10 @@ object InternalServerController {
     /**
      * Выключить @see[startServer]
      */
-    fun closeServer() = trd {
-        sendMessageToServer(CLOSE_CORE_SERVER)
-    }
+    fun closeServer() =
+            trd {
+                sendMessageToServer(CLOSE_CORE_SERVER)
+            }
 
 
     /**
@@ -44,29 +46,28 @@ object InternalServerController {
      * Подключить ADB к данному устройству
      *
      */
-    fun connectAdb(device: Device) {
-        trd {
-            val msg = sendMessageToServer(CONNECT_ADB, device) as Message
-            if (msg.command == ADB_ERROR && listener != null) {
-                listener!!.onAdbError(device, msg.data as Int)
+    fun connectAdb(device: Device) =
+            trd {
+                val msg = sendMessageToServer(CONNECT_ADB, device) as Message
+                if (msg.command == ADB_ERROR && listener != null) {
+                    listener!!.onAdbError(device, msg.data as Int)
+                }
             }
-        }
-    }
+
 
     /**
      * Отключить адб
      */
-    fun disconnectAdb(device: Device) {
-        trd {
-            sendMessageToServer(DISCONNECT_ADB, device)
-        }
-    }
+    fun disconnectAdb(device: Device) =
+            trd {
+                sendMessageToServer(DISCONNECT_ADB, device)
+            }
+
 
     /**
      * Проверить соединение adb с устройством [device]
      * true - если соединение поддерживается
      */
-    @Synchronized
     fun checkAdb(device: Device) =
             sendMessageToServer(ADB_CHECK, device) == ADB_OK
 
@@ -79,10 +80,13 @@ object InternalServerController {
     fun fixAdb10061(device: Device) =
             sendMessageToServer(FIX_ADB_10061, device) == ADB_OK
 
+    fun setDeviceInfo(info: DeviceInfo) =
+            sendMessageToServer(SET_DEVICE_INFO, DeviceInfoSerializable(info))
+
+
     interface Starter {
+
         fun startServer()
-
-
     }
 
     interface InternalServerListener {
@@ -106,67 +110,63 @@ object InternalServerController {
         fun onAdbError(device: Device, code: Int)
     }
 
+
     private var listener: InternalServerListener? = null
 
-    private fun startListening() {
-        trd {
-            while (listener != null) {
-                val listener = listener!!
-                if (isAvailable) {
-                    listener.onServerConnected()
-                } else {
-                    listener.serverStillDisabled()
-                    Thread.sleep(1000)
-                    continue
-                }
-                while (isAvailable) {
-                    listener.serverStillWorking()
-                    val currentDevices = getDevicesList() ?: break
-                    for (device in currentDevices) {
-                        var findDevice = devices.find { it.device == device }
-                        if (findDevice == null) {
-                            listener.onDeviceDetected(device)
-                            findDevice = AdbDevice(device, false)
-                            devices.add(findDevice)
-                        }
-                        val adb = checkAdb(findDevice.device)
-                        if (adb != findDevice.adb) {
-                            if (adb) {
-                                listener.onAdbConnected(findDevice.device)
-                            } else
-                                listener.onAdbDisconnected(findDevice.device)
-                            findDevice.adb = adb
 
-                        }
+    private fun startListening() =
+            trd {
+                while (listener != null) {
+                    val listener = listener!!
+                    if (isAvailable) {
+                        listener.onServerConnected()
+                    } else {
+                        listener.serverStillDisabled()
+                        Thread.sleep(1000)
+                        continue
                     }
-                    for (device in devices) {
-                        if (currentDevices.find { it == device.device } == null) {
-                            listener.onDeviceDisconnected(device.device)
-                            for (i in devices.indices) {
-                                if (devices[i].device == device.device) {
-                                    devices.removeAt(i)
-                                    break
+                    while (isAvailable) {
+                        listener.serverStillWorking()
+                        val currentDevices = getDevicesList() ?: break
+                        for (device in currentDevices) {
+                            var findDevice = devices.find { it.device == device }
+                            if (findDevice == null) {
+                                listener.onDeviceDetected(device)
+                                findDevice = AdbDevice(device, false)
+                                devices.add(findDevice)
+                            }
+                            val adb = checkAdb(findDevice.device)
+                            if (adb != findDevice.adb) {
+                                if (adb) {
+                                    listener.onAdbConnected(findDevice.device)
+                                } else
+                                    listener.onAdbDisconnected(findDevice.device)
+                                findDevice.adb = adb
+
+                            }
+                        }
+                        for (device in devices.toTypedArray()) {
+                            if (currentDevices.find { it == device.device } == null) {
+                                listener.onDeviceDisconnected(device.device)
+                                for (i in devices.indices) {
+                                    if (devices[i].device == device.device) {
+                                        devices.removeAt(i)
+                                        break
+                                    }
                                 }
                             }
                         }
+
+                        Thread.sleep(1000)
                     }
-
-                    Thread.sleep(1000)
+                    listener.onServerDisconnect()
                 }
-                listener.onServerDisconnect()
             }
-        }
-    }
 
-    @Volatile
-    private var devices = ArrayList<AdbDevice>()
+    private val devices = ArrayList<AdbDevice>()
 
     @Suppress("UNCHECKED_CAST")
     private fun getDevicesList() = sendMessageToServer(GET_DEVICE_LIST) as Array<Device>?
-
-    fun setDeviceInfo(info: DeviceInfo) {
-        sendMessageToServer(SET_DEVICE_INFO, DeviceInfoSerializable(info))
-    }
 
     @Synchronized
     private fun sendMessageToServer(command: Int, data: Any? = null) =
@@ -184,5 +184,5 @@ object InternalServerController {
                 null
             }
 
-    class AdbDevice(val device: Device, var adb: Boolean)
+    private class AdbDevice(val device: Device, var adb: Boolean)
 }

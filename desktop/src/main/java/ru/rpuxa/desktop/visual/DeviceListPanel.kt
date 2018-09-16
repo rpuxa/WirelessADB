@@ -1,4 +1,4 @@
-package ru.rpuxa.pc.visual
+package ru.rpuxa.desktop.visual
 
 import ru.rpuxa.core.internalServer.Device
 import ru.rpuxa.core.internalServer.InternalServerController

@@ -1,6 +1,5 @@
-package ru.rpuxa.pc.desktop
+package ru.rpuxa.desktop
 
-import ru.rpuxa.pc.Actions
 import javax.swing.JComponent
 import javax.swing.JOptionPane
 

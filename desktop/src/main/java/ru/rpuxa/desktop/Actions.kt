@@ -1,4 +1,4 @@
-package ru.rpuxa.pc
+package ru.rpuxa.desktop
 
 import javax.swing.JComponent
 

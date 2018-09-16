@@ -4,7 +4,6 @@ apply plugin: 'kotlin'
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':core')
-    implementation project(':internalServer')
 }
 
 compileKotlin {

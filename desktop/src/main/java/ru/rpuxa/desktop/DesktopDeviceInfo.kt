@@ -1,19 +1,19 @@
-package ru.rpuxa.pc
+package ru.rpuxa.desktop
 
 import ru.rpuxa.core.internalServer.DeviceInfo
 import java.io.File
 
-object PCDeviceInfo : DeviceInfo() {
+object DesktopDeviceInfo : DeviceInfo() {
     override val filesDir = File("config").path!!
     override val isMobile = false
     override var adbPath: String
-        get() = PCSettings.adbPath
+        get() = DesktopSettings.adbPath
         set(value) {
-            PCSettings.adbPath = value
+            DesktopSettings.adbPath = value
         }
     override var name: String
-        get() = PCSettings.deviceName
+        get() = DesktopSettings.deviceName
         set(value) {
-            PCSettings.deviceName = value
+            DesktopSettings.deviceName = value
         }
 }

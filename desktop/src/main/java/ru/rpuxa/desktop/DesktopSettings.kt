@@ -1,8 +1,8 @@
-package ru.rpuxa.pc
+package ru.rpuxa.desktop
 
 import ru.rpuxa.core.settings.Settings
 
-object PCSettings : Settings {
+object DesktopSettings : Settings {
     override var deviceName = "Computer"
 
     override var adbPath = "C:\\"
@@ -22,6 +22,7 @@ object PCSettings : Settings {
     override fun deserializable(fields: Array<Any?>) {
         deviceName = fields[0] as String
         adbPath = fields[1] as String
-        autoStart = fields[2] as Boolean
+        autoConnectIds = fields[2] as MutableSet<Long>
+        autoStart = fields[3] as Boolean
     }
 }

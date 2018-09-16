@@ -6,9 +6,17 @@ kotlin { experimental { coroutines 'enable' } }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation project(':core')
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.21'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.21'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'ru.rpuxa.internalServer.main.MainKt'
+    }
+
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
 sourceCompatibility = "1.7"

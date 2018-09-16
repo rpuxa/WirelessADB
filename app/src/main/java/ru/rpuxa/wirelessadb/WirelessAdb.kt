@@ -18,8 +18,6 @@ class WirelessAdb : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        deviceInfo = AndroidDeviceInfo()
-        serverStarter = ServerStarter()
         SettingsCache.load(AndroidSettings, deviceInfo)
     }
 
@@ -28,20 +26,23 @@ class WirelessAdb : Application() {
         SettingsCache.save(AndroidSettings, deviceInfo)
     }
 
-    inner class AndroidDeviceInfo : DeviceInfo() {
-        override val filesDir = this@WirelessAdb.filesDir.toString()
-        override val isMobile = true
-        override var adbPath = ""
-        override var name
+    init {
+        deviceInfo = object : DeviceInfo() {
+            override val filesDir = this@WirelessAdb.filesDir.toString()
+            override val isMobile = true
+            override var adbPath = ""
+            override var name
             get() = AndroidSettings.deviceName
             set(value) {
                 AndroidSettings.deviceName = value
             }
-    }
+        }
 
-    inner class ServerStarter : InternalServerController.Starter {
-        override fun startServer() = trd {
-            InternalServer.init()
+        serverStarter = object : InternalServerController.Starter {
+            override fun startServer() =
+                    trd {
+                        InternalServer.init()
+                    }
         }
     }
 }

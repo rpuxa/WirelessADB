@@ -66,7 +66,7 @@ object InternalServer {
                 sendMessage(list)
             }
 
-            CLOSE_CORE_SERVER -> {
+            CLOSE_SERVER -> {
                 sendMessage(EMPTY_MESSAGE)
                 Pinging.ping = false
                 Server.closeServerSocket()
