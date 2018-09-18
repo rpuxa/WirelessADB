@@ -18,6 +18,14 @@ inline fun trd(crossinline block: () -> Unit) =
             block()
         }.start()
 
+inline fun daemon(crossinline block: () -> Unit) {
+    val thread = Thread {
+        block()
+    }
+    thread.isDaemon = true
+    thread.start()
+}
+
 
 val File.containsAdb: Boolean
     get() {

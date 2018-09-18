@@ -26,10 +26,13 @@ class DeviceListPanel : JPanel() {
     }
 
     fun removeDevice(device: Device) {
-        val panel = deviceViews.find { it.device == device }!!.panel
-        remove(panel)
-        deviceViews.removeIf { it.device == device }
-        repaint()
+        val deviceView = deviceViews.find { it.device == device }
+        if (deviceView != null) {
+            val panel = deviceView.panel
+            remove(panel)
+            deviceViews.removeIf { it.device == device }
+            repaint()
+        }
     }
 
     fun changeAdb(device: Device, connected: Boolean) {

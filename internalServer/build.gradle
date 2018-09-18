@@ -16,7 +16,10 @@ jar {
         attributes 'Main-Class': 'ru.rpuxa.internalServer.main.MainKt'
     }
 
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+
+
+    //Комментить вот эту строчку
+//    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
 sourceCompatibility = "1.7"

@@ -1,5 +1,6 @@
 package ru.rpuxa.internalServer
 
+import ru.rpuxa.core.daemon
 import ru.rpuxa.core.trd
 import ru.rpuxa.internalServer.InternalServer.info
 import java.io.IOException
@@ -27,13 +28,13 @@ internal object Pinging {
             return
         pingingDevices = true
 
-        Thread {
+        daemon {
             var ip: String? = null
 
             while (ip == null) {
                 ip = getIp()
                 if (!pingingDevices)
-                    return@Thread
+                    return@daemon
             }
 
 
@@ -50,7 +51,7 @@ internal object Pinging {
                         Thread.sleep(500)
                     }
                 }
-        }.start()
+        }
     }
 
     @Synchronized

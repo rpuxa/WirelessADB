@@ -1,5 +1,6 @@
 package ru.rpuxa.internalServer
 
+import ru.rpuxa.core.daemon
 import java.io.InputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
@@ -13,7 +14,7 @@ internal object Server {
         if (isVisible)
             return
         isVisible = true
-        Thread {
+        daemon {
             try {
                 while (isVisible) {
                     val ip = InetAddress.getByName(getIp())
@@ -35,7 +36,7 @@ internal object Server {
                 }
             } catch (e: Throwable) {
             }
-        }.start()
+        }
     }
 
     @Synchronized

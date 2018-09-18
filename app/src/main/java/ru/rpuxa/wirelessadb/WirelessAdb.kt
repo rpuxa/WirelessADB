@@ -18,6 +18,7 @@ class WirelessAdb : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        init()
         SettingsCache.load(AndroidSettings, deviceInfo)
     }
 
@@ -26,7 +27,7 @@ class WirelessAdb : Application() {
         SettingsCache.save(AndroidSettings, deviceInfo)
     }
 
-    init {
+    private fun init() {
         deviceInfo = object : DeviceInfo() {
             override val filesDir = this@WirelessAdb.filesDir.toString()
             override val isMobile = true

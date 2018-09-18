@@ -1,5 +1,6 @@
 package ru.rpuxa.desktop.visual
 
+import ru.rpuxa.core.daemon
 import ru.rpuxa.core.internalServer.Device
 import ru.rpuxa.core.internalServer.InternalServerController
 import ru.rpuxa.core.settings.SettingsCache
@@ -125,11 +126,13 @@ class MainPanel(actions: Actions, showAdbPathRow: Boolean = true) : JPanel() {
             builder.redirectErrorStream(true)
             val process = builder.start()
             val reader = BufferedReader(InputStreamReader(process.inputStream))
-            var fullAnswer = ""
-            while (true) {
-                val line = reader.readLine() ?: break
-                fullAnswer += line
-                println(line)
+            daemon {
+                var fullAnswer = ""
+                while (true) {
+                    val line = reader.readLine() ?: break
+                    fullAnswer += line
+                    println(line)
+                }
             }
         }
     }

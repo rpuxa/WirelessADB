@@ -2,6 +2,7 @@ package ru.rpuxa.internalServer
 
 import ru.rpuxa.core.internalServer.Device
 import ru.rpuxa.core.internalServer.Message
+import ru.rpuxa.core.trd
 import ru.rpuxa.internalServer.InternalServer.devices
 import ru.rpuxa.internalServer.InternalServer.info
 import java.io.IOException
@@ -31,13 +32,13 @@ internal class DeviceConnection(
             sendMessage(NAME, info.name)
             sendMessage(TYPE, info.isMobile)
 
-            Thread {
+            trd {
                 Thread.sleep(5000)
                 if (!connected.get()) {
                     output.close()
                     input.close()
                 }
-            }.start()
+            }
             repeat(3) {
                 val message = readMessage()
                 when (message.command) {

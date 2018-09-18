@@ -41,7 +41,7 @@ object InternalServer {
             }
             if (close) {
                 serverSocket.close()
-                return
+                System.exit(0)
             }
         }
     }
