@@ -6,7 +6,7 @@ import ru.rpuxa.core.settings.SettingsCache
 import ru.rpuxa.desktop.Actions
 import ru.rpuxa.desktop.DesktopDeviceInfo
 import ru.rpuxa.desktop.DesktopSettings
-import ru.rpuxa.desktop.DesktopUtils
+import ru.rpuxa.desktop.getResource
 import java.awt.Component
 import java.awt.Dimension
 import java.io.BufferedReader
@@ -115,7 +115,7 @@ class MainPanel(actions: Actions, showAdbPathRow: Boolean = true) : JPanel() {
         private const val SERVER = "jars\\internalServer.jar"
 
         override fun startServer() {
-            val absPath = DesktopUtils.getResource(SERVER).path
+            val absPath = getResource(SERVER).path
 
             val dividerIndex = absPath.indexOf("%5c")
             val path = absPath.substring(0, dividerIndex)
