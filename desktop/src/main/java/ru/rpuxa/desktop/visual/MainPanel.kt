@@ -9,6 +9,8 @@ import ru.rpuxa.desktop.DesktopSettings
 import ru.rpuxa.desktop.DesktopUtils
 import java.awt.Component
 import java.awt.Dimension
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import javax.swing.*
 
 class MainPanel(actions: Actions, showAdbPathRow: Boolean = true) : JPanel() {
@@ -119,9 +121,16 @@ class MainPanel(actions: Actions, showAdbPathRow: Boolean = true) : JPanel() {
             val path = absPath.substring(0, dividerIndex)
             val file = absPath.substring(dividerIndex + 3)
 
-            val s = "$path\\$file"
-            val process = ProcessBuilder(s).start()
-            process.waitFor()
+            val builder = ProcessBuilder("cmd.exe", "/c", "cd $path && java -jar $file")
+            builder.redirectErrorStream(true)
+            val process = builder.start()
+            val reader = BufferedReader(InputStreamReader(process.inputStream))
+            var fullAnswer = ""
+            while (true) {
+                val line = reader.readLine() ?: break
+                fullAnswer += line
+                println(line)
+            }
         }
     }
 }

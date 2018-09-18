@@ -6,8 +6,8 @@ kotlin { experimental { coroutines 'enable' } }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation project(':core')
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile project(':core')
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.21'
 }
 

@@ -3,7 +3,15 @@ apply plugin: 'kotlin'
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation project(':core')
+    compile project(':core')
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'ru.rpuxa.desktop.main.MainKt'
+    }
+
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
 compileKotlin {
