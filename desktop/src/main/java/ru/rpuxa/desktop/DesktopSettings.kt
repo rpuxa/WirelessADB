@@ -19,6 +19,7 @@ object DesktopSettings : Settings {
                 autoStart
         )
 
+    @Suppress("UNCHECKED_CAST")
     override fun deserializable(fields: Array<Any?>) {
         deviceName = fields[0] as String
         adbPath = fields[1] as String
