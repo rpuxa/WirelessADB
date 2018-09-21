@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/WAP2.iml" filepath="$PROJECT_DIR$/WAP2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WirelessAdbPlugin.iml" filepath="$PROJECT_DIR$/WirelessAdbPlugin.iml" />
     </modules>
   </component>
 </project>

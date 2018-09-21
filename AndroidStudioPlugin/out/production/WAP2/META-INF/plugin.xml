@@ -26,6 +26,8 @@
 
     </extensions>
 
+    <depends>org.jetbrains.android</depends>
+
     <actions>
         <!-- Add your actions here -->
     </actions>

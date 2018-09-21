@@ -24,7 +24,6 @@ internal fun changeADB(ip: InetAddress, connect: Boolean = true) =
             while (true) {
                 val line = reader.readLine() ?: break
                 fullAnswer += line
-                println(line)
             }
             val openBracket = fullAnswer.lastIndexOf('(')
             val closeBracket = fullAnswer.lastIndexOf(')')
@@ -43,11 +42,8 @@ internal fun checkADB(ip: InetAddress): Boolean {
         val reader = BufferedReader(InputStreamReader(builder.start().inputStream))
         while (true) {
             val line = reader.readLine() ?: return false
-            println(line)
-            if (line.contains(address)) {
-                println("found! adbcheck")
+            if (line.contains(address))
                 return true
-            }
         }
     } catch (e: IOException) {
         return false
@@ -64,8 +60,7 @@ fun fixAdb10061(ip: InetAddress) =
             )
             val reader = BufferedReader(InputStreamReader(builder.start().inputStream))
             while (true) {
-                val line = reader.readLine() ?: break
-                println(line)
+                reader.readLine() ?: break
             }
             checkADB(ip)
         } catch (e: IOException) {

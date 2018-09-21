@@ -65,7 +65,6 @@ internal object Pinging {
         try {
             val port = address.myPort
             if (port != InetAddress.getByName(getIp()).myPort) {
-                println(address)
                 val socket = Socket()
                 socket.connect(InetSocketAddress(address, port), 500)
                 val output = socket.getOutputStream()

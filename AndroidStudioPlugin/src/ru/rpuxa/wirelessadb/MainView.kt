@@ -7,6 +7,7 @@ import com.intellij.ui.content.ContentFactory
 import ru.rpuxa.desktop.DesktopActions
 import org.jetbrains.android.sdk.AndroidSdkUtils
 import ru.rpuxa.core.settings.Settings
+import ru.rpuxa.desktop.DesktopDeviceInfo
 import ru.rpuxa.desktop.DesktopSettings
 import ru.rpuxa.desktop.visual.MainPanel
 
@@ -14,9 +15,17 @@ import ru.rpuxa.desktop.visual.MainPanel
 class MainView : ToolWindowFactory {
 
     override fun createToolWindowContent(p0: Project, toolWindow: ToolWindow) {
-        val contentFactory = ContentFactory.SERVICE.getInstance()
-        val content = contentFactory.createContent(MainPanel(PluginActions, false), TITLE, false)
-        toolWindow.contentManager.addContent(content)
+        try {
+            val contentFactory = ContentFactory.SERVICE.getInstance()
+            val content = contentFactory.createContent(
+                    MainPanel(PluginActions, PluginSettings(p0), DesktopDeviceInfo, false),
+                    "",
+                    false
+            )
+            toolWindow.contentManager.addContent(content)
+        } catch (e: Throwable) {
+            println()
+        }
     }
 
     class PluginSettings(project: Project) : Settings by DesktopSettings {
