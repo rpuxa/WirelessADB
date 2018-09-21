@@ -17,7 +17,7 @@ jar {
     }
 
     //Комментить вот эту строчку
-   // from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+  //  from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
 sourceCompatibility = "1.7"

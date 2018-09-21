@@ -35,6 +35,7 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
         }
     }
 
+
     /**
      * Аналогичное удаление
      */
@@ -51,6 +52,7 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
                 if (InternalServerController.checkAdb(device))
                     activity.runOnUiThread {
                         onDisconnected()
+
                     }
             }
             notifyDataSetChanged()
