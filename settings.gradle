@@ -1,1 +1,1 @@
-include ':app', ':core', ':desktop', ':internalServer', ':plugin'
+include ':android', ':core', ':desktop', ':internalServer'

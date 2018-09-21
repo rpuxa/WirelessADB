@@ -22,11 +22,13 @@ class MainPanel(actions: Actions, showAdbPathRow: Boolean = true) : JPanel() {
 
     private val mainSwitch = JCheckBox("Enable Wireless Adb")
     private val autoLoading = JCheckBox("Add service to auto-loading")
-    private val devicesLabel = JLabel("Type      Name")
+    private val devicesLabel = JLabel("Type               Name")
+    private val disconnectButton = JButton("Disconnect adb from all device")
+    private val apkButton = JButton("Install APK")
 
     private val adbPathPicker = AdbPathPicker(actions)
     private val namePicker = NamePicker()
-    private val deviceListPanel = DeviceListPanel()
+    private val deviceListPanel = DeviceListPanel(actions)
 
     private val listener = object : InternalServerController.InternalServerListener {
         override fun onServerConnected() {
@@ -63,6 +65,8 @@ class MainPanel(actions: Actions, showAdbPathRow: Boolean = true) : JPanel() {
         }
 
         override fun onAdbError(device: Device, code: Int) {
+            if (code == 10061)
+                deviceListPanel.fixError10061(device)
         }
     }
 
@@ -92,6 +96,14 @@ class MainPanel(actions: Actions, showAdbPathRow: Boolean = true) : JPanel() {
         scroll.maximumSize = Dimension(850, 200)//850 200
         scroll.alignmentX = Component.LEFT_ALIGNMENT
         add(scroll)
+
+        add(Box.createVerticalStrut(10))
+
+        add(disconnectButton)
+
+        add(Box.createVerticalStrut(10))
+
+        add(apkButton)
     }
 
     //Установка листенеров
@@ -105,6 +117,15 @@ class MainPanel(actions: Actions, showAdbPathRow: Boolean = true) : JPanel() {
                 deviceListPanel.clear()
                 InternalServerController.closeServer()
             }
+        }
+
+        disconnectButton.addActionListener {
+            ProcessBuilder("cmd.exe", "/c", "cd ${DesktopDeviceInfo.adbPath} && adb disconnect").redirectErrorStream(true).start()
+        }
+
+        apkButton.addActionListener {
+            //            val absPath = getResource("jars\\android.apk").path
+
         }
     }
 

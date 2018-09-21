@@ -1,11 +1,10 @@
 package ru.rpuxa.wirelessadb
 
 import android.app.Application
+import android.content.Intent
 import ru.rpuxa.core.internalServer.DeviceInfo
 import ru.rpuxa.core.internalServer.InternalServerController
 import ru.rpuxa.core.settings.SettingsCache
-import ru.rpuxa.core.trd
-import ru.rpuxa.internalServer.InternalServer
 import ru.rpuxa.wirelessadb.settings.AndroidSettings
 
 class WirelessAdb : Application() {
@@ -40,10 +39,9 @@ class WirelessAdb : Application() {
         }
 
         serverStarter = object : InternalServerController.Starter {
-            override fun startServer() =
-                    trd {
-                        InternalServer.init()
-                    }
+            override fun startServer() {
+                startService(Intent(this@WirelessAdb, ServerStarterService::class.java))
+            }
         }
     }
 }

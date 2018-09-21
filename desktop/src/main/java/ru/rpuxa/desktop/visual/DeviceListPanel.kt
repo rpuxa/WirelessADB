@@ -2,6 +2,7 @@ package ru.rpuxa.desktop.visual
 
 import ru.rpuxa.core.internalServer.Device
 import ru.rpuxa.core.internalServer.InternalServerController
+import ru.rpuxa.desktop.Actions
 import java.awt.BorderLayout
 import java.awt.Component
 import java.awt.Dimension
@@ -12,7 +13,7 @@ const val DISCONNECTING = "Disconnecting..."
 const val CONNECT = "Connect Adb"
 const val CONNECTING = "Connecting..."
 
-class DeviceListPanel : JPanel() {
+class DeviceListPanel(val actions: Actions) : JPanel() {
 
     private val deviceViews = ArrayList<DeviceView>()
 
@@ -37,6 +38,16 @@ class DeviceListPanel : JPanel() {
 
     fun changeAdb(device: Device, connected: Boolean) {
         deviceViews.find { it.device == device }!!.adbButton!!.text = if (connected) DISCONNECT else CONNECT
+    }
+
+    fun fixError10061(device: Device) {
+        val btn = deviceViews.find { it.device == device }!!.adbButton!!
+        if (InternalServerController.fixAdb10061(device)) {
+            changeAdb(device, true)
+        } else {
+            btn.text = CONNECT
+            actions.sendMessage("Error while connecting adb (10061). Please connect usb to device and try again.", this)
+        }
     }
 
     private fun drawDevice(device: Device) {

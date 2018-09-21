@@ -39,21 +39,21 @@ class MainActivity : AppCompatActivity() {
         }
 
         trd {
-            if (InternalServerController.isAvailable)
+            if (InternalServerController.isAvailable) {
                 onConnectChange(true)
-            runOnUiThread {
-                power_switch.isChecked = true
+                runOnUiThread {
+                    power_switch.isChecked = true
+                }
             }
         }
 
         if (AndroidSettings.autoStart) {
-            power_switch.isChecked = true
             onMainSwitchChange()
         }
     }
 
     private fun onMainSwitchChange() {
-        if (!isWifiEnabled && !power_switch.isChecked) {
+        if (!isWifiEnabled) {
             toast(getString(R.string.not_enabled_wifi))
             power_switch.isChecked = false
         } else
@@ -145,6 +145,10 @@ class MainActivity : AppCompatActivity() {
 
         override fun onDeviceDisconnected(device: Device) {
             adapter.removeDevice(device)
+            if (!isWifiEnabled) {
+                toast(getString(R.string.not_enabled_wifi))
+                InternalServerController.closeServer()
+            }
         }
 
         override fun onAdbConnected(device: Device) {

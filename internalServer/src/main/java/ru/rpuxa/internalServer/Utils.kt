@@ -18,7 +18,7 @@ internal fun getIp(): String? {
     return null
 }
 
-internal fun <T> Enumeration<T>.reverse(): ArrayList<T> {
+internal fun <T> Enumeration<T>.reverse(): List<T> {
     val list = ArrayList<T>()
     for (e in this) {
         list.add(e)

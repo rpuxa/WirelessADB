@@ -21,7 +21,7 @@ abstract class FieldPicker(buttonText: String, private val fieldName: String) : 
         fieldText = ""
 
         layout = BoxLayout(this, BoxLayout.X_AXIS)
-        maximumSize = Dimension(1000, 40)
+        maximumSize = Dimension(1000, 35)
 
         fieldButton.addActionListener { _ ->
             onButtonClick()

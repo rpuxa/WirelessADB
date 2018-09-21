@@ -1,5 +1,6 @@
 package ru.rpuxa.wirelessadb.dialogs
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
@@ -31,10 +32,13 @@ class OnErrorDialog : DialogFragment() {
         dialogView.do_btn.setOnClickListener {
             if (code == 10061) {
                 trd {
-                    if (InternalServerController.fixAdb10061(device))
-                        this.dialog.cancel()
-                    else
-                        dialogView.error_msg.text = getString(R.string.usb_error_msg)
+                    val fixed = InternalServerController.fixAdb10061(device)
+                    (context as Activity).runOnUiThread {
+                        if (fixed)
+                            this.dialog.cancel()
+                        else
+                            dialogView.error_msg.text = getString(R.string.usb_error_msg)
+                    }
                 }
             } else {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://stackoverflow.com/search?q=adb+error+$code")))

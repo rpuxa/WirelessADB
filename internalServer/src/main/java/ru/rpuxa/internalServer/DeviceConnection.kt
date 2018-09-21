@@ -33,7 +33,7 @@ internal class DeviceConnection(
             sendMessage(TYPE, info.isMobile)
 
             trd {
-                Thread.sleep(5000)
+                Thread.sleep(2000)
                 if (!connected.get()) {
                     output.close()
                     input.close()
@@ -60,15 +60,11 @@ internal class DeviceConnection(
                 devices.add(this)
                 connected.set(true)
                 this.connected.set(true)
-                Thread {
-                    while (true) {
-                        Thread.sleep(2000)
-                        if (!connected.get() ||
-                                !sendMessage(CHECK))
-                            break
-                    }
+                trd {
+                    while (connected.get() && sendMessage(CHECK))
+                        Thread.sleep(1000)
                     disconnect()
-                }.start()
+                }
                 startListening()
             }
         } catch (e: IOException) {
