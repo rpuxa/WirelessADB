@@ -2,11 +2,11 @@ package ru.rpuxa.desktop.visual
 
 import ru.rpuxa.core.daemon
 import ru.rpuxa.core.internalServer.Device
+import ru.rpuxa.core.internalServer.DeviceInfo
 import ru.rpuxa.core.internalServer.InternalServerController
+import ru.rpuxa.core.settings.Settings
 import ru.rpuxa.core.settings.SettingsCache
 import ru.rpuxa.desktop.Actions
-import ru.rpuxa.desktop.DesktopDeviceInfo
-import ru.rpuxa.desktop.DesktopSettings
 import ru.rpuxa.desktop.getResource
 import java.awt.Component
 import java.awt.Dimension
@@ -14,10 +14,13 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import javax.swing.*
 
-class MainPanel(actions: Actions, showAdbPathRow: Boolean = true) : JPanel() {
+class MainPanel(actions: Actions,
+                settings: Settings,
+                info: DeviceInfo,
+                showAdbPathRow: Boolean = true) : JPanel() {
     init {
-        SettingsCache.load(DesktopSettings, DesktopDeviceInfo)
-        SettingsCache.save(DesktopSettings, DesktopDeviceInfo)
+        SettingsCache.load(settings, info)
+        SettingsCache.save(settings, info)
     }
 
     private val mainSwitch = JCheckBox("Enable Wireless Adb")
@@ -26,14 +29,14 @@ class MainPanel(actions: Actions, showAdbPathRow: Boolean = true) : JPanel() {
     private val disconnectButton = JButton("Disconnect adb from all device")
     private val apkButton = JButton("Install APK")
 
-    private val adbPathPicker = AdbPathPicker(actions)
-    private val namePicker = NamePicker()
+    private val adbPathPicker = AdbPathPicker(settings, info, actions)
+    private val namePicker = NamePicker(settings, info)
     private val deviceListPanel = DeviceListPanel(actions)
 
     private val listener = object : InternalServerController.InternalServerListener {
         override fun onServerConnected() {
             mainSwitch.isSelected = true
-            InternalServerController.setDeviceInfo(DesktopDeviceInfo)
+            InternalServerController.setDeviceInfo(info)
         }
 
         override fun onServerDisconnect() {
@@ -112,7 +115,7 @@ class MainPanel(actions: Actions, showAdbPathRow: Boolean = true) : JPanel() {
 
         mainSwitch.addActionListener {
             if (!InternalServerController.isAvailable) {
-                InternalServerController.startServer(DesktopDeviceInfo, ServerStarter)
+                InternalServerController.startServer(info, ServerStarter)
             } else {
                 deviceListPanel.clear()
                 InternalServerController.closeServer()
@@ -120,7 +123,7 @@ class MainPanel(actions: Actions, showAdbPathRow: Boolean = true) : JPanel() {
         }
 
         disconnectButton.addActionListener {
-            ProcessBuilder("cmd.exe", "/c", "cd ${DesktopDeviceInfo.adbPath} && adb disconnect").redirectErrorStream(true).start()
+            ProcessBuilder("cmd.exe", "/c", "cd ${info.adbPath} && adb disconnect").redirectErrorStream(true).start()
         }
 
         apkButton.addActionListener {

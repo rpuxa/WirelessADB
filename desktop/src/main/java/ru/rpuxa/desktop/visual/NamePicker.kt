@@ -1,15 +1,15 @@
 package ru.rpuxa.desktop.visual
 
 import ru.rpuxa.core.checkName
+import ru.rpuxa.core.internalServer.DeviceInfo
+import ru.rpuxa.core.settings.Settings
 import ru.rpuxa.core.settings.SettingsCache
-import ru.rpuxa.desktop.DesktopDeviceInfo
-import ru.rpuxa.desktop.DesktopSettings
 import javax.swing.JOptionPane
 
-class NamePicker : FieldPicker("Change name", "Name") {
+class NamePicker(private val settings: Settings, private val info: DeviceInfo) : FieldPicker("Change name", "Name") {
 
     init {
-        fieldText = DesktopDeviceInfo.name
+        fieldText = info.name
     }
 
     override fun onButtonClick() {
@@ -22,9 +22,9 @@ class NamePicker : FieldPicker("Change name", "Name") {
                             " and length must be from 4 to 16")
                     continue
                 }
-                DesktopDeviceInfo.name = res
-                fieldText = DesktopDeviceInfo.name
-                SettingsCache.save(DesktopSettings, DesktopDeviceInfo)
+                info.name = res
+                fieldText = info.name
+                SettingsCache.save(settings, info)
             }
 
             break

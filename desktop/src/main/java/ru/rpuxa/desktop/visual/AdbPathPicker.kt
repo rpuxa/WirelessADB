@@ -1,17 +1,19 @@
 package ru.rpuxa.desktop.visual
 
 import ru.rpuxa.core.containsAdb
+import ru.rpuxa.core.internalServer.DeviceInfo
+import ru.rpuxa.core.settings.Settings
 import ru.rpuxa.core.settings.SettingsCache
 import ru.rpuxa.desktop.Actions
-import ru.rpuxa.desktop.DesktopDeviceInfo
-import ru.rpuxa.desktop.DesktopSettings
 import javax.swing.JFileChooser
 
 
-class AdbPathPicker(private val actions: Actions) : FieldPicker("Select path", "Adb path") {
+class AdbPathPicker(private val settings: Settings,
+                    private val info: DeviceInfo,
+                    private val actions: Actions) : FieldPicker("Select path", "Adb path") {
 
     init {
-        fieldText = DesktopSettings.adbPath
+        fieldText = settings.adbPath
     }
 
     override fun onButtonClick() {
@@ -22,8 +24,8 @@ class AdbPathPicker(private val actions: Actions) : FieldPicker("Select path", "
         if (result == JFileChooser.APPROVE_OPTION) {
             if (chooser.selectedFile.containsAdb) {
                 fieldText = chooser.selectedFile.toString()
-                DesktopSettings.adbPath = chooser.selectedFile.toString()
-                SettingsCache.save(DesktopSettings, DesktopDeviceInfo)
+                settings.adbPath = chooser.selectedFile.toString()
+                SettingsCache.save(settings, info)
             } else {
                 actions.sendMessage("This folder doesn't contain adb.exe", this)
             }
