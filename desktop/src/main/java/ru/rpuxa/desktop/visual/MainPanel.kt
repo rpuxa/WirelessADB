@@ -7,7 +7,7 @@ import ru.rpuxa.core.internalServer.InternalServerController
 import ru.rpuxa.core.settings.Settings
 import ru.rpuxa.core.settings.SettingsCache
 import ru.rpuxa.desktop.Actions
-import ru.rpuxa.desktop.getResource
+import ru.rpuxa.desktop.DesktopUtils
 import java.awt.Component
 import java.awt.Dimension
 import java.io.BufferedReader
@@ -140,16 +140,18 @@ class MainPanel(actions: Actions,
         private const val SERVER = "jars\\internalServer.jar"
 
         override fun startServer() {
-            val absPath = getResource(SERVER).path
+            val absPath = DesktopUtils.INSTANCE.getResource(SERVER)
 
             val dividerIndex = absPath.indexOf("%5c")
-            val path = absPath.substring(0, dividerIndex)
+            val path = absPath.substring(1, dividerIndex)
             val file = absPath.substring(dividerIndex + 3)
 
-            val builder = ProcessBuilder("cmd.exe", "/c", "cd $path && java -jar $file")
-            builder.redirectErrorStream(true)
-            val process = builder.start()
-            val reader = BufferedReader(InputStreamReader(process.inputStream))
+            val reader = BufferedReader(InputStreamReader(
+                    ProcessBuilder("cmd.exe", "/c", "cd $path && java -jar $file")
+                            .redirectErrorStream(true)
+                            .start()
+                            .inputStream
+            ))
             daemon {
                 var fullAnswer = ""
                 while (true) {
