@@ -13,7 +13,6 @@ import ru.rpuxa.core.internalServer.InternalServerController
 import ru.rpuxa.core.trd
 import ru.rpuxa.wirelessadb.R
 
-
 const val ERROR_CODE = "errorCode"
 const val DEVICE = "device"
 

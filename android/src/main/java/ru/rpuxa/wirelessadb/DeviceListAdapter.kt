@@ -52,14 +52,13 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
                 if (InternalServerController.checkAdb(device))
                     activity.runOnUiThread {
                         onDisconnected()
-
                     }
             }
             notifyDataSetChanged()
         }
     }
 
-    fun onAdbDisconnected(device: Device) {
+    fun onAdbDisconnected() {
         activity.runOnUiThread {
             onDisconnected()
         }
@@ -78,6 +77,12 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
             animateConnected(activity, false)
             onConnected()
         }
+    }
+
+    fun onAdbError() {
+        val view = deviceViews.find { it.device.id == it.device.id }!!.view
+        view.progress_bar_connect.visibility = View.INVISIBLE
+        view.connect_btn.visibility = View.VISIBLE
     }
 
     private fun onDisconnected() {
@@ -115,6 +120,8 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
         }
 
         activity.include.disconnect_btn.setOnClickListener {
+            activity.include.disconnect_btn.visibility = View.INVISIBLE
+            activity.include.progress_bar_disconnect.visibility = View.VISIBLE
             InternalServerController.disconnectAdb(this)
         }
 
@@ -163,6 +170,8 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
                     }
                 })
             }
+            activity.include.disconnect_btn.visibility = View.VISIBLE
+            activity.include.progress_bar_disconnect.visibility = View.INVISIBLE
             activity.include.startAnimation(animation)
         }
     }

@@ -156,11 +156,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onAdbDisconnected(device: Device) {
-            adapter.onAdbDisconnected(device)
+            adapter.onAdbDisconnected()
         }
 
         override fun onAdbError(device: Device, code: Int) {
             runOnUiThread {
+                adapter.onAdbError()
                 val args = Bundle()
                 val errorDialog = OnErrorDialog()
                 args.putInt(ERROR_CODE, code)
