@@ -13,4 +13,4 @@ TODO пофиксить диалог исправления ошибки, доб
 TODO service to auto loading
 TODO fix enable wireless adb in plugin
 TODO не работает автоматическое включение на андроид
-TODO connecting... disconnecting... infinity
+TODO пофиксить баг с отключением серва

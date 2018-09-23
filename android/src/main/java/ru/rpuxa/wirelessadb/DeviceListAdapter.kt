@@ -66,7 +66,7 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
 
     fun onAdbConnected(device: Device) {
         activity.runOnUiThread {
-            val view = deviceViews.find { it.device.id == it.device.id }!!.view
+            val view = deviceViews.find { it.device.id == device.id }!!.view
             view.progress_bar_connect.visibility = View.INVISIBLE
             view.connect_indicator.visibility = View.VISIBLE
 
@@ -79,8 +79,8 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
         }
     }
 
-    fun onAdbError() {
-        val view = deviceViews.find { it.device.id == it.device.id }!!.view
+    fun onAdbError(device: Device) {
+        val view = deviceViews.find { it.device.id == device.id }!!.view
         view.progress_bar_connect.visibility = View.INVISIBLE
         view.connect_btn.visibility = View.VISIBLE
     }

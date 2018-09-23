@@ -161,7 +161,7 @@ class MainActivity : AppCompatActivity() {
 
         override fun onAdbError(device: Device, code: Int) {
             runOnUiThread {
-                adapter.onAdbError()
+                adapter.onAdbError(device)
                 val args = Bundle()
                 val errorDialog = OnErrorDialog()
                 args.putInt(ERROR_CODE, code)
