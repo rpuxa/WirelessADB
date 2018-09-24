@@ -40,6 +40,7 @@ class MainPanel(actions: Actions,
         }
 
         override fun onServerDisconnect() {
+            deviceListPanel.clear()
             mainSwitch.isSelected = false
         }
 
@@ -117,7 +118,6 @@ class MainPanel(actions: Actions,
             if (!InternalServerController.isAvailable) {
                 InternalServerController.startServer(info, ServerStarter)
             } else {
-                deviceListPanel.clear()
                 InternalServerController.closeServer()
             }
         }

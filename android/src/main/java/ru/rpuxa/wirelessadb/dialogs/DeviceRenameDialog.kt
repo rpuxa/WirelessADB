@@ -4,11 +4,11 @@ import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
-import android.widget.Toast
 import kotlinx.android.synthetic.main.device_rename_dialog.view.*
 import ru.rpuxa.core.checkName
 import ru.rpuxa.wirelessadb.R
 import ru.rpuxa.wirelessadb.settings.AndroidSettings
+import ru.rpuxa.wirelessadb.toast
 
 class DeviceRenameDialog : DialogFragment() {
 
@@ -28,7 +28,8 @@ class DeviceRenameDialog : DialogFragment() {
                 AndroidSettings.deviceName = name
                 dialog.cancel()
             } else {
-                Toast.makeText(activity, "Only numbers, the Roman and Cyrillic alphabet, \"-\" and \"_\", from 4 to 16 characters", Toast.LENGTH_LONG).show()
+                activity.toast("Only numbers, the Roman and Cyrillic alphabet, \"-\" and \"_\"," +
+                        " from 4 to 16 characters")
             }
         }
 

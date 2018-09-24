@@ -129,6 +129,10 @@ class MainActivity : AppCompatActivity() {
             runOnUiThread {
                 power_switch.isChecked = true
                 device_list_view.visibility = View.VISIBLE
+                if (!isWifiEnabled) {
+                    toast(getString(R.string.not_enabled_wifi))
+                    InternalServerController.closeServer()
+                }
             }
         }
 
@@ -145,10 +149,6 @@ class MainActivity : AppCompatActivity() {
 
         override fun onDeviceDisconnected(device: Device) {
             adapter.removeDevice(device)
-            if (!isWifiEnabled) {
-                toast(getString(R.string.not_enabled_wifi))
-                InternalServerController.closeServer()
-            }
         }
 
         override fun onAdbConnected(device: Device) {
