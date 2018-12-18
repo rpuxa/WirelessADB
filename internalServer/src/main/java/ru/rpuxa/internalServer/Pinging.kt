@@ -1,7 +1,5 @@
 package ru.rpuxa.internalServer
 
-import ru.rpuxa.core.daemon
-import ru.rpuxa.core.trd
 import ru.rpuxa.internalServer.InternalServer.info
 import java.io.IOException
 import java.io.ObjectInputStream
@@ -9,6 +7,7 @@ import java.io.ObjectOutputStream
 import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.Socket
+import kotlin.concurrent.thread
 
 internal object Pinging {
 
@@ -28,7 +27,8 @@ internal object Pinging {
             return
         pingingDevices = true
 
-        daemon {
+
+        thread(isDaemon = true) daemon@{
             var ip: String? = null
 
             while (ip == null) {
@@ -41,7 +41,7 @@ internal object Pinging {
             val address = InetAddress.getByName(ip).address
 
             for (lastByte in 1..254)
-                trd {
+                thread {
                     while (pingingDevices) {
                         val newAddress = address.clone()
                         newAddress[3] = lastByte.toByte()

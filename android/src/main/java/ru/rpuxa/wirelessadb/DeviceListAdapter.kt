@@ -14,8 +14,8 @@ import kotlinx.android.synthetic.main.connected_device.view.*
 import kotlinx.android.synthetic.main.list_item.view.*
 import ru.rpuxa.core.internalServer.Device
 import ru.rpuxa.core.internalServer.InternalServerController
-import ru.rpuxa.core.trd
 import ru.rpuxa.wirelessadb.settings.AndroidSettings
+import kotlin.concurrent.thread
 
 class DeviceListAdapter(private val inflater: LayoutInflater, private val listView: ViewGroup) : BaseAdapter() {
 
@@ -48,7 +48,7 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
                     break
                 }
 
-            trd {
+            thread {
                 if (InternalServerController.checkAdb(device))
                     activity.runOnUiThread {
                         onDisconnected()
@@ -145,7 +145,7 @@ class DeviceListAdapter(private val inflater: LayoutInflater, private val listVi
         onConnecting()
         itemView.connect_btn.visibility = View.INVISIBLE
         itemView.progress_bar_connect.visibility = View.VISIBLE
-        trd { InternalServerController.connectAdb(this) }
+        thread { InternalServerController.connectAdb(this) }
     }
 
     private fun animateConnected(activity: Activity, close: Boolean) {

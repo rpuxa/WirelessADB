@@ -2,7 +2,6 @@ package ru.rpuxa.internalServer
 
 import ru.rpuxa.core.internalServer.Device
 import ru.rpuxa.core.internalServer.Message
-import ru.rpuxa.core.trd
 import ru.rpuxa.internalServer.InternalServer.devices
 import ru.rpuxa.internalServer.InternalServer.info
 import java.io.IOException
@@ -11,6 +10,7 @@ import java.io.ObjectOutputStream
 import java.net.InetAddress
 import java.net.Socket
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.concurrent.thread
 
 internal class DeviceConnection(
         private val socket: Socket,
@@ -32,7 +32,7 @@ internal class DeviceConnection(
             sendMessage(NAME, info.name)
             sendMessage(TYPE, info.isMobile)
 
-            trd {
+            thread {
                 Thread.sleep(2000)
                 if (!connected.get()) {
                     output.close()
@@ -60,7 +60,7 @@ internal class DeviceConnection(
                 devices.add(this)
                 connected.set(true)
                 this.connected.set(true)
-                trd {
+                thread {
                     while (connected.get() && sendMessage(CHECK))
                         Thread.sleep(1000)
                     disconnect()

@@ -1,7 +1,5 @@
 package ru.rpuxa.wirelessadb
 
-import android.content.Context
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
@@ -11,9 +9,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import ru.rpuxa.core.internalServer.Device
 import ru.rpuxa.core.internalServer.InternalServerController
 import ru.rpuxa.core.settings.SettingsCache
-import ru.rpuxa.core.trd
 import ru.rpuxa.wirelessadb.dialogs.*
 import ru.rpuxa.wirelessadb.settings.AndroidSettings
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         adapter = DeviceListAdapter(layoutInflater, device_list_view)
         device_list_view.adapter = adapter
+        thread { }
 
         if (listener == null)
             listener = Listener()
@@ -38,7 +37,7 @@ class MainActivity : AppCompatActivity() {
             onMainSwitchChange()
         }
 
-        trd {
+        thread {
             if (InternalServerController.isAvailable) {
                 onConnectChange(true)
                 runOnUiThread {
@@ -57,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             toast(getString(R.string.not_enabled_wifi))
             power_switch.isChecked = false
         } else
-            trd {
+            thread {
                 onConnectChange(!InternalServerController.isAvailable)
             }
     }
@@ -104,12 +103,12 @@ class MainActivity : AppCompatActivity() {
         super.onPause()
     }
 
-    private val isWifiEnabled: Boolean
-        get() {
-            val connManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-            return mWifi.isConnected
-        }
+    private val isWifiEnabled: Boolean = true
+    /* get() {
+         val connManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+         val mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+         return mWifi.isConnected
+     }*/
 
     private inner class Listener : InternalServerController.InternalServerListener {
         override fun onServerConnected() {
@@ -165,7 +164,7 @@ class MainActivity : AppCompatActivity() {
                 val args = Bundle()
                 val errorDialog = OnErrorDialog()
                 args.putInt(ERROR_CODE, code)
-                args.putSerializable(DEVICE, code)
+                args.putSerializable(DEVICE, device)
                 errorDialog.arguments = args
                 errorDialog.show(supportFragmentManager, "Error")
             }

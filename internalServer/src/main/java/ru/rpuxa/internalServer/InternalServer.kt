@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream
 import java.net.InetAddress
 import java.net.ServerSocket
 import java.net.SocketException
+import kotlin.concurrent.thread
 
 object InternalServer {
 
@@ -17,38 +18,40 @@ object InternalServer {
     internal lateinit var info: DeviceInfoSerializable
 
     fun init() {
-        try {
-            val serverSocket = ServerSocket(7158, 0, InetAddress.getByName("localhost"))
+        thread {
+            try {
+                val serverSocket = ServerSocket(7158, 0, InetAddress.getByName("localhost"))
 
-            while (true) {
-                val socket = serverSocket.accept()
-                val inputStream = socket.getInputStream()
-                val outputStream = socket.getOutputStream()
-                val input = ObjectInputStream(inputStream)
-                val output = ObjectOutputStream(outputStream)
-                val message = input.readObject() as Message
-                var close = false
-                if (onMessage(message, output))
-                    close = true
-                try {
-                    input.close()
-                } catch (e: Exception) {
+                while (true) {
+                    val socket = serverSocket.accept()
+                    val inputStream = socket.getInputStream()
+                    val outputStream = socket.getOutputStream()
+                    val input = ObjectInputStream(inputStream)
+                    val output = ObjectOutputStream(outputStream)
+                    val message = input.readObject() as Message
+                    var close = false
+                    if (onMessage(message, output))
+                        close = true
+                    try {
+                        input.close()
+                    } catch (e: Exception) {
+                    }
+                    try {
+                        output.close()
+                    } catch (e: Exception) {
+                    }
+                    try {
+                        socket.close()
+                    } catch (e: Exception) {
+                    }
+                    if (close) {
+                        serverSocket.close()
+                        return@thread
+                    }
                 }
-                try {
-                    output.close()
-                } catch (e: Exception) {
-                }
-                try {
-                    socket.close()
-                } catch (e: Exception) {
-                }
-                if (close) {
-                    serverSocket.close()
-                    return
-                }
+            } catch (e: SocketException) {
+                e.printStackTrace()
             }
-        } catch (e: SocketException) {
-            e.printStackTrace()
         }
     }
 

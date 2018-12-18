@@ -6,9 +6,6 @@ interface Settings {
     var autoStart: Boolean
     var adbPath: String
 
-
-
-
     val fields: Array<Any?>
 
     fun deserializable(fields: Array<Any?>)

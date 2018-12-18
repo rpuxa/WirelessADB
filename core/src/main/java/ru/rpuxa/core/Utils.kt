@@ -5,28 +5,6 @@ import java.io.File
 import java.io.IOException
 import java.io.InputStreamReader
 
-/**
- * Запускает поток
- *
- * Usage:
- * trd {
- * //code
- * }
- */
-inline fun trd(crossinline block: () -> Unit) =
-        Thread {
-            block()
-        }.start()
-
-inline fun daemon(crossinline block: () -> Unit) {
-    val thread = Thread {
-        block()
-    }
-    thread.isDaemon = true
-    thread.start()
-}
-
-
 val File.containsAdb: Boolean
     get() {
         try {

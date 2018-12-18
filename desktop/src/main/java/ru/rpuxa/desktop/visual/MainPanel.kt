@@ -1,22 +1,19 @@
 package ru.rpuxa.desktop.visual
 
-import ru.rpuxa.core.daemon
 import ru.rpuxa.core.internalServer.Device
 import ru.rpuxa.core.internalServer.DeviceInfo
 import ru.rpuxa.core.internalServer.InternalServerController
 import ru.rpuxa.core.settings.Settings
 import ru.rpuxa.core.settings.SettingsCache
 import ru.rpuxa.desktop.Actions
-import ru.rpuxa.desktop.DesktopUtils
 import java.awt.Component
 import java.awt.Dimension
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import javax.swing.*
 
-class MainPanel(actions: Actions,
+class MainPanel(val actions: Actions,
                 settings: Settings,
                 info: DeviceInfo,
+                serverStarter: InternalServerController.Starter,
                 showAdbPathRow: Boolean = true) : JPanel() {
     init {
         SettingsCache.load(settings, info)
@@ -82,7 +79,7 @@ class MainPanel(actions: Actions,
         add(mainSwitch)
 
         autoLoading.alignmentX = Component.LEFT_ALIGNMENT
-        add(autoLoading)
+        // add(autoLoading)
 
         if (showAdbPathRow) {
             adbPathPicker.alignmentX = Component.LEFT_ALIGNMENT
@@ -107,7 +104,7 @@ class MainPanel(actions: Actions,
 
         add(Box.createVerticalStrut(10))
 
-        add(apkButton)
+        //  add(apkButton)
     }
 
     //Установка листенеров
@@ -116,7 +113,7 @@ class MainPanel(actions: Actions,
 
         mainSwitch.addActionListener {
             if (!InternalServerController.isAvailable) {
-                InternalServerController.startServer(info, ServerStarter)
+                InternalServerController.startServer(info, serverStarter)
             } else {
                 InternalServerController.closeServer()
             }
@@ -127,39 +124,7 @@ class MainPanel(actions: Actions,
         }
 
         apkButton.addActionListener {
-            //            val absPath = getResource("jars\\android.apk").path
 
-        }
-    }
-
-
-
-
-    object ServerStarter : InternalServerController.Starter {
-
-        private const val SERVER = "jars\\internalServer.jar"
-
-        override fun startServer() {
-            val absPath = DesktopUtils.INSTANCE.getResource(SERVER)
-
-            val dividerIndex = absPath.indexOf("%5c")
-            val path = absPath.substring(1, dividerIndex)
-            val file = absPath.substring(dividerIndex + 3)
-
-            val reader = BufferedReader(InputStreamReader(
-                    ProcessBuilder("cmd.exe", "/c", "cd $path && java -jar $file")
-                            .redirectErrorStream(true)
-                            .start()
-                            .inputStream
-            ))
-            daemon {
-                var fullAnswer = ""
-                while (true) {
-                    val line = reader.readLine() ?: break
-                    fullAnswer += line
-                    println(line)
-                }
-            }
         }
     }
 }

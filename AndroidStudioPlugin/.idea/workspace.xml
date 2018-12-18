@@ -7,17 +7,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8d433b40-9c57-4fb4-a291-f2ae279ac197" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/WirelessAdbPlugin.zip" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/caches/build_file_checksums.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/WAP2/META-INF/WAP2.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/WAP2/META-INF/plugin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/WAP2/META-INF/plugin.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/WAP2/ru/rpuxa/wirelessadb/MainView.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/META-INF/plugin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/META-INF/plugin.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WirelessAdbPlugin.zip" beforeDir="false" afterPath="$PROJECT_DIR$/WirelessAdbPlugin.zip" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ru/rpuxa/wirelessadb/MainView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/rpuxa/wirelessadb/MainView.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../core/src/main/java/ru/rpuxa/core/TODO_LIST.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../core/src/main/java/ru/rpuxa/core/TODO_LIST.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../android/src/main/java/ru/rpuxa/wirelessadb/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../android/src/main/java/ru/rpuxa/wirelessadb/MainActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../core/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../core/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../desktop/desktop_jar/desktop.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../desktop/desktop_jar/desktop.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../desktop/src/main/java/ru/rpuxa/desktop/main/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../desktop/src/main/java/ru/rpuxa/desktop/main/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../desktop/src/main/java/ru/rpuxa/desktop/visual/MainPanel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../desktop/src/main/java/ru/rpuxa/desktop/visual/MainPanel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../desktop/src/main/resources/jars/internalServer.jar" beforeDir="false" afterPath="$PROJECT_DIR$/resources/internalServer.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../internalServer/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../internalServer/build.gradle" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -85,35 +88,48 @@
     <session id="23045212">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
+          <entry key="project.closed" value="14" />
           <entry key="project.open.time.0" value="1" />
-          <entry key="project.open.time.10" value="1" />
+          <entry key="project.open.time.10" value="2" />
+          <entry key="project.open.time.11" value="2" />
+          <entry key="project.open.time.12" value="1" />
+          <entry key="project.open.time.13" value="1" />
+          <entry key="project.open.time.14" value="3" />
+          <entry key="project.open.time.16" value="2" />
+          <entry key="project.open.time.18" value="1" />
+          <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.5" value="1" />
-          <entry key="project.opened" value="3" />
+          <entry key="project.opened" value="15" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="kt" value="485" />
-          <entry key="xml" value="21" />
+          <entry key="kt" value="2560" />
+          <entry key="xml" value="23" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Kotlin" value="485" />
-          <entry key="XML" value="21" />
+          <entry key="Kotlin" value="2560" />
+          <entry key="XML" value="23" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
+          <entry key="class" value="1" />
           <entry key="iml" value="1" />
-          <entry key="kt" value="3" />
+          <entry key="java" value="2" />
+          <entry key="kotlin_builtins" value="1" />
+          <entry key="kt" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
+          <entry key="CLASS" value="1" />
           <entry key="IDEA_MODULE" value="1" />
-          <entry key="Kotlin" value="3" />
+          <entry key="JAVA" value="2" />
+          <entry key="Kotlin" value="6" />
+          <entry key="kotlin_builtins" value="1" />
         </counts>
       </usages-collector>
     </session>
@@ -123,8 +139,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/META-INF/plugin.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="256">
-              <caret line="25" selection-start-line="25" selection-end-line="25" />
+            <state relative-caret-position="464">
+              <caret line="29" selection-start-line="29" selection-end-line="29" />
             </state>
           </provider>
         </entry>
@@ -132,17 +148,31 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ru/rpuxa/wirelessadb/PluginActions.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="96">
-              <caret line="12" column="61" selection-start-line="12" selection-start-column="61" selection-end-line="12" selection-end-column="61" />
+            <state relative-caret-position="144">
+              <caret line="15" selection-start-line="15" selection-end-line="15" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/ru/rpuxa/wirelessadb/olymp.kt">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ru/rpuxa/wirelessadb/MainView.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="30" column="25" selection-start-line="30" selection-start-column="25" selection-end-line="30" selection-end-column="25" />
+            <state relative-caret-position="352">
+              <caret line="36" column="38" selection-start-line="36" selection-start-column="38" selection-end-line="36" selection-end-column="38" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://$PROJECT_DIR$/../desktop/desktop_jar/desktop.jar!/ru/rpuxa/desktop/DesktopUtils.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="160">
+              <caret line="13" column="18" selection-start-line="13" selection-start-column="18" selection-end-line="13" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -152,8 +182,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Kotlin File" />
         <option value="Kotlin Object" />
+        <option value="Kotlin File" />
       </list>
     </option>
   </component>
@@ -171,11 +201,13 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/MainView.kt" />
-        <option value="$PROJECT_DIR$/src/ru/rpuxa/wirelessadb/Strings.kt" />
         <option value="$PROJECT_DIR$/src/ru/rpuxa/wirelessadb/PluginSettings.kt" />
         <option value="$PROJECT_DIR$/src/ru/rpuxa/wirelessadb/PluginActions.kt" />
         <option value="$PROJECT_DIR$/resources/META-INF/plugin.xml" />
         <option value="$PROJECT_DIR$/src/ru/rpuxa/wirelessadb/MainView.kt" />
+        <option value="$PROJECT_DIR$/src/ru/rpuxa/wirelessadb/Strings.kt" />
+        <option value="$PROJECT_DIR$/src/ru/rpuxa/wirelessadb/VadosLax.kt" />
+        <option value="$PROJECT_DIR$/src/ru/rpuxa/wirelessadb/olymp.kt" />
       </list>
     </option>
   </component>
@@ -193,10 +225,10 @@
     <option name="CUSTOM_FILTER" />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-9" />
-    <option name="y" value="-9" />
-    <option name="width" value="1938" />
-    <option name="height" value="1048" />
+    <option name="x" value="-10" />
+    <option name="y" value="-10" />
+    <option name="width" value="1940" />
+    <option name="height" value="1050" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -205,30 +237,12 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="AndroidStudioPlugin" type="b2602c69:ProjectViewProjectNode" />
               <item name="AndroidStudioPlugin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="AndroidStudioPlugin" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AndroidStudioPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name=".idea" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="AndroidStudioPlugin" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AndroidStudioPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="AndroidStudioPlugin" type="b2602c69:ProjectViewProjectNode" />
-              <item name="AndroidStudioPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-              <item name="production" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="AndroidStudioPlugin" type="b2602c69:ProjectViewProjectNode" />
@@ -246,20 +260,23 @@
         </subPane>
       </pane>
       <pane id="AndroidView" />
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SearchEverywhereHistoryKey" value="Byte&#9;ACTION&#9;ShowKotlinBytecode" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1537548809429" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1539363338968" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../desktop/desktop_jar/internalServer.jar!/" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
@@ -267,6 +284,8 @@
       <recent name="" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Projects\Android\WirelessADB\AndroidStudioPlugin\resources" />
+      <recent name="C:\Projects\Android\WirelessADB\AndroidStudioPlugin\resources\jars" />
       <recent name="C:\Projects\WAP2\jars" />
       <recent name="C:\Projects\WAP2\src\ru\rpuxa" />
       <recent name="C:\Projects\WAP2\src" />
@@ -284,49 +303,28 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
-    <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
+  <component name="RunManager" selected="Kotlin.ru.rpuxa.wirelessadb.OlympKt">
+    <configuration name="VadosLaxKt" type="JetRunConfigurationType" factoryName="Kotlin" temporary="true" nameIsGenerated="true">
       <module name="WirelessAdbPlugin" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
+      <option name="MAIN_CLASS_NAME" value="VadosLaxKt" />
       <option name="WORKING_DIRECTORY" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType" factoryName="Kotlin script">
+    <configuration name="ru.rpuxa.wirelessadb.OlympKt" type="JetRunConfigurationType" factoryName="Kotlin" temporary="true" nameIsGenerated="true">
       <module name="WirelessAdbPlugin" />
-      <option name="filePath" />
-      <option name="vmParameters" />
-      <option name="alternativeJrePath" />
-      <option name="programParameters" />
-      <option name="passParentEnvs" value="true" />
-      <option name="workingDirectory" />
-      <option name="isAlternativeJrePathEnabled" value="false" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
-      <option name="filePath" />
-      <option name="vmParameters" />
-      <option name="alternativeJrePath" />
-      <option name="programParameters" />
-      <option name="passParentEnvs" value="true" />
-      <option name="workingDirectory" />
-      <option name="isAlternativeJrePathEnabled" value="false" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
+      <option name="MAIN_CLASS_NAME" value="ru.rpuxa.wirelessadb.OlympKt" />
       <option name="WORKING_DIRECTORY" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -350,6 +348,17 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Plugin.Plugin" />
+      <item itemvalue="Kotlin.VadosLaxKt" />
+      <item itemvalue="Kotlin.ru.rpuxa.wirelessadb.OlympKt" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Kotlin.ru.rpuxa.wirelessadb.OlympKt" />
+        <item itemvalue="Kotlin.VadosLaxKt" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -374,11 +383,23 @@
       <workItem from="1537533119475" duration="2894000" />
       <workItem from="1537544093102" duration="31000" />
       <workItem from="1537547638448" duration="1667000" />
+      <workItem from="1537599298457" duration="3077000" />
+      <workItem from="1537605367885" duration="283000" />
+      <workItem from="1537605706362" duration="74000" />
+      <workItem from="1537678693969" duration="77000" />
+      <workItem from="1538029570021" duration="656000" />
+      <workItem from="1538217784383" duration="326000" />
+      <workItem from="1538218602639" duration="1758000" />
+      <workItem from="1538745306636" duration="1879000" />
+      <workItem from="1538747583832" duration="5941000" />
+      <workItem from="1539014684199" duration="34000" />
+      <workItem from="1539014752003" duration="116000" />
+      <workItem from="1539360683744" duration="2307000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="18665000" />
+    <option name="totallyTimeSpent" value="35193000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
@@ -393,16 +414,17 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.69140625" weight="0.3337912" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49739584" weight="0.3997253" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.6894531" weight="0.33241758" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.6295573" weight="0.3997253" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Terminal" order="9" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5045573" side_tool="true" visible="true" weight="0.32692307" />
-      <window_info active="true" anchor="bottom" id="Messages" order="11" sideWeight="0.49544272" visible="true" weight="0.32692307" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.37044272" side_tool="true" weight="0.3997253" />
+      <window_info anchor="bottom" id="Messages" order="11" sideWeight="0.4921875" weight="0.32692307" />
+      <window_info anchor="right" x="152" y="115" width="1350" height="638" id="Byte Code Viewer" type="FLOATING" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -414,9 +436,10 @@
       <window_info anchor="right" id="Palette&#9;" order="8" />
       <window_info anchor="right" id="Maven Projects" order="9" />
       <window_info anchor="right" id="Gradle" order="10" />
+      <window_info anchor="right" id="Kotlin Bytecode" order="11" visible="true" weight="0.031901043" />
     </layout>
     <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20268457" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.35416666" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -425,27 +448,28 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.6919463" visible="true" weight="0.33475178" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49798658" weight="0.4" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.6894531" weight="0.33241758" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.6295573" weight="0.3997253" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Terminal" order="9" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.3080537" side_tool="true" visible="true" weight="0.33475178" />
-      <window_info anchor="bottom" id="Messages" order="11" sideWeight="0.4986577" weight="0.32907802" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="right" id="Capture Analysis" order="4" />
-      <window_info anchor="right" id="Database" order="5" />
-      <window_info anchor="right" id="Theme Preview" order="6" />
-      <window_info anchor="right" id="Key Promoter X" order="7" />
-      <window_info anchor="right" id="Palette&#9;" order="8" />
-      <window_info anchor="right" id="Maven Projects" order="9" />
-      <window_info anchor="right" id="Gradle" order="10" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.37044272" side_tool="true" weight="0.3997253" />
+      <window_info anchor="bottom" id="Messages" order="11" sideWeight="0.4921875" weight="0.32692307" />
+      <window_info active="true" anchor="right" id="Kotlin Bytecode" order="0" visible="true" weight="0.1360677" />
+      <window_info anchor="right" id="Commander" order="1" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="2" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="3" weight="0.25" />
+      <window_info anchor="right" id="Palette" order="4" />
+      <window_info anchor="right" id="Capture Analysis" order="5" />
+      <window_info anchor="right" id="Database" order="6" />
+      <window_info anchor="right" id="Theme Preview" order="7" />
+      <window_info anchor="right" id="Key Promoter X" order="8" />
+      <window_info anchor="right" id="Palette&#9;" order="9" />
+      <window_info anchor="right" id="Maven Projects" order="10" />
+      <window_info anchor="right" id="Gradle" order="11" />
     </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -462,6 +486,24 @@
           <line>13</line>
           <properties />
           <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/ru/rpuxa/wirelessadb/MainView.kt</url>
+          <line>30</line>
+          <properties />
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/ru/rpuxa/wirelessadb/MainView.kt</url>
+          <line>22</line>
+          <properties />
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/ru/rpuxa/wirelessadb/MainView.kt</url>
+          <line>61</line>
+          <properties />
+          <option name="timeStamp" value="10" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -483,34 +525,52 @@
     <entry file="jar://$PROJECT_DIR$/jars/desktop.jar!/ru/rpuxa/desktop/DesktopUtilsKt.class" />
     <entry file="jar://C:/Programs/Android Studio/lib/resources.jar!/META-INF/IdeaPlugin.xml" />
     <entry file="jar://C:/Programs/Android Studio/lib/idea.jar!/com/intellij/openapi/wm/impl/CommandProcessor.class" />
+    <entry file="file://$PROJECT_DIR$/src/ru/rpuxa/wirelessadb/PluginSettings.kt" />
+    <entry file="jar://C:/Programs/Android Studio/lib/kotlin-runtime.jar!/kotlin/kotlin.kotlin_builtins">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="47" column="83" lean-forward="true" selection-start-line="47" selection-start-column="83" selection-end-line="47" selection-end-column="83" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/rpuxa/wirelessadb/Strings.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="32">
-          <caret line="2" column="31" selection-start-line="2" selection-start-column="31" selection-end-line="2" selection-end-column="31" />
+          <caret line="2" column="32" selection-start-line="2" selection-start-column="32" selection-end-line="2" selection-end-column="32" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ru/rpuxa/wirelessadb/PluginSettings.kt" />
-    <entry file="file://$PROJECT_DIR$/src/ru/rpuxa/wirelessadb/PluginActions.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="12" column="61" selection-start-line="12" selection-start-column="61" selection-end-line="12" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/rpuxa/wirelessadb/VadosLax.kt" />
     <entry file="file://$PROJECT_DIR$/resources/META-INF/plugin.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="25" selection-start-line="25" selection-end-line="25" />
+        <state relative-caret-position="464">
+          <caret line="29" selection-start-line="29" selection-end-line="29" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ru/rpuxa/wirelessadb/MainView.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="30" column="25" selection-start-line="30" selection-start-column="25" selection-end-line="30" selection-end-column="25" />
+        <state relative-caret-position="352">
+          <caret line="36" column="38" selection-start-line="36" selection-start-column="38" selection-end-line="36" selection-end-column="38" />
         </state>
       </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../desktop/desktop_jar/desktop.jar!/ru/rpuxa/desktop/DesktopUtils.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="13" column="18" selection-start-line="13" selection-start-column="18" selection-end-line="13" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/rpuxa/wirelessadb/PluginActions.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="15" selection-start-line="15" selection-end-line="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ru/rpuxa/wirelessadb/olymp.kt">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
   </component>
   <component name="masterDetails">
@@ -566,7 +626,7 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>WAP2</last-edited>
+          <last-edited>WirelessAdbPlugin</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

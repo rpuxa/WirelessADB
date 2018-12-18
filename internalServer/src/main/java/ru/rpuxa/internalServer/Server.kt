@@ -1,11 +1,11 @@
 package ru.rpuxa.internalServer
 
-import ru.rpuxa.core.daemon
 import java.io.InputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.net.InetAddress
 import java.net.ServerSocket
+import kotlin.concurrent.thread
 
 internal object Server {
 
@@ -14,7 +14,7 @@ internal object Server {
         if (isVisible)
             return
         isVisible = true
-        daemon {
+        thread(isDaemon = true) {
             try {
                 while (isVisible) {
                     val ip = InetAddress.getByName(getIp())

@@ -1,12 +1,11 @@
 package ru.rpuxa.core.internalServer
 
-import ru.rpuxa.core.trd
 import java.io.IOException
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.net.InetSocketAddress
 import java.net.Socket
-
+import kotlin.concurrent.thread
 
 object InternalServerController {
 
@@ -14,7 +13,7 @@ object InternalServerController {
      *  Включить видимость и начать поиск устройств в Wifi сети
      */
     fun startServer(info: DeviceInfo, starter: Starter) =
-            trd {
+            thread {
                 if (!isAvailable) {
                     starter.startServer()
                     setDeviceInfo(info)
@@ -31,9 +30,7 @@ object InternalServerController {
      * Выключить @see[startServer]
      */
     fun closeServer() =
-            trd {
-                sendMessageToServer(CLOSE_CORE_SERVER)
-            }
+            thread { sendMessageToServer(CLOSE_CORE_SERVER) }
 
 
     /**
@@ -47,11 +44,10 @@ object InternalServerController {
      *
      */
     fun connectAdb(device: Device) =
-            trd {
+            thread {
                 val msg = sendMessageToServer(CONNECT_ADB, device) as Message
-                if (msg.command == ADB_ERROR && listener != null) {
+                if (msg.command == ADB_ERROR && listener != null)
                     listener!!.onAdbError(device, msg.data as Int)
-                }
             }
 
 
@@ -59,9 +55,7 @@ object InternalServerController {
      * Отключить адб
      */
     fun disconnectAdb(device: Device) =
-            trd {
-                sendMessageToServer(DISCONNECT_ADB, device)
-            }
+            thread { sendMessageToServer(DISCONNECT_ADB, device) }
 
 
     /**
@@ -115,7 +109,7 @@ object InternalServerController {
 
 
     private fun startListening() =
-            trd {
+            thread {
                 while (listener != null) {
                     val listener = listener!!
                     if (isAvailable) {
@@ -162,6 +156,7 @@ object InternalServerController {
                     listener.onServerDisconnect()
                 }
             }
+
 
     private val devices = ArrayList<AdbDevice>()
 
