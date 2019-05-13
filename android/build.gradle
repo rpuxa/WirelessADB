@@ -1,4 +1,4 @@
-//Тестим кое что
+
 
 apply plugin: 'com.android.application'
 
